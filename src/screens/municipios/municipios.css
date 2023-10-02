@@ -1,0 +1,24 @@
+.municipios-form{
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.municipios-form input{
+    width: 100%;
+    height: 30px;
+    margin-bottom: 7px;
+}
+
+.municipios-form textarea{
+    width: 100%;
+    margin-bottom: 7px;
+}
+
+.municipios-form button{
+    width: 100%;
+    height: 40px;
+}
+
+.municipios-form progress{
+    width: 100%;
+}
