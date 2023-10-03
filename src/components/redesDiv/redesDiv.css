@@ -1,3 +1,97 @@
 .redes-title{
     display: flex;
+    border-top: 2px solid rgb(163, 163, 163);
+    padding-top: 5px;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.redes-title:last-child{
+    display: flex;
+    border-bottom: 2px solid rgb(163, 163, 163);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.redes-content:last-child{
+    display: flex;
+    border-bottom: 2px solid rgb(163, 163, 163);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.redes-title p {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgb(39, 39, 39);
+}
+
+.redes-title button{
+    width: 35px;
+    margin-left: 10px;
+    height: 35px;
+    border: none;
+    background-color: rgb(58, 58, 253);
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.redes-content{
+    display: flex;
+    margin-top: 5px;
+}
+
+
+.redes-content input{
+    height: 43px;
+    border: 2px solid rgb(163, 163, 163);
+    border-radius: 7px;
+    padding: 14px;
+    box-sizing: border-box;
+}
+
+.redes-content input::placeholder{
+    color: rgb(99, 99, 99);
+    font-weight: 600;
+
+}
+
+.redes-content select {
+    width: 160px;
+    height: 43px;
+    margin-right: 10px;
+    border: 2px solid rgb(163, 163, 163);
+    background-color: white;
+    padding: 5px;
+    border-radius: 7px;
+    font-weight: 600;
+    color: rgb(70, 70, 70);
+}
+
+.close-remove p{
+    transform: rotate(45deg);
+    font-size: 40px;
+    font-weight: 300;
+}
+
+.close-remove{
+    min-width: 43px;
+    width: 43px;
+    margin-left: 10px;
+    height: 43px;
+    border: none;
+    background-color: rgb(224, 24, 24);
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    border-radius: 6px;
+    cursor: pointer;
 }

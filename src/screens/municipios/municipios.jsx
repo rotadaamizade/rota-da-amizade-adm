@@ -103,13 +103,17 @@ function Municipios() {
       imgs: imagesUrl,
       localizacao: formData.localizacao,
       municipio: formData.municipio,
-      sobre: formData.sobre
+      sobre: formData.sobre,
+      contatos: formData.contatos,
+      redesSociais: formData.redesSociais
     }).then(() => {
       setFormData({
         municipio: '',
         descricao: '',
         localizacao: '',
-        sobre: ''
+        sobre: '',
+        contatos: '',
+        redesSociais: ''
       })
       setProgressCard(0)
       setProgressImages(0)
@@ -119,6 +123,7 @@ function Municipios() {
   return (
     <form onSubmit={cardImageUpload} className="municipios-form" action="">
       <input
+        className='input-default'
         type="text"
         name="municipio"
         placeholder="Nome do município"
@@ -126,6 +131,7 @@ function Municipios() {
         onChange={handleChange}
       />
       <input
+        className='input-default'
         type="text"
         name="descricao"
         placeholder="Descrição"
@@ -133,15 +139,16 @@ function Municipios() {
         onChange={handleChange}
       />
       <input
+        className='input-default'
         type="text"
         name="localizacao"
         placeholder="Link de Localização"
         value={formData.localizacao}
         onChange={handleChange}
       />
-      <textarea
-        rows={5}
-        cols={10}
+      <input
+        type='text'
+        className='input-sobre'
         name="sobre"
         placeholder="Sobre"
         value={formData.sobre}
@@ -150,14 +157,20 @@ function Municipios() {
 
       <RedesDiv formData={formData} setFormData={setFormData} />
 
-      <label htmlFor="">Imagem do card</label>
-      <input onChange={(e) => setImage(e.target.files[0])} type="file" />
+      <div class='file-input'>
+        <input onChange={(e) => setImage(e.target.files[0])} type='file'/>
+        <span class='button'>Selecione a Imagem Principal</span>
+        <label class='label' data-js-label>Nenhuma imagem selecionada</label>
+      </div>
+
       <progress value={progressCard} max={100} />
 
-      <br /><br />
+      <div class='file-input'>
+        <input multiple onChange={(e) => setImages(e.target.files)} type='file'/>
+        <span class='button'>Selecione as Imagens Secundárias</span>
+        <label class='label' data-js-label>Nenhuma imagem selecionada</label>
+      </div>
 
-      <label htmlFor="">Imagens do Município</label>
-      <input multiple onChange={(e) => setImages(e.target.files)} type="file" />
       <progress value={progressImages} max={100} />
 
       <button type="submit">Cadastrar</button>

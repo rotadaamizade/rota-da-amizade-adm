@@ -1,44 +1,43 @@
+import './redesDiv.css'
+
 function RedesDiv({ formData, setFormData }) {
     const contatosTemplate = [
         {
-            color: 'aaa',
+            color: '000000',
             name: 'Whatsapp',
         },
         {
-            color: 'bbb',
+            color: 'FF0000',
             name: 'Email',
         },
         {
-            color: 'ccc',
+            color: '25D366',
             name: 'Telefone',
         }
-    ];
+    ]
 
     const redesSociaisTemplate = [
         {
-            name: 'Facebook',
+            color: '4267B2',
+            name: 'Facebook'
         },
         {
+            color: '1DA1F2',
             name: 'Twitter',
         },
         {
+            color: 'FD1D1D',
             name: 'Instagram',
         }
-    ];
+    ]
 
     const adicionarContato = () => {
-        const novoContato = { name: '', url: '', color: '', outroInput: '' };
+        const novoContato = { name: '', url: '', color: '' };
         const novoFormData = { ...formData };
         novoFormData.contatos.push(novoContato);
         setFormData(novoFormData);
     }
 
-    const adicionarRedeSocial = () => {
-        const novaRedeSocial = { name: '', url: '' };
-        const novoFormData = { ...formData };
-        novoFormData.redesSociais.push(novaRedeSocial);
-        setFormData(novoFormData);
-    }
 
     const removerContato = (index) => {
         const novoFormData = { ...formData };
@@ -46,13 +45,8 @@ function RedesDiv({ formData, setFormData }) {
         setFormData(novoFormData);
     }
 
-    const removerRedeSocial = (index) => {
-        const novoFormData = { ...formData };
-        novoFormData.redesSociais.splice(index, 1);
-        setFormData(novoFormData);
-    }
 
-    const handleSelectChange = (index, selectedValue) => {
+    const handleContatoNameChange = (index, selectedValue) => {
         const novoFormData = { ...formData };
         novoFormData.contatos[index].name = selectedValue;
 
@@ -64,29 +58,41 @@ function RedesDiv({ formData, setFormData }) {
         setFormData(novoFormData);
     }
 
-    const handleOutroChange = (index, value) => {
-        const novoFormData = { ...formData };
-        novoFormData.contatos[index].outroInput = value;
-        setFormData(novoFormData);
-    }
 
-    const handleUrlChange = (index, value) => {
+    const handleContatoUrlChange = (index, value) => {
         const novoFormData = { ...formData };
         novoFormData.contatos[index].url = value;
         setFormData(novoFormData);
     }
 
-    const handleRedeSocialNameChange = (index, selectedValue) => {
+    ////////////////////////////////////////////////
+
+    const adicionarRedeSocial = () => {
+        const novaRedeSocial = { name: '', url: '', color: '' };
         const novoFormData = { ...formData };
-        novoFormData.redesSociais[index].name = selectedValue;
+        novoFormData.redesSociais.push(novaRedeSocial);
         setFormData(novoFormData);
     }
 
-    const handleRedeSocialOutroChange = (index, value) => {
+    const removerRedeSocial = (index) => {
         const novoFormData = { ...formData };
-        novoFormData.redesSociais[index].outroInput = value;
+        novoFormData.redesSociais.splice(index, 1);
         setFormData(novoFormData);
     }
+
+
+    const handleRedeSocialNameChange = (index, selectedValue) => {
+        const novoFormData = { ...formData };
+        novoFormData.redesSociais[index].name = selectedValue;
+    
+        const redeSocialTemplate = redesSociaisTemplate.find((template) => template.name === selectedValue);
+        if (redeSocialTemplate) {
+            novoFormData.redesSociais[index].color = redeSocialTemplate.color; // Corrigido aqui
+        }
+    
+        setFormData(novoFormData);
+    }
+    
 
     const handleRedeSocialUrlChange = (index, value) => {
         const novoFormData = { ...formData };
@@ -101,18 +107,17 @@ function RedesDiv({ formData, setFormData }) {
             <div className='redes-title'>
                 <p>Contatos</p>
                 <button onClick={() => adicionarContato()} type="button">
-                    Adicionar Contato
+                    +
                 </button>
             </div>
 
-            {formData.contatos.map((contato, index) => {
-                const isOutro = contato.name === 'Outro'; // Verifica se o nome é 'Outro'
-                return (
-                    <div key={index}>
+            {formData.contatos.map((contato, index) => 
+                (
+                    <div className='redes-content' key={index}>
                         <select
                             name="name"
                             value={contato.name}
-                            onChange={(e) => handleSelectChange(index, e.target.value)}
+                            onChange={(e) => handleContatoNameChange(index, e.target.value)}
                         >
                             <option value="">Selecione</option>
                             {contatosTemplate.map((contato2, index2) => (
@@ -120,43 +125,31 @@ function RedesDiv({ formData, setFormData }) {
                                     {contato2.name}
                                 </option>
                             ))}
-                            <option value={'Outro'}>
-                                Outro
-                            </option>
                         </select>
-
-                        {isOutro && (
-                            <input
-                                type="text" 
-                                value={contato.outroInput}
-                                onChange={(e) => handleOutroChange(index, e.target.value)}
-                            />
-                        )}
 
                         <input
                             type="text"
                             value={contato.url}
-                            onChange={(e) => handleUrlChange(index, e.target.value)}
+                            placeholder='Digite a URL:'
+                            onChange={(e) => handleContatoUrlChange(index, e.target.value)}
                         />
 
-                        <br />
-                        <br />
-                        <button type="button" onClick={() => removerContato(index)}>
-                            Remover Contato
-                        </button>
-                    </div>
-                );
-            })}
+                        <div className='close-remove' onClick={() => removerContato(index)}>
+                            <p>+</p>
+                        </div>
+                    </div >
+                )
+            )}
 
-            <p>Redes Sociais</p>
-            <button onClick={() => adicionarRedeSocial()} type="button">
-                    Adicionar Rede Social
+            <div className="redes-title">
+                <p>Redes Sociais</p>
+                <button onClick={() => adicionarRedeSocial()} type="button">
+                    +
                 </button>
+            </div>
 
-            {formData.redesSociais.map((redeSocial, index) => {
-                const isOutro = redeSocial.name === 'Outro'; // Verifica se o nome é 'Outro'
-                return (
-                    <div key={index}>
+            {formData.redesSociais.map((redeSocial, index) => (
+                    <div className='redes-content' key={index}>
                         <select
                             name="name"
                             value={redeSocial.name}
@@ -168,33 +161,22 @@ function RedesDiv({ formData, setFormData }) {
                                     {redeSocial2.name}
                                 </option>
                             ))}
-                            <option value={'Outro'}>
-                                Outro
-                            </option>
+
                         </select>
 
-                        {isOutro && (
-                            <input
-                                type="text" 
-                                value={redeSocial.outroInput}
-                                onChange={(e) => handleRedeSocialOutroChange(index, e.target.value)}
-                            />
-                        )}
 
                         <input
                             type="text"
+                            placeholder='Digite a URL:'
                             value={redeSocial.url}
                             onChange={(e) => handleRedeSocialUrlChange(index, e.target.value)}
                         />
-
-                        <br />
-                        <br />
-                        <button type="button" onClick={() => removerRedeSocial(index)}>
-                            Remover Rede Social
-                        </button>
+                        <div className='close-remove' onClick={() => removerRedeSocial(index)}>
+                            <p>+</p>
+                        </div>
                     </div>
-                );
-            })}
+                )
+            )}
         </div>
     );
 }
