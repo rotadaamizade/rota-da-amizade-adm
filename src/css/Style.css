@@ -1,0 +1,34 @@
+main {
+  background-color: rgb(252, 252, 252);
+}
+
+body {
+  font-family: "Raleway", sans-serif;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  max-width: 1.5rem;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+@media (max-width: 991px) {
+  .container {
+    width: auto;
+    max-width: 990px;
+  }
+
+  main {
+    padding-top: 92px;
+  }
+}

@@ -1,0 +1,19 @@
+section#aboutUs p#supporters {
+  font-size: small;
+}
+
+section#aboutUs img.sponsor {
+  width: 75px;
+}
+
+@keyframes colorTitle {
+  25% {
+    color: #98b126;
+  }
+  50% {
+    color: #e30613;
+  }
+  100% {
+    color: black;
+  }
+}

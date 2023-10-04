@@ -1,0 +1,27 @@
+section#contactUs {
+  padding: 1rem;
+}
+
+section#contactUs div#basicInfo {
+  display: flex;
+}
+
+section#contactUs div#basicInfo > div {
+  flex-grow: 1;
+}
+
+section#contactUs div#basicInfo p {
+  margin: 0.5rem;
+}
+
+section#contactUs div#localization iframe {
+  width: 100%;
+  height: 30rem;
+  border: 0;
+}
+
+@media (max-width: 991px) {
+  section#contactUs div#basicInfo {
+    display: inline;
+  }
+}

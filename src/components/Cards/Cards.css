@@ -1,0 +1,60 @@
+div.cardGroup {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div.card {
+    position: relative;
+    width: 250px;
+    height: 350px;
+    margin-bottom: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+div.cardGroup div.shadow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+div.cardGroup div.lowShadow {
+    box-shadow: inset 0px -70px 30px -10px rgba(0,0,0,0.7);
+    transition: .2s;
+}
+
+div.cardGroup div.highShadow {
+    box-shadow: inset 0px -100px 30px -10px rgba(0,0,0,0.7);
+    transition: .2s;
+}
+
+div.cardGroup div.cardContainer img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+div.cardGroup div.cardOverlay {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #ffffff;
+    padding: 0 1rem;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+@media (max-width: 1000px) {
+    div.cardGroup {
+        justify-content: center;
+    }
+
+    div.card {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+}

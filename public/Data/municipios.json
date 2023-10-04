@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "nome": "Iomere",
+        "imagem": "iomereImg.jpg"
+    },
+    {
+        "id": 2,
+        "nome": "Arroio Trinta",
+        "imagem": "arroioTrintaImg.jpg"
+    },
+    {
+        "id": 3,
+        "nome": "Videira",
+        "imagem": "videiraImg.jpg"
+    },
+    {
+        "id": 4,
+        "nome": "Tangará",
+        "imagem": "tangaraImg.jpg"
+    }
+]

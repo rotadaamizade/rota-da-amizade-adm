@@ -1,0 +1,158 @@
+header {
+  background-color: #ffffff;
+  height: 60px;
+  padding: 1rem 0;
+  border-bottom: solid 1px #c6c6c6;
+  z-index: 1;
+}
+
+header div#options {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  z-index: 2;
+}
+
+header a#icon {
+  display: flex;
+  align-items: center;
+}
+
+header a#icon img {
+  max-width: 150px;
+}
+
+header a#icon img#rotaDesenho {
+  max-height: 50px;
+}
+
+header div#options a {
+  text-decoration: none;
+  color: #000000;
+  margin-left: 1rem;
+
+  transition: color 1s ease-out;
+}
+
+header div#options a:hover,
+header div#dropdown-menu a:hover {
+  color: #98b126;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+header div#options a.activeLink {
+  color: #e30613;
+  transition: color 0.3s ease;
+}
+
+header div#options a.activeLink:hover {
+  color: #98b126;
+  transition: color 1s ease-out;
+}
+
+header div#options > a#baixarApp {
+  border: solid 3px #98b126;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  margin-left: auto;
+}
+
+header div#options > a#baixarApp:hover {
+  color: #e30613;
+  transition: color 0.3s ease;
+}
+
+/* mobile */
+
+header div#options div#dropdown-icon {
+  display: none;
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+header div#options div#dropdown-icon button {
+  background: none;
+  border: solid 1px #c6c6c6;
+  border-radius: 5px;
+}
+
+header div#options div#dropdown-icon button svg {
+  width: auto;
+  width: 3em;
+}
+
+header div#dropdown-menu {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #f8f8f8;
+}
+
+header div.show {
+  border-top: solid 1px #c6c6c6;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(10px);
+  transition: 0.2s;
+}
+
+header div.hide {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: 0.2s;
+}
+
+header div#dropdown-menu ul {
+  list-style: none;
+}
+
+header div#dropdown-menu hr {
+  background-color: #c6c6c6;
+  border: 0;
+  height: 1px;
+  width: 85%;
+  margin: 0 auto;
+}
+
+header div#dropdown-menu ul li {
+  margin-bottom: 0.5rem;
+}
+
+header div#dropdown-menu ul li a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #000000;
+  transition: color 1s ease-out;
+}
+
+@media (min-width: 992px) {
+  header div#dropdown-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  /* retirar elementos do desktop */
+  header div#options ul,
+  a#baixarApp,
+  a#icon {
+    display: none;
+  }
+  /* mostrar elementos do mobile */
+  header {
+    position: fixed;
+    width: 100%;
+  }
+
+  header div#options div#dropdown-icon {
+    display: flex;
+  }
+}
+
+@media (max-width: 375px) {
+  header div#options img#rotaEscrita {
+    display: none;
+  }
+}

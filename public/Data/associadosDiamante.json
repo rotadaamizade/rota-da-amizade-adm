@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "nome": "Hotel Bebber",
+      "cidade": "Campos Novos",
+      "imagem": "hotelBebberImg.jpg"
+    },
+    {
+      "id": 2,
+      "nome": "Hotel Renar",
+      "cidade": "Fraiburgo",
+      "imagem": "hotelRenarImg.jpg"
+    },
+    {
+      "id": 3,
+      "nome": "Park Hotel Treze Tílias",
+      "cidade": "Treze Tílias",
+      "imagem": "parkHotelTrezeTriliasImg.jpg"
+    }
+]

@@ -1,0 +1,26 @@
+section#city div#cityTittle {
+    text-align: center;
+}
+
+section#city div#basicInfo {
+    display: flex;
+    justify-content: space-around;
+    text-align: start;
+}
+
+section#city div#basicInfo p {
+    margin: 8px 0 8px 8px;
+}
+
+section#city div#basicInfo > div {
+    display: flex;
+}
+
+section#city div#basicInfo div.infoIconContainer {
+    display: block;
+    margin: auto;
+}
+
+section#city div#basicInfo div.infoIconContainer svg {
+    height: 30px;
+}
