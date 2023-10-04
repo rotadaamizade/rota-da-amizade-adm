@@ -1,4 +1,4 @@
-section#city div#cityTittle {
+section#city, section#history {
     text-align: center;
 }
 
@@ -23,4 +23,25 @@ section#city div#basicInfo div.infoIconContainer {
 
 section#city div#basicInfo div.infoIconContainer svg {
     height: 30px;
+}
+
+section#imagesCity ul {
+    display: block;
+    width: 100%;
+    height: 30rem;
+    margin: auto;
+    margin-top: 20px;
+    position: relative;
+}
+
+section#imagesCity ul li {
+    list-style: none;
+    position: absolute;
+}
+
+section#imagesCity ul li img {
+    margin: auto;
+    width: 100%;
+    vertical-align: top;
+    object-fit: cover;
 }

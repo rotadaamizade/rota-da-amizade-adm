@@ -24,7 +24,7 @@ function App() {
               <Route path="/cidades" element={<Cities />} />
               <Route path="/associados" element={<Associates />} />
               <Route path="/contato" element={<Contact />} />
-              <Route path="/:url" element={<City />} />
+              <Route path="/cidades/:url" element={<City />} />
               <Route path="*" element={<Navigate to="" />} />
             </Routes>
           </main>

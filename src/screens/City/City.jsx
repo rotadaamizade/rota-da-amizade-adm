@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Footer from "../../components/Footer/Footer";
 import Loading from "../../components/Loading/Loading";
+import ImgCarousel from "../../components/ImgCarousel/ImgCarousel";
 
 function City() {
     const townUrl = useParams();
@@ -11,7 +12,7 @@ function City() {
     const [town, setTown] = useState([]);
 
     useEffect(() => {
-        axios.get(`Data/cities/${townUrl.url}.json`).then((res) => {
+        axios.get(`../Data/cities/${townUrl.url}.json`).then((res) => {
             setTown(res.data);
         });
     }, []);
@@ -73,38 +74,55 @@ function City() {
                 <>
                     <section id="city">
                         <div className="container">
-                            <div id="cityTittle">
-                                <h1>{town.name}</h1>
-                                <div id="basicInfo">
-                                    <div>
-                                        <div className="infoIconContainer">
-                                            {calendarIcon}
-                                        </div>
-                                        <div>
-                                            <p>Fundação</p>
-                                            <p>{town.foundation}</p>
-                                        </div>
+                            <h1>{town.name}</h1>
+                            <div id="basicInfo">
+                                <div>
+                                    <div className="infoIconContainer">
+                                        {calendarIcon}
                                     </div>
                                     <div>
-                                        <div className="infoIconContainer">
-                                            {peoplesIcon}
-                                        </div>
-                                        <div>
-                                            <p>População</p>
-                                            <p>{town.population}</p>
-                                        </div>
+                                        <p>Fundação</p>
+                                        <p>{town.foundation}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="infoIconContainer">
+                                        {peoplesIcon}
                                     </div>
                                     <div>
-                                        <div className="infoIconContainer">
-                                            {speakBubbleIcon}
-                                        </div>
-                                        <div>
-                                            <p>Gentílico</p>
-                                            <p>{town.ethnic}</p>
-                                        </div>
+                                        <p>População</p>
+                                        <p>{town.population}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="infoIconContainer">
+                                        {speakBubbleIcon}
+                                    </div>
+                                    <div>
+                                        <p>Gentílico</p>
+                                        <p>{town.ethnic}</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </section>
+                    {town.images.length !== 0 ? (
+                        <section id="imagesCity">
+                            <div className="container">
+                                <ImgCarousel
+                                    images={town.images}
+                                    imageName={town.imageName}
+                                    name={town.name}
+                                ></ImgCarousel>
+                            </div>
+                        </section>
+                    ) : (
+                        ""
+                    )}
+
+                    <section id="history">
+                        <div className="container">
+                            <h2>Nossa história</h2>
                         </div>
                     </section>
                 </>

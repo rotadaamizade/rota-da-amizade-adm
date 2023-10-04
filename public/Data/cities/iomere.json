@@ -3,6 +3,21 @@
   "foundation": "20/07/1995",
   "ethnic": "Iomerense",
   "population": "2.877 habitantes (IBGE/2022)",
+  "imageName": "iomere",
+  "images": [
+    {
+      "url": "IMG_2184.JPG"
+    },
+    {
+      "url": "IMG_2190.JPG"
+    },
+    {
+      "url": "IMG_2202.JPG"
+    },
+    {
+      "url": "hotel-iomere.webp"
+    }
+  ],
   "history": [
     {
       "paragraph": "A colonização da região de Iomerê começou por volta de 1900 – até então, suas matas eram habitadas por índios. Os primeiros colonizadores foram imigrantes italianos que chegaram inicialmente das cidades gaúchas de Erechim, Carlos Barbosa, Santa Maria, Bento Gonçalves, Garibaldi e Guaporé. Na agricultura o milho foi o primeiro a ser plantado seguido pelas uvas tornando-se suas principais atividades juntamente com a criação de porcos, herança econômica que se mantém até hoje."
