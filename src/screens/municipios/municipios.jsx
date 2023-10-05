@@ -17,10 +17,10 @@ function Municipios() {
   const [progressCard, setProgressCard] = useState(0)
   const [progressImages, setProgressImages] = useState(0)
   const [image, setImage] = useState(null)
-  const [images, setImages] = useState(null)
+  const [images, setImages] = useState([])
 
   const imagesUpload = (imageCardUrl) => {
-    if (images == null) return
+    if (images == []) return
 
     let totalProgress = 0;
     let imagesProcessed = 0;
@@ -56,12 +56,34 @@ function Municipios() {
     }
   }
 
+
+
   const cardImageUpload = (event) => {
     event.preventDefault()
 
-    if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || !image || !images) {
+    if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || !image || images == []) {
       alert('Por favor, preencha todos os campos e selecione as imagens antes de enviar.');
       return
+    }
+
+    if (formData.contatos.length > 0) {
+      for (let i = 0; i < formData.contatos.length; i++) {
+        const element = formData.contatos[i];
+        if (element.color === '' || element.name === '' || element.url === '') {
+          alert('Por favor, preencha todos os campos de contatos');
+          return
+        }
+      }
+    }
+
+    if (formData.redesSociais.length > 0) {
+      for (let i = 0; i < formData.redesSociais.length; i++) {
+        const element = formData.redesSociais[i];
+        if (element.color === '' || element.name === '' || element.url === '') {
+          alert('Por favor, preencha todos os campos de redes sociais');
+          return
+        }
+      }
     }
 
     if (image == null) return
@@ -107,16 +129,7 @@ function Municipios() {
       contatos: formData.contatos,
       redesSociais: formData.redesSociais
     }).then(() => {
-      setFormData({
-        municipio: '',
-        descricao: '',
-        localizacao: '',
-        sobre: '',
-        contatos: '',
-        redesSociais: ''
-      })
-      setProgressCard(0)
-      setProgressImages(0)
+      window.location.reload()
     })
   }
 
@@ -157,23 +170,31 @@ function Municipios() {
 
       <RedesDiv formData={formData} setFormData={setFormData} />
 
-      <div class='file-input'>
-        <input onChange={(e) => setImage(e.target.files[0])} type='file'/>
-        <span class='button'>Selecione a Imagem Principal</span>
-        <label class='label' data-js-label>Nenhuma imagem selecionada</label>
+      <div className='file-input'>
+        <input onChange={(e) => setImage(e.target.files[0])} type='file' />
+        <span className='button'>Selecione a Imagem Principal</span>
+        <p className='label' data-js-label>
+          {image != null
+            ? image.name
+            : 'Nenhuma imagem selecionada'}
+        </p>
       </div>
 
       <progress value={progressCard} max={100} />
 
-      <div class='file-input'>
-        <input multiple onChange={(e) => setImages(e.target.files)} type='file'/>
-        <span class='button'>Selecione as Imagens Secundárias</span>
-        <label class='label' data-js-label>Nenhuma imagem selecionada</label>
+      <div className='file-input file-input-2'>
+        <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
+        <span className='button'>Selecione as Imagens Secundárias</span>
+        <p className='label'>
+          {images && images.length > 0
+            ? Array.from(images).map((image) => image.name).join(', ')
+            : 'Nenhuma imagem selecionada'}
+        </p>
       </div>
 
       <progress value={progressImages} max={100} />
 
-      <button type="submit">Cadastrar</button>
+      <button className='submit-button' type="submit">Cadastrar</button>
     </form>
   )
 }

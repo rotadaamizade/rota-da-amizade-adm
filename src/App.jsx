@@ -1,4 +1,5 @@
 import './App.css'
+import Header from './components/header/header'
 import Municipios from './screens/municipios/municipios'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
@@ -19,6 +20,7 @@ function App() {
     <div className="App">
       
     <BrowserRouter>
+      <Header/>
       <main>
       <Routes>
         <Route path='/municipios' element={<Municipios/>}/>

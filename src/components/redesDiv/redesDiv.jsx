@@ -3,7 +3,7 @@ import './redesDiv.css'
 function RedesDiv({ formData, setFormData }) {
     const contatosTemplate = [
         {
-            color: '000000',
+            color: '25D366',
             name: 'Whatsapp',
         },
         {
@@ -11,7 +11,7 @@ function RedesDiv({ formData, setFormData }) {
             name: 'Email',
         },
         {
-            color: '25D366',
+            color: '128C7E',
             name: 'Telefone',
         }
     ]
@@ -100,8 +100,6 @@ function RedesDiv({ formData, setFormData }) {
         setFormData(novoFormData);
     }
 
-    console.log(formData)
-
     return (
         <div>
             <div className='redes-title'>
@@ -115,6 +113,7 @@ function RedesDiv({ formData, setFormData }) {
                 (
                     <div className='redes-content' key={index}>
                         <select
+                            className='input-default'
                             name="name"
                             value={contato.name}
                             onChange={(e) => handleContatoNameChange(index, e.target.value)}
@@ -128,6 +127,7 @@ function RedesDiv({ formData, setFormData }) {
                         </select>
 
                         <input
+                            className='input-default'
                             type="text"
                             value={contato.url}
                             placeholder='Digite a URL:'
@@ -151,6 +151,7 @@ function RedesDiv({ formData, setFormData }) {
             {formData.redesSociais.map((redeSocial, index) => (
                     <div className='redes-content' key={index}>
                         <select
+                            className='input-default'
                             name="name"
                             value={redeSocial.name}
                             onChange={(e) => handleRedeSocialNameChange(index, e.target.value)}
@@ -169,6 +170,7 @@ function RedesDiv({ formData, setFormData }) {
                             type="text"
                             placeholder='Digite a URL:'
                             value={redeSocial.url}
+                            className='input-default'
                             onChange={(e) => handleRedeSocialUrlChange(index, e.target.value)}
                         />
                         <div className='close-remove' onClick={() => removerRedeSocial(index)}>
