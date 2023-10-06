@@ -103,7 +103,7 @@ function RedesDiv({ formData, setFormData }) {
     return (
         <div>
             <div className='redes-title'>
-                <p>Contatos</p>
+                <p>Contatos (opcional)</p>
                 <button onClick={() => adicionarContato()} type="button">
                     +
                 </button>
@@ -142,7 +142,7 @@ function RedesDiv({ formData, setFormData }) {
             )}
 
             <div className="redes-title">
-                <p>Redes Sociais</p>
+                <p>Redes Sociais (opcional)</p>
                 <button onClick={() => adicionarRedeSocial()} type="button">
                     +
                 </button>

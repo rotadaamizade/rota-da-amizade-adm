@@ -3,6 +3,7 @@ header{
     width: 100%;
     position: fixed;
     background-color: rgb(0, 0, 0);
+    z-index: 2;
 }
 
 header div{

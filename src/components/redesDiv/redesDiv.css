@@ -28,12 +28,15 @@
 }
 
 .redes-title button{
-    width: 35px;
+    max-width: 35px;
+    min-width: 35px;
     margin-left: 10px;
     height: 35px;
+    min-height: 35px;
+    max-height: 35px;
     border: none;
     background-color: rgb(58, 58, 253);
-    font-size: 24px;
+    font-size: 34px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,7 +65,7 @@
 
 .close-remove p{
     transform: rotate(45deg);
-    font-size: 40px;
+    font-size: 55px;
     font-weight: 300;
 }
 

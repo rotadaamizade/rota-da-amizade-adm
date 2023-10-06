@@ -1,6 +1,8 @@
 import './App.css'
 import Header from './components/header/header'
+import MunicipiosCasdastro from './screens/municipiosCadastro/municipiosCadastro'
 import Municipios from './screens/municipios/municipios'
+import MunicipiosEditar from './screens/municipiosEditar/municipiosEditar'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -23,7 +25,9 @@ function App() {
       <Header/>
       <main>
       <Routes>
+        <Route path='/municipios/cadastro' element={<MunicipiosCasdastro/>}/>
         <Route path='/municipios' element={<Municipios/>}/>
+        <Route path='/municipios/editar/:id' element={<MunicipiosEditar/>}/>
       </Routes>
       </main>
     </BrowserRouter>
