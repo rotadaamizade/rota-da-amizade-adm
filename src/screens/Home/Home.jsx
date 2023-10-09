@@ -3,7 +3,6 @@ import ShortDescribeHome from "../../components/ShortDescribeHome/ShortDescribeH
 import "./Home.css";
 import { PageContext } from "../../useContext";
 import { useNavigate } from "react-router-dom";
-import Footer from "../../components/Footer/Footer";
 
 function Home() {
   const { page, setPage } = useContext(PageContext);
@@ -85,7 +84,6 @@ function Home() {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 }

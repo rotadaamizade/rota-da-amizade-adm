@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./AboutUs.css";
 import axios from "axios";
 import ShortDescribeAboutUs from "../../components/ShortDescribeAboutUs/ShortDescribeAboutUs";
-import Footer from "../../components/Footer/Footer";
 
 function AboutUs() {
   const [imgCapa, setImgCapa] = useState([]);
@@ -37,7 +36,6 @@ function AboutUs() {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 }

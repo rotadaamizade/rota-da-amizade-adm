@@ -2,6 +2,6 @@ section#associates {
   margin-top: 1rem;
 }
 
-section#associates h1 {
-  margin-left: 1rem;
+section#associates > h1 {
+  text-align: center;
 }

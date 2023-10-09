@@ -2,6 +2,6 @@ section#cities {
     margin-top: 1rem;
 }
 
-section#cities h1{
-    margin-left: 1rem;
+section#cities > h1{
+    text-align: center;
 }

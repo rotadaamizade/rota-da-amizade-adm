@@ -10,6 +10,7 @@ import Contact from "./screens/Contact/Contact";
 import Associates from "./screens/Associates/Associates";
 import Header from "./components/Header/Header";
 import City from "./screens/City/City";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path="*" element={<Navigate to="" />} />
             </Routes>
           </main>
+          <Footer />
         </PageProvider>
       </BrowserRouter>
     </>

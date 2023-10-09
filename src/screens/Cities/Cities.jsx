@@ -1,5 +1,4 @@
 import CidadeCard from "../../components/CidadeCard/cidadeCard";
-import Footer from "../../components/Footer/Footer";
 import Loading from "../../components/Loading/Loading";
 import "./Cities.css";
 import axios from "axios";
@@ -30,13 +29,13 @@ function Cities() {
                 key={municipio.id}
                 instancia={municipio}
                 path="cidades"
+                url={municipio.url}
               />
             );
           })
         )}
       </div>
     </section>
-    <Footer />
     </>
   );
 }

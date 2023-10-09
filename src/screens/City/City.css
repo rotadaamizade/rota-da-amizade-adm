@@ -1,4 +1,5 @@
-section#city, section#history {
+section#city,
+section#history {
     text-align: center;
 }
 
@@ -14,11 +15,12 @@ section#city div#basicInfo p {
 
 section#city div#basicInfo > div {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 section#city div#basicInfo div.infoIconContainer {
     display: block;
-    margin: auto;
 }
 
 section#city div#basicInfo div.infoIconContainer svg {
@@ -44,4 +46,49 @@ section#imagesCity ul li img {
     width: 100%;
     vertical-align: top;
     object-fit: cover;
+}
+
+section#cityLocation div#cityContainer {
+    display: flex;
+    justify-content: center;
+}
+
+section#cityLocation div#cityContainer div#flagIcon {
+    width: 40px;
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+section#cityLocation div#locationGeo {
+    display: flex;
+    justify-content: center;
+}
+
+section#cityLocation div#locationGeo iframe {
+    border: none;
+}
+
+@media (max-width: 991px) {
+    section#city div#basicInfo {
+        display: inline;
+    }
+
+    section#city div#basicInfo div.infoIconContainer {
+        margin: 0;
+        padding-left: 25vw;
+    }
+
+    section#cityLocation div#cityContainer {
+        justify-content: start;
+        padding-left: 25vw;
+    }
+
+    section#history {
+        padding: 0 1rem;
+    }
+
+    section#city div#basicInfo > div {
+        justify-content: start;
+    }
 }

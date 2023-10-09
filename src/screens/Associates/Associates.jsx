@@ -1,5 +1,4 @@
 import AssociadoCard from "../../components/AssociadoCard/AssociadoCard";
-import Footer from "../../components/Footer/Footer";
 import Loading from "../../components/Loading/Loading";
 import "./Associates.css";
 import axios from "axios";
@@ -68,7 +67,6 @@ function Associates() {
         )}
       </div>
     </section>
-    <Footer />
     </>
   );
 }
