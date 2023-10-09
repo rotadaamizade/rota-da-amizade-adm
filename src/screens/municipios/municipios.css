@@ -1,9 +1,10 @@
-.card-div{
-    display: flex;
-    flex-wrap: wrap;
+.card-div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-gap: 10px;
 }
 
-.cadastrar-button{
+.cadastrar-button {
     width: 100%;
     height: 40px;
     margin-top: 20px;
@@ -14,4 +15,16 @@
     border: none;
     border-radius: 7px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 900px) {
+    .card-div {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .card-div {
+        grid-template-columns: 1fr;
+    }
 }

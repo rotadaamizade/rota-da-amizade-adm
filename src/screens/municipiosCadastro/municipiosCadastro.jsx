@@ -140,78 +140,78 @@ function MunicipiosCasdastro() {
 
   return (
     <>
-    <div className='title-div'>
-      <div onClick={() => navigate('/municipios')} className='voltar-button'>
-        <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <h1 className='title'>Cadastro de Municípios</h1>
-    </div>
-
-    <form onSubmit={cardImageUpload} action="">
-      <input
-        className='input-default'
-        type="text"
-        name="municipio"
-        placeholder="Nome do município:"
-        value={formData.municipio}
-        onChange={handleChange}
-      />
-      <input
-        className='input-default'
-        type="text"
-        name="descricao"
-        placeholder="Descrição:"
-        value={formData.descricao}
-        onChange={handleChange}
-      />
-      <input
-        className='input-default'
-        type="text"
-        name="localizacao"
-        placeholder="URL da localização: (Google Maps)"
-        value={formData.localizacao}
-        onChange={handleChange}
-      />
-      <textarea
-        type='text'
-        className='textarea-input'
-        name="sobre"
-        placeholder="Sobre:"
-        value={formData.sobre}
-        onChange={handleChange}
-      />
-
-      <RedesDiv formData={formData} setFormData={setFormData} />
-
-      <div className='file-input'>
-        <input onChange={(e) => setImage(e.target.files[0])} type='file' />
-        <span className='button'>Selecione a Imagem Principal</span>
-        <p className='label' data-js-label>
-          {image != null
-            ? image.name
-            : 'Nenhuma imagem selecionada'}
-        </p>
+      <div className='title-div'>
+        <div onClick={() => navigate('/municipios')} className='voltar-button'>
+          <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <h1 className='title'>Cadastro de Municípios</h1>
       </div>
 
-      <progress value={progressCard} max={100} />
+      <form onSubmit={cardImageUpload} action="">
+        <input
+          className='input-default'
+          type="text"
+          name="municipio"
+          placeholder="Nome do município:"
+          value={formData.municipio}
+          onChange={handleChange}
+        />
+        <input
+          className='input-default'
+          type="text"
+          name="descricao"
+          placeholder="Descrição:"
+          value={formData.descricao}
+          onChange={handleChange}
+        />
+        <input
+          className='input-default'
+          type="text"
+          name="localizacao"
+          placeholder="URL da localização: (Google Maps)"
+          value={formData.localizacao}
+          onChange={handleChange}
+        />
+        <textarea
+          type='text'
+          className='textarea-input'
+          name="sobre"
+          placeholder="Sobre:"
+          value={formData.sobre}
+          onChange={handleChange}
+        />
 
-      <div className='file-input file-input-2'>
-        <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
-        <span className='button'>Selecione as Imagens Secundárias</span>
-        <p className='label'>
-          {images && images.length > 0
-            ? Array.from(images).map((image) => image.name).join(', ')
-            : 'Nenhuma imagem selecionada'}
-        </p>
-      </div>
+        <RedesDiv formData={formData} setFormData={setFormData} />
 
-      <progress value={progressImages} max={100} />
+        <div className='file-input'>
+          <input onChange={(e) => setImage(e.target.files[0])} type='file' />
+          <span className='button'>Selecione a Imagem Principal</span>
+          <p className='label' data-js-label>
+            {image != null
+              ? image.name
+              : 'Nenhuma imagem selecionada'}
+          </p>
+        </div>
 
-      <button className='submit-button' type="submit">Cadastrar</button>
-    </form>
+        <progress value={progressCard} max={100} />
+
+        <div className='file-input file-input-2'>
+          <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
+          <span className='button'>Selecione as Imagens Secundárias</span>
+          <p className='label'>
+            {images && images.length > 0
+              ? Array.from(images).map((image) => image.name).join(', ')
+              : 'Nenhuma imagem selecionada'}
+          </p>
+        </div>
+
+        <progress value={progressImages} max={100} />
+
+        <button className='submit-button' type="submit">Cadastrar</button>
+      </form>
     </>
   )
 }
