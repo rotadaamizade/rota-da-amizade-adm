@@ -27,16 +27,31 @@ function MunicipiosCasdastro() {
     alert('Por favor, preencha todos os campos');
   }
 
-  const imagesUpload = (imageCardUrl) => {
+  function generateRandomId(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomId = '';
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomId += characters.charAt(randomIndex);
+    }
+
+    return randomId;
+  }
+
+  const imagesUpload = (imageCardUrl, imageCardDirectory) => {
     if (images == []) return
 
     let totalProgress = 0;
     let imagesProcessed = 0;
     let imagesUrl = []
 
+
     for (let index = 0; index < images.length; index++) {
 
-      const storageRef = ref(storage, `images/${formData.municipio}-image-${index + 1}`)
+      const id = generateRandomId(6)
+
+      const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-image-${id}`)
       const uploadTask = uploadBytesResumable(storageRef, images[index])
 
       uploadTask.on(
@@ -52,11 +67,14 @@ function MunicipiosCasdastro() {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(url => {
-            imagesUrl.push(url)
+            imagesUrl.push({
+              url: url,
+              directory: `municipios/images${formData.municipio}/${formData.municipio}-image-${id}`
+            })
             imagesProcessed++;
 
             if (imagesProcessed === images.length) {
-              handleSubmit(imageCardUrl, imagesUrl);
+              handleSubmit(imageCardUrl, imageCardDirectory, imagesUrl);
             }
           })
         }
@@ -94,7 +112,7 @@ function MunicipiosCasdastro() {
 
     if (image == null) return
 
-    const storageRef = ref(storage, `cardImages/${formData.municipio}-card`)
+    const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-card`)
     const uploadTask = uploadBytesResumable(storageRef, image)
 
     uploadTask.on(
@@ -108,7 +126,7 @@ function MunicipiosCasdastro() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          imagesUpload(url)
+          imagesUpload(url, `municipios/images${formData.municipio}/${formData.municipio}-card`)
         })
       }
     )
@@ -123,10 +141,10 @@ function MunicipiosCasdastro() {
     })
   }
 
-  const handleSubmit = async (imageCardUrl, imagesUrl) => {
+  const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
     const docRef = await addDoc(collection(db, 'municipios'), {
       descricao: formData.descricao,
-      imgCard: imageCardUrl,
+      imgCard: { url: imageCardUrl, directory: imageCardDirectory },
       imgs: imagesUrl,
       localizacao: formData.localizacao,
       municipio: formData.municipio,

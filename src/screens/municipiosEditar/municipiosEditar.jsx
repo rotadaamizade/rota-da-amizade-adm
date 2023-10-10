@@ -1,10 +1,11 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { db } from "../../config/firebase";
+import { db, storage } from "../../config/firebase";
 import RedesDiv from "../../components/redesDiv/redesDiv";
 import Loading from "../../components/loading/loading";
 import ImgsEdit from "../../components/imgsEdit/imgsEdit";
+import { deleteObject, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 function MunicipiosEditar() {
 
@@ -12,8 +13,14 @@ function MunicipiosEditar() {
     const navigate = useNavigate()
 
     const [city, setCity] = useState({});
-
     const [imgsCopy, setImgsCopy] = useState([])
+    const [imgsExclude, setImgsExclude] = useState([])
+    const [image, setImage] = useState(null)
+    const [images, setImages] = useState([])
+    const [progressImage, setProgressImage] = useState(0)
+    const [progressImages, setProgressImages] = useState(0)
+
+    const numImgs = 5
 
     useEffect(() => {
         getCity()
@@ -32,10 +39,10 @@ function MunicipiosEditar() {
             setImgsCopy(docSnap.data().imgs)
 
             if (!docSnap.exists()) {
-                navigate(`/`)
+                navigate(`/municipios`)
             }
         } catch (error) {
-            navigate(`/`)
+            navigate(`/municipios`)
             console.log(error)
         }
     }
@@ -50,37 +57,118 @@ function MunicipiosEditar() {
         })
     }
 
-    async function editCity(e) {
+    function generateRandomId(length) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let randomId = '';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            randomId += characters.charAt(randomIndex);
+        }
+
+        return randomId;
+    }
+
+    const imagesUpload = (e) => {
+
         e.preventDefault()
 
-        if (!city.municipio || !city.descricao || !city.localizacao || !city.sobre ) {
+        if (images.length == 0){
+            editCity([]);
+        }
+
+        let totalProgress = 0;
+        let imagesProcessed = 0;
+        let imagesUrl = []
+
+
+        for (let index = 0; index < images.length; index++) {
+
+            const id = generateRandomId(6)
+
+            const storageRef = ref(storage, `municipios/images${city.municipio}/${city.municipio}-image-${id}`)
+            const uploadTask = uploadBytesResumable(storageRef, images[index])
+
+            uploadTask.on(
+                'state_changed',
+                snapshot => {
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * (100 / images.length);
+                    totalProgress += progress;
+                    setProgressImages(totalProgress);
+                },
+                error => {
+                    alert(error)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                        imagesUrl.push({
+                            url: url,
+                            directory: `municipios/images${city.municipio}/${city.municipio}-image-${id}`
+                        })
+                        imagesProcessed++;
+
+                        if (imagesProcessed === images.length) {
+                            editCity(imagesUrl);
+                        }
+                    })
+                }
+            )
+        }
+    }
+
+    async function editCity(imgsUrl) {
+
+        console.log('alo')
+
+        imgsExclude.forEach(element => {
+            console.log(element)
+            const desertRef = ref(storage, element)
+
+            deleteObject(desertRef).then(() => {
+                console.log('sucesso')
+            }).catch((error) => {
+                console.log('erro')
+            });
+        });
+
+        if (!city.municipio || !city.descricao || !city.localizacao || !city.sobre) {
             errorAlert()
             return
-          }
-      
-          if (city.contatos.length > 0) {
+        }
+
+        if (city.contatos.length > 0) {
             for (let i = 0; i < city.contatos.length; i++) {
-              const element = city.contatos[i];
-              if (element.color === '' || element.name === '' || element.url === '') {
-                errorAlert()
-                return
-              }
+                const element = city.contatos[i];
+                if (element.color === '' || element.name === '' || element.url === '') {
+                    errorAlert()
+                    return
+                }
             }
-          }
-      
-          if (city.redesSociais.length > 0) {
+        }
+
+        if (city.redesSociais.length > 0) {
             for (let i = 0; i < city.redesSociais.length; i++) {
-              const element = city.redesSociais[i];
-              if (element.color === '' || element.name === '' || element.url === '') {
-                errorAlert()
-                return
-              }
+                const element = city.redesSociais[i];
+                if (element.color === '' || element.name === '' || element.url === '') {
+                    errorAlert()
+                    return
+                }
             }
-          }
+        }
 
         try {
             const docRef = doc(db, "municipios", id);
-            await updateDoc(docRef, city)
+            await updateDoc(docRef, {
+                contatos: city.contatos,
+                descricao: city.descricao,
+                imgCard: city.imgCard,
+                imgs: [...city.imgs ,...imgsUrl],
+                localizacao: city.localizacao,
+                municipio: city.municipio,
+                redesSociais: city.redesSociais,
+                sobre: city.sobre
+            })
             navigate('/municipios')
         } catch (error) {
             console.error("Erro ao editar o documento:", error);
@@ -96,14 +184,14 @@ function MunicipiosEditar() {
                 <>
                     <div className='title-div'>
                         <div onClick={() => navigate('/municipios')} className='voltar-button'>
-                            <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http:www.w3.org/2000/svg">
                                 <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
                         <h1 className='title'>Editar Município: {city.municipio}</h1>
                     </div>
-                    <form onSubmit={editCity} action="">
+                    <form onSubmit={imagesUpload} action="">
                         <input
                             disabled
                             className='input-default input-disabled'
@@ -143,9 +231,11 @@ function MunicipiosEditar() {
                                 <RedesDiv formData={city} setFormData={setCity} />
 
                                 <ImgsEdit
-                                    city = {city}
-                                    setCity = {setCity}
-                                    imgsCopy = {imgsCopy}
+                                    city={city}
+                                    setCity={setCity}
+                                    imgsCopy={imgsCopy}
+                                    setImgsExclude={setImgsExclude}
+                                    imgsExclude={imgsExclude}
                                 />
                             </>
                         )}
@@ -162,19 +252,22 @@ function MunicipiosEditar() {
                     </p>
                 </div>
 
-                <progress value={progressCard} max={100} />
+                <progress value={progressCard} max={100} /> */}
 
-                <div className='file-input file-input-2'>
-                    <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
-                    <span className='button'>Selecione as Imagens Secundárias</span>
-                    <p className='label'>
-                        {images && images.length > 0
-                            ? Array.from(images).map((image) => image.name).join(', ')
-                            : 'Nenhuma imagem selecionada'}
-                    </p>
-                </div>
 
-                <progress value={progressImages} max={100} /> */}
+
+                        <div className='file-input file-input-2'>
+                            <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
+                            <span className='button'>Adicione mais imagens</span>
+                            <p className='label'>
+                                {images && images.length > 0
+                                    ? Array.from(images).map((image) => image.name).join(', ')
+                                    : 'Nenhuma imagem selecionada'}
+                            </p>
+                        </div>
+
+                        <progress value={progressImages} max={100} />
+
 
                         <button className='submit-button' type="submit">Editar</button>
                     </form>

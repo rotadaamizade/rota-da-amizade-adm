@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './imgsEdit.css';
 
-function ImgsEdit({ city, setCity, imgsCopy }) {
+function ImgsEdit({ city, setCity, imgsCopy, setImgsExclude, imgsExclude }) {
 
     useEffect(() => {
         console.log(imgsCopy)
@@ -9,7 +9,8 @@ function ImgsEdit({ city, setCity, imgsCopy }) {
 
 
     const handleRemoveImage = (index) => {
-        const updatedCity = { ...city };
+        const updatedCity = { ...city }
+        setImgsExclude([...imgsExclude, updatedCity.imgs[index].directory])
         updatedCity.imgs.splice(index, 1);
         setCity(updatedCity);
     }
@@ -18,11 +19,13 @@ function ImgsEdit({ city, setCity, imgsCopy }) {
         let updatedCity = { ...city };
         updatedCity.imgs = [...imgsCopy]
         setCity(updatedCity);
-
+        setImgsExclude([])
     };
     
 
     return (
+        <>
+        <h1 className='title-removeImgs'>Remover imagens</h1>
         <div className='editImg-container'>
             {city.imgs.length < imgsCopy.length && (
             <div onClick={redefinir} className='editImg-redefinir'>
@@ -39,11 +42,12 @@ function ImgsEdit({ city, setCity, imgsCopy }) {
                     <div className='editImg-close' onClick={() => handleRemoveImage(index)}>
                         <p>+</p>
                     </div>
-                    <img src={img} alt='' />
+                    <img src={img.url} alt='' />
                 </div>
             ))}
         </div>
-    );
+        </>
+    )
 }
 
 export default ImgsEdit;

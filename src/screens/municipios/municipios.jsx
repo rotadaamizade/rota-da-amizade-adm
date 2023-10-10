@@ -10,7 +10,7 @@ function Municipios() {
 
     const navigate = useNavigate()
 
-    const [cities, setCities] = useState([])
+    const [cities, setCities] = useState(null)
 
     useEffect(() => {
         getCities()
@@ -44,7 +44,7 @@ function Municipios() {
     return (
         <>
         {
-            cities.length === 0 ? (
+            cities == null ? (
                 <Loading />
             ) : (
                 <>
@@ -55,7 +55,7 @@ function Municipios() {
                             cities.map((city, index) => (
                                 <CardEdit
                                     key={index}
-                                    url={city.imgCard}
+                                    url={city.imgCard.url}
                                     id={city.id}
                                     descricao={city.descricao}
                                     nome={city.municipio}
