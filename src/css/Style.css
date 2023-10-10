@@ -23,6 +23,10 @@ body {
   margin: 0 auto;
 }
 
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 991px) {
   .container {
     width: auto;
@@ -31,5 +35,9 @@ body {
 
   main {
     padding-top: 92px;
+  }
+
+  .mob-mb-05 {
+    margin-bottom: 0.5rem;
   }
 }

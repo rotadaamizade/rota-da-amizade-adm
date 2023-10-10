@@ -79,7 +79,7 @@ function Footer() {
                         <p className="tittleContact">
                             <b>Contato</b>
                         </p>
-                        <div className="row redFilter" id="emailBox">
+                        <div className="row redFilter mb-1" id="emailBox">
                             {emailIcon}
                             <p className="textWithIcon">
                                 <a
@@ -90,7 +90,7 @@ function Footer() {
                                 </a>
                             </p>
                         </div>
-                        <div className="row redFilter" id="phoneBox">
+                        <div className="row redFilter mb-1" id="phoneBox">
                             {phoneIcon}
                             <p className="textWithIcon">(49) 99930-7834</p>
                         </div>
@@ -99,7 +99,7 @@ function Footer() {
                         <p className="tittleContact">
                             <b>Redes sociais</b>
                         </p>
-                        <div className="row redFilter" id="facebookBox">
+                        <div className="row redFilter mb-1" id="facebookBox">
                             {facebookIcon}
                             <p className="textWithIcon">
                                 <a
@@ -111,7 +111,7 @@ function Footer() {
                                 </a>
                             </p>
                         </div>
-                        <div className="row redFilter" id="instagramBox">
+                        <div className="row redFilter mb-1" id="instagramBox">
                             {instagramIcon}
                             <p className="textWithIcon">
                                 <a
@@ -128,12 +128,12 @@ function Footer() {
                         <p className="tittleContact">
                             <b>Termos de privacidade</b>
                         </p>
-                        <div className="row redFilter">
+                        <div className="row redFilter mb-1">
                             <p>
                                 <a href="#">Política de Privacidade</a>
                             </p>
                         </div>
-                        <div className="row redFilter">
+                        <div className="row redFilter mb-1">
                             <p>
                                 <a href="#">Termos de Uso</a>
                             </p>

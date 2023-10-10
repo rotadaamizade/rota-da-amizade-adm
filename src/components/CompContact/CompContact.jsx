@@ -55,7 +55,7 @@ function CompContact(props) {
                     <div>
                         {props.whatsapp && (
                             <>
-                                <div className="row">
+                                <div className="row mob-mb-05">
                                     {whatsappIcon}
                                     <p>{props.whatsapp}</p>
                                 </div>
@@ -63,7 +63,7 @@ function CompContact(props) {
                         )}
 
                         {props.email && (
-                            <div className="row">
+                            <div className="row mob-mb-05">
                                 {emailIcon}
                                 <a
                                     href={`mailto:${props.email}`}
@@ -76,7 +76,7 @@ function CompContact(props) {
                     </div>
                     <div>
                         {props.facebook && (
-                            <div className="row">
+                            <div className="row mob-mb-05">
                                 {facebookIcon}
                                 <a href={props.facebookUrl} target="_blank">
                                     <p>{props.facebook}</p>
@@ -84,7 +84,7 @@ function CompContact(props) {
                             </div>
                         )}
                         {props.instagram && (
-                            <div className="row">
+                            <div className="row mob-mb-05">
                                 {instagramIcon}
                                 <a href={props.instagramUrl} target="_blank">
                                     <p>{props.instagram}</p>

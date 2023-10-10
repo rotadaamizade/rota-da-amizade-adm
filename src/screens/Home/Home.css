@@ -1,17 +1,19 @@
 section#app div#appContainer {
   display: flex;
+  justify-content: center;
 }
 
 section#app div#appContainer div#appText {
-  flex-grow: 1;
   text-align: start;
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
+  margin-right: 2rem;
 }
 
 section#app div#appContainer div#appText ul {
   list-style: none;
+  padding-left: 0;
 }
 
 section#app div#appContainer div.appBadges {

@@ -5,8 +5,9 @@ section#history {
 
 section#city div#basicInfo {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     text-align: start;
+    margin-bottom: 1rem;
 }
 
 section#city div#basicInfo p {
@@ -76,7 +77,6 @@ section#cityLocation div#locationGeo iframe {
 
     section#city div#basicInfo div.infoIconContainer {
         margin: 0;
-        padding-left: 25vw;
     }
 
     section#cityLocation div#cityContainer {
@@ -90,5 +90,6 @@ section#cityLocation div#locationGeo iframe {
 
     section#city div#basicInfo > div {
         justify-content: start;
+        padding: 0 25vw;
     }
 }

@@ -13,6 +13,7 @@ function City() {
 
     useEffect(() => {
         axios.get(`../Data/cities/${townUrl.url}.json`).then((res) => {
+            console.log(res);
             setTown(res.data);
         });
     }, []);
@@ -128,8 +129,8 @@ function City() {
                     <section id="history">
                         <div className="container">
                             <h2>Nossa história</h2>
-                            {town.history.map((res) => {
-                                return <p>{res.paragraph}</p>;
+                            {town.history.map((res, index) => {
+                                return <p key={index}>{res.paragraph}</p>;
                             })}
                         </div>
                     </section>
@@ -174,15 +175,18 @@ function City() {
                                 whatsapp={town.contact.phone}
                                 email={town.contact.email}
                                 facebook={town.contact.socialMedias.facebook}
-                                facebookUrl={town.contact.socialMedias.facebookUrl}
+                                facebookUrl={
+                                    town.contact.socialMedias.facebookUrl
+                                }
                                 instagram={town.contact.socialMedias.instagram}
-                                instagramUrl={town.contact.socialMedias.instagramUrl}
+                                instagramUrl={
+                                    town.contact.socialMedias.instagramUrl
+                                }
                             />
                         </div>
                     </section>
                 </>
             )}
-
         </>
     );
 }

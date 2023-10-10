@@ -12,7 +12,7 @@ div#basicInfo a {
     transition: color 500ms;
 }
 
-div#basicInfo a:hover {
+div#basicInfo a:hover, div#basicInfo p:hover {
     color: #98b126;
     transition: color 500ms;
 }

@@ -5,9 +5,8 @@ function ImgCarousel(props) {
     return (
         <Carousel
             className="carouselContainer"
-            renderCenterLeftControls={false}
-            renderCenterRightControls={true}
-            withoutControls={true}
+            renderBottomCenterControls={false}
+            
         >
             {props.images.map((img, index) => {
                 return (

@@ -15,6 +15,10 @@ section#aboutUs div#contentMiddle h1 {
   animation-duration: 3000ms;
 }
 
+section#aboutUs div#contentMiddle p {
+  font-weight: 500;
+}
+
 @keyframes colorTitle {
   25% {
     color: #98b126;

@@ -5,3 +5,7 @@ section#cities {
 section#cities > h1{
     text-align: center;
 }
+
+section#cities div.cardGroup a {
+    cursor: pointer;
+}

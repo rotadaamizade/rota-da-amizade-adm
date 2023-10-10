@@ -63,7 +63,7 @@ function Header() {
   return (
     <header>
       <div id="options" className="container">
-        <a onClick={linkHome} href="#paginaInicial" id="icon">
+        <a onClick={linkHome} href="#top" id="icon">
           <img
             src={rotaDesenho}
             alt="Logo da rota da amizade"
@@ -75,25 +75,25 @@ function Header() {
         <ul>
           <a
             className={page == "about" ? "activeLink" : ""}
-            onClick={linkAboutUs} href="#sobreNos"
+            onClick={linkAboutUs} href="#top"
           >
             Quem somos
           </a>
           <a
             className={page == "cities" ? "activeLink" : ""}
-            onClick={linkCities} href="#cidades"
+            onClick={linkCities} href="#top"
           >
             Municipios
           </a>
           <a
             className={page == "associates" ? "activeLink" : ""}
-            onClick={linkAssociates} href="#associados"
+            onClick={linkAssociates} href="#top"
           >
             Associados
           </a>
           <a
             className={page == "contact" ? "activeLink" : ""}
-            onClick={linkContact} href="#contatos"
+            onClick={linkContact} href="#top"
           >
             Contato
           </a>
@@ -117,16 +117,16 @@ function Header() {
       >
         <ul id="dropdown-menu-mobile">
           <li>
-            <a onClick={linkAboutUs} href="#sobreNos">Quem somos</a>
+            <a onClick={linkAboutUs} href="#top">Quem somos</a>
           </li>
           <li>
-            <a onClick={linkCities} href="#cidades">Municipios</a>
+            <a onClick={linkCities} href="#top">Municipios</a>
           </li>
           <li>
-            <a onClick={linkAssociates} href="#associados">Associados</a>
+            <a onClick={linkAssociates} href="#top">Associados</a>
           </li>
           <li>
-            <a onClick={linkContact} href="#contatos">
+            <a onClick={linkContact} href="#top">
               Contato
             </a>
           </li>

@@ -1,6 +1,6 @@
-rotaIconfooter {
-  /* background-color: #dbdbdb; */
-  background-color: #efefef;
+footer {
+  margin-top: 2rem;
+  border-top: solid 1px #c6c6c6;
 }
 
 footer div#paddingAll {
@@ -21,7 +21,8 @@ footer div#rotaIcon img#rotaDesenho {
 }
 
 footer p.tittleContact {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 footer div.row {
