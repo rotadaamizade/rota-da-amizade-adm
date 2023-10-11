@@ -10,3 +10,32 @@
     height: 100%;
     object-fit: cover;
 }
+
+.carouselPrevButton {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 0.5rem;
+    background-image: url("./img/arrow-left-icon.svg") !important;
+    background-size: 45% auto!important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    border-radius: 100%;
+    padding: 4rem;
+    /* background-color: blue!important; */
+}
+
+.carouselNextButton {
+    width: 1rem;
+    height: 1rem;
+    background-image: url("./img/arrow-right-icon.svg") !important;
+}
+
+.arrowleftIcon {
+    border: 0px;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    padding: 10px;
+    text-transform: uppercase;
+    opacity: 1;
+    cursor: pointer;
+}

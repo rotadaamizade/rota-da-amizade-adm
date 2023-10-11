@@ -28,7 +28,7 @@ section#city div#basicInfo div.infoIconContainer svg {
     height: 30px;
 }
 
-section#imagesCity ul {
+section#imagesCity > ul {
     display: block;
     width: 100%;
     height: 30rem;
@@ -37,12 +37,12 @@ section#imagesCity ul {
     position: relative;
 }
 
-section#imagesCity ul li {
+section#imagesCity > ul li {
     list-style: none;
     position: absolute;
 }
 
-section#imagesCity ul li img {
+section#imagesCity > ul li img {
     margin: auto;
     width: 100%;
     vertical-align: top;
