@@ -1,4 +1,4 @@
-import CidadeCard from "../../components/CidadeCard/cidadeCard";
+import CidadeCard from "../../components/CidadeCard/CidadeCard";
 import Loading from "../../components/Loading/Loading";
 import "./Cities.css";
 import axios from "axios";
