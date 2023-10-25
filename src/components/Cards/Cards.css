@@ -48,6 +48,19 @@ div.cardGroup div.cardOverlay {
     border-bottom-right-radius: 5px;
 }
 
+div.cardContainer {
+    animation: 500ms ease-out cardAppear;
+}
+
+@keyframes cardAppear {
+    0% {
+      opacity: 0%;
+    }
+    100% {
+      opacity: 100%;
+    }
+  }
+
 @media (max-width: 1000px) {
     div.cardGroup {
         justify-content: center;
