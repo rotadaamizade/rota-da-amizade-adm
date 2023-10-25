@@ -311,6 +311,7 @@ function MunicipiosEditar() {
                                     <span className="button">
                                         Adicione mais imagens{city.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (city.imgs.length + images.length)}` }
                                         {city.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (city.imgs.length + images.length)}` }
+                                        {city.imgs.length + images.length > maxImgs && ` - Limite excedido` }
                                     </span>
                                     <p className='label'>
                                         {images && images.length > 0

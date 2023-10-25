@@ -23,6 +23,9 @@ function MunicipiosCasdastro() {
   const [image, setImage] = useState(null)
   const [images, setImages] = useState([])
 
+  const maxImgs = 5
+    const minImgs = 2
+
   const errorAlert = () => {
     alert('Por favor, preencha todos os campos');
   }
@@ -110,7 +113,17 @@ function MunicipiosCasdastro() {
       }
     }
 
-    if (image == null) return
+    if (image == null){
+      errorAlert()
+      return
+      
+    }
+
+    if (images.length < minImgs || images.length > maxImgs){
+      errorAlert()
+      return
+      
+    }
 
     const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-card`)
     const uploadTask = uploadBytesResumable(storageRef, image)
@@ -218,7 +231,10 @@ function MunicipiosCasdastro() {
 
         <div className='file-input file-input-2'>
           <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
-          <span className='button'>Selecione as Imagens Secundárias</span>
+          <span className='button'>Selecione as Imagens Secundárias 
+          {images.length < maxImgs && ` - maximo: ${maxImgs - images.length} `}
+          {minImgs - images.length > 0 && ` - Mínimo: ${minImgs - images.length} `}
+          {images.length > maxImgs && ` - Limite excedido`}</span>
           <p className='label'>
             {images && images.length > 0
               ? Array.from(images).map((image) => image.name).join(', ')
