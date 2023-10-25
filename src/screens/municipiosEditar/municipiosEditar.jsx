@@ -17,7 +17,7 @@ function MunicipiosEditar() {
     const [imgsExclude, setImgsExclude] = useState([])
     const [image, setImage] = useState(null)
     const [images, setImages] = useState([])
-    const [progressImage, setProgressImage] = useState(0)
+    const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
 
     const maxImgs = 5
@@ -27,9 +27,6 @@ function MunicipiosEditar() {
         getCity()
     }, [])
 
-    const errorAlert = () => {
-        alert('Por favor, preencha todos os campos');
-    }
 
     const getCity = async () => {
 
@@ -58,6 +55,52 @@ function MunicipiosEditar() {
         })
     }
 
+    const verification = () => {
+
+        let errors = []
+
+        if (!city.municipio || !city.descricao || !city.localizacao || !city.sobre) {
+            errors.push('Preencha todos os campos principais')
+        }
+
+        if (city.contatos.length > 0) {
+            for (let i = 0; i < city.contatos.length; i++) {
+                const element = city.contatos[i];
+                if (element.color === '' || element.name === '' || element.url === '') {
+                    errors.push('Preencha todos os campos de contatos')
+                }
+            }
+        }
+
+        if (city.redesSociais.length > 0) {
+            for (let i = 0; i < city.redesSociais.length; i++) {
+                const element = city.redesSociais[i];
+                if (element.color === '' || element.name === '' || element.url === '') {
+                    errors.push('Preencha todos os campos de redes sociais')
+                }
+            }
+        }
+
+        if (images.length + city.imgs.length > maxImgs) {
+            errors.push('Limite de imagens gerais excedito')
+        } else if (images.length + city.imgs.length < minImgs) {
+            errors.push('Adicione o mínimo de imagens gerais')
+        }
+
+        if (errors.length == 0) {
+            return 1
+        } else {
+
+            errors.forEach(element => {
+                alert(element)
+            });
+
+            return 0
+        }
+
+
+    }
+
     function generateRandomId(length) {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let randomId = '';
@@ -70,12 +113,12 @@ function MunicipiosEditar() {
         return randomId;
     }
 
-    const imagesUpload = (e) => {
+    const imagesUpload = (cardUrl, cardDirectory) => {
 
-        e.preventDefault()
 
-        if (images.length == 0){
-            editCity([]);
+        if (images.length == 0) {
+            editCity([], cardUrl, cardDirectory)
+            return
         }
 
         let totalProgress = 0;
@@ -110,7 +153,7 @@ function MunicipiosEditar() {
                         imagesProcessed++;
 
                         if (imagesProcessed === images.length) {
-                            editCity(imagesUrl);
+                            editCity(imagesUrl, cardUrl, cardDirectory);
                         }
                     })
                 }
@@ -118,41 +161,43 @@ function MunicipiosEditar() {
         }
     }
 
-    console.log(city.imgs)
+    const cardImageUpload = (event) => {
+        event.preventDefault()
 
-    async function editCity(imgsUrl) {
-
-        if(city.imgs.length > maxImgs || city.imgs.length < minImgs){
-            errorAlert()
+        if (verification() == 0) {
             return
         }
 
-        if (!city.municipio || !city.descricao || !city.localizacao || !city.sobre) {
-            errorAlert()
+        if (image == null || image.length == 0) {
+            imagesUpload(city.imgCard.url, city.imgCard.directory)
             return
         }
 
-        if (city.contatos.length > 0) {
-            for (let i = 0; i < city.contatos.length; i++) {
-                const element = city.contatos[i];
-                if (element.color === '' || element.name === '' || element.url === '') {
-                    errorAlert()
-                    return
-                }
-            }
-        }
+        const storageRef = ref(storage, `municipios/images${city.municipio}/${city.municipio}-card`)
+        const uploadTask = uploadBytesResumable(storageRef, image)
 
-        if (city.redesSociais.length > 0) {
-            for (let i = 0; i < city.redesSociais.length; i++) {
-                const element = city.redesSociais[i];
-                if (element.color === '' || element.name === '' || element.url === '') {
-                    errorAlert()
-                    return
-                }
+        uploadTask.on(
+            'state_changed',
+            snapshot => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                setProgressCard(progress)
+            },
+            error => {
+                alert(error)
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                    imagesUpload(url, `municipios/images${city.municipio}/${city.municipio}-card`)
+                })
             }
-        }
+        )
+    }
 
-        
+    async function editCity(imgsUrl, cardUrl, cardDirectory) {
+
+        console.log(cardUrl)
+        console.log(cardDirectory)
+
         imgsExclude.forEach(element => {
             console.log(element)
             const desertRef = ref(storage, element)
@@ -164,13 +209,17 @@ function MunicipiosEditar() {
             });
         });
 
+        if (cardUrl) {
+
+        }
+
         try {
             const docRef = doc(db, "municipios", id);
             await updateDoc(docRef, {
                 contatos: city.contatos,
                 descricao: city.descricao,
-                imgCard: city.imgCard,
-                imgs: [...city.imgs ,...imgsUrl],
+                imgCard: { url: cardUrl, directory: cardDirectory },
+                imgs: [...city.imgs, ...imgsUrl],
                 localizacao: city.localizacao,
                 municipio: city.municipio,
                 redesSociais: city.redesSociais,
@@ -198,7 +247,7 @@ function MunicipiosEditar() {
                         </div>
                         <h1 className='title'>Editar Município: {city.municipio}</h1>
                     </div>
-                    <form onSubmit={imagesUpload} action="">
+                    <form onSubmit={cardImageUpload} action="">
                         <input
                             disabled
                             className='input-default input-disabled'
@@ -236,6 +285,18 @@ function MunicipiosEditar() {
                         {Object.keys(city).length !== 0 && (
                             <>
                                 <RedesDiv formData={city} setFormData={setCity} />
+                                <h1 className='title-removeImgs'>Editar Imagem Principal</h1>
+                                <div className='file-input'>
+                                    <input onChange={(e) => setImage(e.target.files[0])} type='file' />
+                                    <span className='button'>Selecione a Imagem Principal</span>
+                                    <p className='label' data-js-label>
+                                        {image != null
+                                            ? image.name
+                                            : 'Nenhuma imagem selecionada'}
+                                    </p>
+                                </div>
+
+                                <progress value={progressCard} max={100} />
 
                                 <ImgsEdit
                                     city={city}
@@ -244,37 +305,23 @@ function MunicipiosEditar() {
                                     setImgsExclude={setImgsExclude}
                                     imgsExclude={imgsExclude}
                                 />
+
+                                <div className='file-input file-input-2'>
+                                    <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
+                                    <span className="button">
+                                        Adicione mais imagens{city.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (city.imgs.length + images.length)}` }
+                                        {city.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (city.imgs.length + images.length)}` }
+                                    </span>
+                                    <p className='label'>
+                                        {images && images.length > 0
+                                            ? Array.from(images).map((image) => image.name).join(', ')
+                                            : 'Nenhuma imagem selecionada'}
+                                    </p>
+                                </div>
+
+                                <progress value={progressImages} max={100} />
                             </>
                         )}
-
-
-
-                        {/* <div className='file-input'>
-                    <input onChange={(e) => setImage(e.target.files[0])} type='file' />
-                    <span className='button'>Selecione a Imagem Principal</span>
-                    <p className='label' data-js-label>
-                        {image != null
-                            ? image.name
-                            : 'Nenhuma imagem selecionada'}
-                    </p>
-                </div>
-
-                <progress value={progressCard} max={100} /> */}
-
-
-
-                        <div className='file-input file-input-2'>
-                            <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
-                            <span className='button'>Adicione mais imagens</span>
-                            <p className='label'>
-                                {images && images.length > 0
-                                    ? Array.from(images).map((image) => image.name).join(', ')
-                                    : 'Nenhuma imagem selecionada'}
-                            </p>
-                        </div>
-
-                        <progress value={progressImages} max={100} />
-
 
                         <button className='submit-button' type="submit">Editar</button>
                     </form>
