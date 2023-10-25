@@ -1,0 +1,41 @@
+.login-div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: rgb(240, 240, 240);
+    margin-top: 37px;
+    text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.login-div h2{
+    margin: 0;
+    margin-bottom: 24px;
+}
+
+.login-div form{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.login-div input{
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.login-div input:focus{
+    outline: none;
+}
+
+.login-div button{
+    margin-top: 10px;
+    background-color: #3a3afd;
+    border: none;
+    color: white;
+    font-weight: 500;
+    border-radius: 6px;
+}

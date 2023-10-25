@@ -20,7 +20,8 @@ function MunicipiosEditar() {
     const [progressImage, setProgressImage] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
 
-    const numImgs = 5
+    const maxImgs = 5
+    const minImgs = 2
 
     useEffect(() => {
         getCity()
@@ -117,20 +118,14 @@ function MunicipiosEditar() {
         }
     }
 
+    console.log(city.imgs)
+
     async function editCity(imgsUrl) {
 
-        console.log('alo')
-
-        imgsExclude.forEach(element => {
-            console.log(element)
-            const desertRef = ref(storage, element)
-
-            deleteObject(desertRef).then(() => {
-                console.log('sucesso')
-            }).catch((error) => {
-                console.log('erro')
-            });
-        });
+        if(city.imgs.length > maxImgs || city.imgs.length < minImgs){
+            errorAlert()
+            return
+        }
 
         if (!city.municipio || !city.descricao || !city.localizacao || !city.sobre) {
             errorAlert()
@@ -156,6 +151,18 @@ function MunicipiosEditar() {
                 }
             }
         }
+
+        
+        imgsExclude.forEach(element => {
+            console.log(element)
+            const desertRef = ref(storage, element)
+
+            deleteObject(desertRef).then(() => {
+                console.log('sucesso')
+            }).catch((error) => {
+                console.log('erro')
+            });
+        });
 
         try {
             const docRef = doc(db, "municipios", id);

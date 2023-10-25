@@ -15,6 +15,7 @@ header div{
     height: 100%;
     font-size: 18px;
     font-weight: 600;
+    justify-content: space-between;
 }
 
 @media screen and (max-width: 1240px) {
