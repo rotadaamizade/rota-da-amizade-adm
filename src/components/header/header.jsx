@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import './header.css';
 import { UserContext } from '../../UserContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Header() {
     return (
         <header>
             <div>
-                <p>Rota da Amizade ADM</p>
+                <Link to={'/'}>Rota da Amizade ADMIN</Link>
                 {logged.status && <button onClick={logOut}>Sair</button>}
                 
             </div>

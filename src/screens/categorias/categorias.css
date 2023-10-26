@@ -1,0 +1,25 @@
+.category-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.category-div{
+
+}
+
+.category-div p{
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+    color: rgb(52, 52, 52);
+}
+
+.category-button{
+    width: 100px;
+    height: 60px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

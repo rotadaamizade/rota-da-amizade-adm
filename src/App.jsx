@@ -9,6 +9,9 @@ import Login from './screens/login/login';
 import { useContext } from 'react';
 import RedirectToLogin from './redirects/redirectToLogin';
 import RedirectToHome from './redirects/redirectToHome';
+import Home from './screens/home/home';
+import Categorias from './screens/categorias/categorias';
+import CategoriasCadastro from './screens/categoriasCadastro/categoriasCadastro';
 
 function App() {
   const { logged } = useContext(UserContext);
@@ -31,9 +34,12 @@ function App() {
             <Routes>
               {logged.status ? (
                 <>
+                <Route path="/" element={<Home />} />
               <Route path="/municipios/cadastro" element={<MunicipiosCadastro />} />
               <Route path="/municipios" element={<Municipios />} />
               <Route path="/municipios/editar/:id" element={<MunicipiosEditar />} />
+              <Route path="/categorias" element={<Categorias />} />
+              <Route path="/categorias/cadastro" element={<CategoriasCadastro />} />
               <Route path="*" element={<RedirectToHome />} />
               </>
               ) : (
