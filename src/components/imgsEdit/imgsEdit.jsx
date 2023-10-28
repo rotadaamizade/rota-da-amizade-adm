@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import './imgsEdit.css';
 
 function ImgsEdit({ city, setCity, imgsCopy, setImgsExclude, imgsExclude }) {
-
-    useEffect(() => {
-        console.log(imgsCopy)
-    }, [])
-
 
     const handleRemoveImage = (index) => {
         const updatedCity = { ...city }

@@ -11,8 +11,7 @@ function CategoriasCadastro() {
     const [categories, setCategories] = useState([]);
     const [formData, setFormData] = useState({
         nome: '',
-        cor1: '',
-        cor2: '',
+        corFundo: '',
         svg: ''
     })
 
@@ -20,7 +19,9 @@ function CategoriasCadastro() {
         getCategories()
     }, [])
 
-    console.log(category)
+    const errorAlert = () => {
+        alert('Preencha todos os campos corretamente')
+    }
 
     const getCategories = async () => {
         try {
@@ -48,6 +49,10 @@ function CategoriasCadastro() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if(category == null || category == undefined || formData.corFundo == '' || formData.nome == '' || formData.svg == ''){
+            errorAlert()
+            return
+        }
         try {
             if (category) {
                 const docRef = doc(db, "categorias", category.nome.toLowerCase());
@@ -83,16 +88,17 @@ function CategoriasCadastro() {
             </div>
             <form onSubmit={handleSubmit} action="">
                 <select
-                    className='input-default'
+                    className='select-category'
                     name="category"
-                    value={category ? category.nome : ''} // Exiba o nome da categoria selecionada
+                    value={category ? category.nome : ''}
                     onChange={handleSelectChange}
                 >
-                    <option value="">Selecione uma categoria</option>
+                    <option value="">Selecione o tipo de categoria</option>
                     {categories.map((cat, index) => (
                         <option key={index} value={cat.nome}>{cat.nome}</option>
                     ))}
                 </select>
+
                 <input
                     className='input-default'
                     type="text"
@@ -104,17 +110,9 @@ function CategoriasCadastro() {
                 <input
                     className='input-default'
                     type="text"
-                    name="cor1"
-                    placeholder="Cor 1:"
-                    value={formData.cor1}
-                    onChange={handleChange}
-                />
-                <input
-                    className='input-default'
-                    type="text"
-                    name="cor2"
-                    placeholder="Cor 2:"
-                    value={formData.cor2}
+                    name="corFundo"
+                    placeholder="Cor de Fundo:"
+                    value={formData.corFundo}
                     onChange={handleChange}
                 />
                 <textarea

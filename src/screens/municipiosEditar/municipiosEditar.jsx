@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, addDoc, collection } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
@@ -37,10 +37,10 @@ function MunicipiosEditar() {
             setImgsCopy(docSnap.data().imgs)
 
             if (!docSnap.exists()) {
-                navigate(`/municipios`)
+                navigate(`/`)
             }
         } catch (error) {
-            navigate(`/municipios`)
+            navigate(`/`)
             console.log(error)
         }
     }
@@ -195,11 +195,7 @@ function MunicipiosEditar() {
 
     async function editCity(imgsUrl, cardUrl, cardDirectory) {
 
-        console.log(cardUrl)
-        console.log(cardDirectory)
-
         imgsExclude.forEach(element => {
-            console.log(element)
             const desertRef = ref(storage, element)
 
             deleteObject(desertRef).then(() => {
@@ -228,6 +224,36 @@ function MunicipiosEditar() {
             navigate('/municipios')
         } catch (error) {
             console.error("Erro ao editar o documento:", error);
+        }
+    }
+
+    console.log(city)
+
+    const deleteCity = async() => {
+        try {
+
+            imgsCopy.forEach(element => {
+                const imagesRef = ref(storage, element.directory)
+    
+                deleteObject(imagesRef).then(() => {
+                }).catch((error) => {
+                    console.log(error
+                        )
+                });
+            });
+
+            const cardRef = ref(storage, city.imgCard.directory)
+
+            deleteObject(cardRef).then(() => {
+            }).catch((error) => {
+                console.log(error)
+            })
+
+            await deleteDoc(doc(db, "municipios", id))
+            navigate('/municipios')
+
+        } catch (error) {
+            console.error('Erro ao excluir:', error);
         }
     }
 
@@ -288,7 +314,7 @@ function MunicipiosEditar() {
                                 <h1 className='title-removeImgs'>Editar Imagem Principal</h1>
                                 <div className='file-input'>
                                     <input onChange={(e) => setImage(e.target.files[0])} type='file' />
-                                    <span className='button'>Selecione a Imagem Principal</span>
+                                    <span className='button'>Selecione a nova imagem principal</span>
                                     <p className='label' data-js-label>
                                         {image != null
                                             ? image.name
@@ -306,10 +332,12 @@ function MunicipiosEditar() {
                                     imgsExclude={imgsExclude}
                                 />
 
+                                
                                 <div className='file-input file-input-2'>
+                                    <h1 className='title-removeImgs'>Adicionar Imagens</h1>
                                     <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
                                     <span className="button">
-                                        Adicione mais imagens{city.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (city.imgs.length + images.length)}` }
+                                        Selecione novas imagens{city.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (city.imgs.length + images.length)}` }
                                         {city.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (city.imgs.length + images.length)}` }
                                         {city.imgs.length + images.length > maxImgs && ` - Limite excedido` }
                                     </span>
@@ -323,9 +351,9 @@ function MunicipiosEditar() {
                                 <progress value={progressImages} max={100} />
                             </>
                         )}
-
-                        <button className='submit-button' type="submit">Editar</button>
+                        <button className='submit-button' type="submit">Editar Município</button>
                     </form>
+                    <button className='delete-button' onClick={deleteCity}>Remover Município</button>
                 </>
             )}
 

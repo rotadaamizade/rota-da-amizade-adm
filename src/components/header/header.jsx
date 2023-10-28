@@ -15,8 +15,8 @@ function Header() {
     return (
         <header>
             <div>
-                <Link to={'/'}>Rota da Amizade ADMIN</Link>
-                {logged.status && <button onClick={logOut}>Sair</button>}
+                <Link className='header-title' to={'/'}>Rota da Amizade ADM</Link>
+                {logged.status && <button  className='header-button' onClick={logOut}>Sair</button>}
                 
             </div>
         </header>

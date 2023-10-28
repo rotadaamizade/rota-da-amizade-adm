@@ -1,0 +1,31 @@
+.homeCard{
+    height: 70px;
+    min-width: calc(50% - 5px);
+    border-radius: 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.homeCard-text{
+    width: 100%;
+    color: white;
+    bottom: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.homeCard-text h1{
+    margin: 0;
+}
+
+.homeCard-text h1{
+    font-family: Raleway;
+    font-size: 27px;
+    padding: 0 5px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 110.9%;
+    letter-spacing: 0.1px;
+}

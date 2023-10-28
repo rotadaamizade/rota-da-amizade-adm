@@ -1,0 +1,12 @@
+.homeCards-container{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.home-title{
+    border-bottom: 1px solid rgb(173, 173, 173);
+    padding-bottom: 14px;
+    font-weight: 600;
+    color: rgb(34, 34, 34);
+}

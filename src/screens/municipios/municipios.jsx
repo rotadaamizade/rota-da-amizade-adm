@@ -63,7 +63,7 @@ function Municipios() {
                                     <CardEdit
                                         key={index}
                                         url={city.imgCard.url}
-                                        id={city.id}
+                                        id={"editar/"+city.id}
                                         descricao={city.descricao}
                                         nome={city.municipio}
                                     />

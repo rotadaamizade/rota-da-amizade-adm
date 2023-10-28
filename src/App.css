@@ -140,7 +140,7 @@ form progress {
   border: none;
   color: white;
   font-size: 16px;
-  padding: 22px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,6 +148,22 @@ form progress {
   margin-top: 20px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.delete-button{
+  background-color: #cc1e1e;
+  border: none;
+  color: white;
+  font-size: 16px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
 }
 
 progress{

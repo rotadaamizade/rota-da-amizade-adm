@@ -1,0 +1,21 @@
+.select-category{
+    border: 1px solid #cfcfcf;
+    box-sizing: border-box;
+    transition: .3s;
+    padding: 0 10px;
+    border-radius: 4px;
+    color: #0a0a0a;
+    font-weight: 600;
+    background-color: #dddddd50;
+    height: 43px;
+    transition: .2s;
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.select-category:focus{
+    outline: none;
+    border: 1px solid #4e4e4e;
+    transition: .2s;
+}

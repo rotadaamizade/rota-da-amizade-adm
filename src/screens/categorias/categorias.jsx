@@ -23,8 +23,12 @@ function Categorias() {
             const categoriesData = [];
 
             data.forEach((doc) => {
-
-                categoriesData.push(doc.data());
+                const categoryData = {
+                    nome: doc.data().nome,
+                    tipos: doc.data().tipos,
+                    id: doc.id
+                }
+                categoriesData.push(categoryData);
             });
 
             setCategories(categoriesData);
@@ -36,38 +40,42 @@ function Categorias() {
     console.log(categories)
 
     return (
-        <>
-            <div className='title-div'>
-                <div onClick={() => navigate('/')} className='voltar-button'>
-                    <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http:www.w3.org/2000/svg">
-                        <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+        categories.length === 0 ? (
+            <Loading />
+        ) : (
+            <>
+                <div className='title-div'>
+                    <div onClick={() => navigate('/')} className='voltar-button'>
+                        <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </div>
+                    <h1 className='title'>Categorias</h1>
                 </div>
-                <h1 className='title'>Categorias</h1>
-            </div>
-            {categories.map((category, index) => (
-                <>
-                <h2>{category.nome}</h2>
-                <div className='category-container' key={index}>
-                    {category.tipos.map((tipo, tipoIndex) => (
-                        <>
-                            <div className='category-div'>
-                                <div style={{backgroundColor: `#${tipo.cor2}`}} className='category-button' key={tipoIndex}>
-                                    <StringToHtml
-                                        htmlString={tipo.svg}
-                                    />
+                {categories.map((category, index) => (
+                    <div key={'category-' + index}>
+                        <h2 className='category-name'>{category.nome}</h2>
+                        <div className='category-container'>
+                            {category.tipos.map((tipo, tipoIndex) => (
+                                <div key={'tipo-' + tipoIndex}>
+                                    <div onClick={() => navigate(`editar/${category.id+'&'+tipoIndex}`)} className='category-div'>
+                                        <div style={{ backgroundColor: `#${tipo.corFundo}` }} className='category-button'>
+                                            <StringToHtml htmlString={tipo.svg} />
+                                        </div>
+                                        <p>{tipo.nome}</p>
+                                    </div>
                                 </div>
-                                <p>{tipo.nome}</p>
-                            </div>
-                        </>
-                    ))}
-                </div>
-                </>
-            ))}
-            <button onClick={() => navigate('cadastro')} className='cadastrar-button'>Cadastrar Categoria</button>
-        </>
-    )
+                            ))}
+                        </div>
+                    </div>
+                ))}
+    
+                <button onClick={() => navigate('cadastro')} className='cadastrar-button'>Cadastrar Categoria</button>
+            </>
+        )
+    );
+    
 
 }
 
