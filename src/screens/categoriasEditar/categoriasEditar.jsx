@@ -22,6 +22,8 @@ function CategoriasEditar() {
         getCategory()
     }, [])
 
+    console.log(formData)
+
     const getCategory = async () => {
 
         try {
@@ -54,7 +56,7 @@ function CategoriasEditar() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(formData.corFundo == '' || formData.nome == '' || formData.svg == ''){
+        if(formData.corPrincipal == '' || formData.corFundo == '' || formData.nome == '' || formData.svg == ''){
             errorAlert()
             return
         }
@@ -118,15 +120,23 @@ function CategoriasEditar() {
                     className='input-default'
                     type="text"
                     name="corFundo"
-                    placeholder="Cor de Fundo:"
+                    placeholder="Cor de Fundo (Hexadecimal):"
                     value={formData.corFundo}
+                    onChange={handleChange}
+                />
+                <input
+                    className='input-default'
+                    type="text"
+                    name="corPrincipal"
+                    placeholder="Cor Principal (Hexadecimal):"
+                    value={formData.corPrincipal}
                     onChange={handleChange}
                 />
                 <textarea
                     type='text'
                     className='textarea-input'
                     name="svg"
-                    placeholder="SVG:"
+                    placeholder="Ícone: (Svg):"
                     value={formData.svg}
                     onChange={handleChange}
                 />

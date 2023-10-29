@@ -1,18 +1,18 @@
 import './imgsEdit.css';
 
-function ImgsEdit({ city, setCity, imgsCopy, setImgsExclude, imgsExclude }) {
+function ImgsEdit({ formData, setFormData, imgsCopy, setImgsExclude, imgsExclude }) {
 
     const handleRemoveImage = (index) => {
-        const updatedCity = { ...city }
+        const updatedCity = { ...formData }
         setImgsExclude([...imgsExclude, updatedCity.imgs[index].directory])
         updatedCity.imgs.splice(index, 1);
-        setCity(updatedCity);
+        setFormData(updatedCity);
     }
 
     const redefinir = () => {
-        let updatedCity = { ...city };
+        let updatedCity = { ...formData };
         updatedCity.imgs = [...imgsCopy]
-        setCity(updatedCity);
+        setFormData(updatedCity);
         setImgsExclude([])
     };
     
@@ -21,7 +21,7 @@ function ImgsEdit({ city, setCity, imgsCopy, setImgsExclude, imgsExclude }) {
         <>
         <h1 className='title-removeImgs'>Remover imagens</h1>
         <div className='editImg-container'>
-            {city.imgs.length < imgsCopy.length && (
+            {formData.imgs.length < imgsCopy.length && (
             <div onClick={redefinir} className='editImg-redefinir'>
                     <div>
                     <svg fill="#fff" width="80px" height="80px" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">
@@ -31,7 +31,7 @@ function ImgsEdit({ city, setCity, imgsCopy, setImgsExclude, imgsExclude }) {
                 </div>
             </div>
             )}
-            {city.imgs.map((img, index) => (
+            {formData.imgs.map((img, index) => (
                 <div className='editImg-div' key={index}>
                     <div className='editImg-close' onClick={() => handleRemoveImage(index)}>
                         <p>+</p>

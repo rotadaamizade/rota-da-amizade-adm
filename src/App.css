@@ -119,6 +119,7 @@ form progress {
   font-weight: 600;
   background-color: #dddddd50;
   line-height: 125%;
+  margin-bottom: 10px;
 }
 
 .input-disabled{

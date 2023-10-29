@@ -2,7 +2,6 @@
     display: flex;
     border-top: 1px solid #d4d4d4;
     padding-top: 5px;
-    margin-top: 10px;
     align-items: center;
 }
 
@@ -35,7 +34,7 @@
     min-height: 35px;
     max-height: 35px;
     border: none;
-    background-color: rgb(58, 58, 253);
+    background-color: #3a3afd;
     font-size: 34px;
     display: flex;
     justify-content: center;
@@ -75,7 +74,7 @@
     margin-left: 10px;
     height: 42px;
     border: none;
-    background-color: rgb(224, 24, 24);
+    background-color: #e01818;
     font-size: 24px;
     display: flex;
     justify-content: center;

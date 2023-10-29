@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
@@ -6,34 +6,102 @@ import RedesDiv from "../../components/redesDiv/redesDiv";
 import Loading from "../../components/loading/loading";
 import ImgsEdit from "../../components/imgsEdit/imgsEdit";
 import { deleteObject, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import CategoriesDiv from '../../components/categoriesDiv/categoriesDiv'
+import DatasDiv from '../../components/datasDiv/datasDiv'
 
-function MunicipiosEditar() {
+function EventosEditar() {
 
     const { id } = useParams();
     const navigate = useNavigate()
 
-    const [formData, setFormData] = useState({}); // Substitui city por formData
+    const [formData, setFormData] = useState({
+        municipio: '',
+        realizador: '',
+        nome: '',
+        localizacao: '',
+        sobre: '',
+        contatos: [],
+        redesSociais: [],
+        data: [],
+        categorias: [],
+        tipo: '',
+        id_terceiro: '',
+        imgs: [],
+        imgCard: {}
+      })
     const [imgsCopy, setImgsCopy] = useState([])
     const [imgsExclude, setImgsExclude] = useState([])
     const [image, setImage] = useState(null)
     const [images, setImages] = useState([])
     const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
+    const [cities, setCities] = useState([])
+    const [associados, setAssociados] = useState([])
+    const [tipoRealizador, setTipoRealizador] = useState('');
+    const [loaded, setLoaded] = useState(false)
+
+    console.log(formData)
 
     const maxImgs = 5
     const minImgs = 2
 
     useEffect(() => {
-        getCity()
+        getEvent()
+        getMunicipios()
+        getAssociados()
     }, [])
 
-    const getCity = async () => {
+    const getMunicipios = async () => {
 
         try {
-            const docRef = doc(db, "municipios", id)
+            const data = await getDocs(collection(db, "municipios"));
+            const citiesData = [];
+
+            data.forEach((doc) => {
+                const cityData = {
+                    id: doc.id,
+                    nome: doc.data().municipio
+                };
+
+                citiesData.push(cityData);
+            });
+
+            setCities(citiesData);
+        } catch (error) {
+            console.error("Erro ao recuperar documentos:", error);
+        }
+    }
+
+    const getAssociados = async () => {
+
+        try {
+            const data = await getDocs(collection(db, "associados"));
+            const associadosData = [];
+
+            data.forEach((doc) => {
+                const associadoData = {
+                    id: doc.id,
+                    nome: doc.data().nome
+                };
+
+                associadosData.push(associadoData);
+            });
+
+            setAssociados(associadosData);
+        } catch (error) {
+            console.error("Erro ao recuperar documentos:", error);
+        }
+    }
+
+    const getEvent = async () => {
+
+        try {
+            const docRef = doc(db, "eventos", id)
             const docSnap = await getDoc(docRef)
-            setFormData(docSnap.data()) // Substitui setCity por setFormData
+            setFormData(docSnap.data())
             setImgsCopy(docSnap.data().imgs)
+            setLoaded(true)
+            setTipoRealizador(docSnap.data().tipo)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -43,6 +111,7 @@ function MunicipiosEditar() {
             console.log(error)
         }
     }
+
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -54,9 +123,10 @@ function MunicipiosEditar() {
     }
 
     const verification = () => {
+
         let errors = []
 
-        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre) {
+        if (!formData.municipio || !formData.realizador || !formData.nome || !formData.localizacao || !formData.sobre || !formData.tipo || !formData.id_terceiro || formData.categorias.length == 0 || formData.data.length == 0) {
             errors.push('Preencha todos os campos principais')
         }
 
@@ -79,19 +149,30 @@ function MunicipiosEditar() {
         }
 
         if (images.length + formData.imgs.length > maxImgs) {
-            errors.push('Limite de imagens gerais excedido')
+            errors.push('Limite de imagens gerais excedito')
         } else if (images.length + formData.imgs.length < minImgs) {
             errors.push('Adicione o mínimo de imagens gerais')
         }
 
-        if (errors.length === 0) {
+        for (let i = 0; i < formData.data.length; i++) {
+            const element = formData.data[i];
+            if (element.data === '' || element.horaInicio === '' || element.horaFim === '') {
+                errors.push('Preencha todos os campos de Datas')
+            }
+          }
+
+        if (errors.length == 0) {
             return 1
         } else {
+
             errors.forEach(element => {
                 alert(element)
             });
+
             return 0
         }
+
+
     }
 
     function generateRandomId(length) {
@@ -107,8 +188,10 @@ function MunicipiosEditar() {
     }
 
     const imagesUpload = (cardUrl, cardDirectory) => {
-        if (images.length === 0) {
-            editCity([], cardUrl, cardDirectory)
+
+
+        if (images.length == 0) {
+            editformData([], cardUrl, cardDirectory)
             return
         }
 
@@ -116,16 +199,19 @@ function MunicipiosEditar() {
         let imagesProcessed = 0;
         let imagesUrl = []
 
+
         for (let index = 0; index < images.length; index++) {
+
             const id = generateRandomId(6)
 
-            const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-image-${id}`)
+            const storageRef = ref(storage, `eventos/images${formData.nome}/${formData.nome}-image-${id}`)
             const uploadTask = uploadBytesResumable(storageRef, images[index])
 
             uploadTask.on(
                 'state_changed',
                 snapshot => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * (100 / images.length);
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * (100 / images.length);
                     totalProgress += progress;
                     setProgressImages(totalProgress);
                 },
@@ -136,12 +222,12 @@ function MunicipiosEditar() {
                     getDownloadURL(uploadTask.snapshot.ref).then(url => {
                         imagesUrl.push({
                             url: url,
-                            directory: `municipios/images${formData.municipio}/${formData.municipio}-image-${id}`
+                            directory: `eventos/images${formData.nome}/${formData.nome}-image-${id}`
                         })
                         imagesProcessed++;
 
                         if (imagesProcessed === images.length) {
-                            editCity(imagesUrl, cardUrl, cardDirectory);
+                            editformData(imagesUrl, cardUrl, cardDirectory);
                         }
                     })
                 }
@@ -152,16 +238,16 @@ function MunicipiosEditar() {
     const cardImageUpload = (event) => {
         event.preventDefault()
 
-        if (verification() === 0) {
+        if (verification() == 0) {
             return
         }
 
-        if (image == null || image.length === 0) {
+        if (image == null || image.length == 0) {
             imagesUpload(formData.imgCard.url, formData.imgCard.directory)
             return
         }
 
-        const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-card`)
+        const storageRef = ref(storage, `eventos/images${formData.nome}/${formData.nome}-card`)
         const uploadTask = uploadBytesResumable(storageRef, image)
 
         uploadTask.on(
@@ -175,13 +261,14 @@ function MunicipiosEditar() {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                    imagesUpload(url, `municipios/images${formData.municipio}/${formData.municipio}-card`)
+                    imagesUpload(url, `eventos/images${formData.nome}/${formData.nome}-card`)
                 })
             }
         )
     }
 
-    async function editCity(imgsUrl, cardUrl, cardDirectory) {
+    async function editformData(imgsUrl, cardUrl, cardDirectory) {
+
         imgsExclude.forEach(element => {
             const desertRef = ref(storage, element)
 
@@ -193,37 +280,33 @@ function MunicipiosEditar() {
         });
 
         if (cardUrl) {
-            // Fazer alguma coisa com a imagem do cartão
+
         }
 
         try {
-            const docRef = doc(db, "municipios", id);
+            const docRef = doc(db, "eventos", id);
             await updateDoc(docRef, {
-                contatos: formData.contatos,
-                descricao: formData.descricao,
+                ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
-                imgs: [...formData.imgs, ...imgsUrl],
-                localizacao: formData.localizacao,
-                municipio: formData.municipio,
-                redesSociais: formData.redesSociais,
-                sobre: formData.sobre
+                imgs: [...formData.imgs, ...imgsUrl]
+
             })
-            navigate('/municipios')
+            navigate('/eventos')
         } catch (error) {
             console.error("Erro ao editar o documento:", error);
         }
     }
 
-    console.log(formData)
-
-    const deleteCity = async() => {
+    const deleteCity = async () => {
         try {
+
             imgsCopy.forEach(element => {
                 const imagesRef = ref(storage, element.directory)
-    
+
                 deleteObject(imagesRef).then(() => {
                 }).catch((error) => {
-                    console.log(error);
+                    console.log(error
+                    )
                 });
             });
 
@@ -231,19 +314,70 @@ function MunicipiosEditar() {
 
             deleteObject(cardRef).then(() => {
             }).catch((error) => {
-                console.log(error);
+                console.log(error)
             })
 
-            await deleteDoc(doc(db, "municipios", id))
-            navigate('/municipios')
+            await deleteDoc(doc(db, "eventos", id))
+            navigate('/eventos')
+
         } catch (error) {
             console.error('Erro ao excluir:', error);
         }
     }
 
+    const handleRealizadorChange = (e) => {
+        setFormData({
+            ...formData,
+            tipo: e.target.value
+        });
+        setTipoRealizador(e.target.value)
+        setFormData({
+            ...formData,
+            realizador: '',
+            municipio: '',
+            id_terceiro: '',
+            tipo: e.target.value
+          })
+    }
+
+
+    const handleMunicipioRealizadorChange = (e) => {
+        const selectedValue = JSON.parse(e.target.value);
+
+        setFormData({
+            ...formData,
+            realizador: selectedValue.nome,
+            municipio: selectedValue.nome,
+            id_terceiro: selectedValue.id,
+            tipo: 'municipio'
+        });
+    }
+
+    const handleAssociadoRealizadorChange = (e) => {
+        const selectedValue = JSON.parse(e.target.value);
+
+        setFormData({
+            ...formData,
+            realizador: selectedValue.nome,
+            id_terceiro: selectedValue.id,
+            tipo: 'associado'
+        });
+    }
+
+    const handleAssociadoRealizadorMunicipioChange = (e) => {
+        const selectedValue = JSON.parse(e.target.value);
+
+        setFormData({
+            ...formData,
+            municipio: selectedValue.nome,
+        });
+    }
+
+
     return (
         <>
-            {Object.keys(formData).length === 0 ? (
+
+            {!loaded ? (
                 <Loading />
             ) : (
                 <>
@@ -254,26 +388,69 @@ function MunicipiosEditar() {
                                 <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
-                        <h1 className='title'>Editar Município: {formData.municipio}</h1>
+                        <h1 className='title'>Editar Evento: {formData.nome}</h1>
                     </div>
                     <form onSubmit={cardImageUpload} action="">
                         <input
-                            disabled
-                            className='input-default input-disabled'
-                            type="text"
-                            name="municipio"
-                            placeholder="Nome do município:"
-                            value={formData.municipio}
-                            onChange={handleChange}
-                        />
-                        <input
                             className='input-default'
                             type="text"
-                            name="descricao"
-                            placeholder="Descrição:"
-                            value={formData.descricao}
+                            name="nome"
+                            placeholder="Nome do Evento:"
+                            value={formData.nome}
                             onChange={handleChange}
                         />
+
+                        <select
+                            className='select-category'
+                            name="category"
+                            value={tipoRealizador}
+                            onChange={handleRealizadorChange}
+                        >
+                            <option value="">Selecione o tipo de Realizador</option>
+                            <option value="associado">Associado</option>
+                            <option value="municipio">Município</option>
+                        </select>
+
+                        {tipoRealizador === 'associado' ? (
+                            <>
+                                <select
+                                    className='select-category'
+                                    name="associado"
+                                    onChange={handleAssociadoRealizadorChange}
+                                >
+                                    <option value={JSON.stringify({ nome: '', id: '' })}>Selecione o Associado Realizador</option>
+                                    {associados.map((associado, index) => (
+                                        <option key={index} value={JSON.stringify(associado)}>{associado.nome}</option>
+                                    ))}
+                                </select>
+                                <select
+                                    className='select-category'
+                                    name="municipio"
+                                    onChange={handleAssociadoRealizadorMunicipioChange}
+                                >
+                                    <option value={JSON.stringify({ nome: '', id: '' })}>Em que municipio vai acontecer</option>
+                                    {cities.map((city, index) => (
+                                        <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
+                                    ))}
+                                    <option value={JSON.stringify({ nome: 'outro', id: '' })}>Outro</option>
+                                </select>
+                            </>
+
+                        ) : tipoRealizador === 'municipio' ? (
+
+                            <select
+                                className='select-category'
+                                name="municipio"
+                                onChange={handleMunicipioRealizadorChange}
+                            >
+                                <option value={JSON.stringify({ nome: '', id: '' })}>Selecione o Município Realizador</option>
+                                {cities.map((city, index) => (
+                                    <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
+                                ))}
+                            </select>
+                        ) : (
+                            null
+                        )}
                         <input
                             className='input-default'
                             type="text"
@@ -291,9 +468,13 @@ function MunicipiosEditar() {
                             onChange={handleChange}
                         />
 
+                        <DatasDiv formData={formData} setFormData={setFormData} />
+                        <CategoriesDiv formData={formData} setFormData={setFormData} type='eventos' />
+                        <RedesDiv formData={formData} setFormData={formData} />
+
                         {Object.keys(formData).length !== 0 && (
                             <>
-                                <RedesDiv formData={formData} setFormData={setFormData} />
+
                                 <h1 className='title-removeImgs'>Editar Imagem Principal</h1>
                                 <div className='file-input'>
                                     <input onChange={(e) => setImage(e.target.files[0])} type='file' />
@@ -308,20 +489,21 @@ function MunicipiosEditar() {
                                 <progress value={progressCard} max={100} />
 
                                 <ImgsEdit
-                                    formData={formData} // Substitui city por formData
-                                    setFormData={setFormData} // Substitui setCity por setFormData
+                                    formData={formData}
+                                    setFormData={setFormData}
                                     imgsCopy={imgsCopy}
                                     setImgsExclude={setImgsExclude}
                                     imgsExclude={imgsExclude}
                                 />
 
+
                                 <div className='file-input file-input-2'>
                                     <h1 className='title-removeImgs'>Adicionar Imagens</h1>
                                     <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
                                     <span className="button">
-                                        Selecione novas imagens{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}` }
-                                        {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}` }
-                                        {formData.imgs.length + images.length > maxImgs && ` - Limite excedido` }
+                                        Selecione novas imagens{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
+                                        {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}`}
+                                        {formData.imgs.length + images.length > maxImgs && ` - Limite excedido`}
                                     </span>
                                     <p className='label'>
                                         {images && images.length > 0
@@ -338,8 +520,9 @@ function MunicipiosEditar() {
                     <button className='delete-button' onClick={deleteCity}>Remover Município</button>
                 </>
             )}
+
         </>
     )
 }
 
-export default MunicipiosEditar;
+export default EventosEditar

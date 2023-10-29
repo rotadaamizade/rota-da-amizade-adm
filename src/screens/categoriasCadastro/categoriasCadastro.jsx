@@ -7,11 +7,12 @@ import { useNavigate } from 'react-router-dom'
 function CategoriasCadastro() {
     const navigate = useNavigate()
 
-    const [category, setCategory] = useState(null); // Inicialize com null
-    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState(null)
+    const [categories, setCategories] = useState([])
     const [formData, setFormData] = useState({
         nome: '',
         corFundo: '',
+        corPrincipal: '',
         svg: ''
     })
 
@@ -49,7 +50,7 @@ function CategoriasCadastro() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(category == null || category == undefined || formData.corFundo == '' || formData.nome == '' || formData.svg == ''){
+        if(category == null || category == undefined || formData.corFundo == '' || formData.corPrincipal == '' || formData.nome == '' || formData.svg == ''){
             errorAlert()
             return
         }
@@ -111,18 +112,27 @@ function CategoriasCadastro() {
                     className='input-default'
                     type="text"
                     name="corFundo"
-                    placeholder="Cor de Fundo:"
+                    placeholder="Cor de Fundo (Hexadecimal):"
                     value={formData.corFundo}
+                    onChange={handleChange}
+                />
+                <input
+                    className='input-default'
+                    type="text"
+                    name="corPrincipal"
+                    placeholder="Cor Principal (Hexadecimal):"
+                    value={formData.corPrincipal}
                     onChange={handleChange}
                 />
                 <textarea
                     type='text'
                     className='textarea-input'
                     name="svg"
-                    placeholder="SVG:"
+                    placeholder="Ícone: (Svg):"
                     value={formData.svg}
                     onChange={handleChange}
                 />
+
 
                 <button className='submit-button' type="submit">Cadastrar</button>
             </form>

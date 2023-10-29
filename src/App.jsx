@@ -13,11 +13,13 @@ import Home from './screens/home/home';
 import Categorias from './screens/categorias/categorias';
 import CategoriasCadastro from './screens/categoriasCadastro/categoriasCadastro';
 import CategoriasEditar from './screens/categoriasEditar/categoriasEditar';
+import Eventos from './screens/eventos/eventos';
+import EventosEditar from './screens/eventosEditar/eventosEditar';
+import EventosCadastro from './screens/eventosCadastro/eventosCadastro';
 
 function App() {
   const { logged } = useContext(UserContext);
   const maintenance = false;
-  console.log(logged);
 
   if (maintenance) {
     return (
@@ -42,6 +44,9 @@ function App() {
               <Route path="/categorias" element={<Categorias />} />
               <Route path="/categorias/cadastro" element={<CategoriasCadastro />} />
               <Route path="/categorias/editar/:id" element={<CategoriasEditar />} />
+              <Route path="/eventos" element={<Eventos />} />
+              <Route path="/eventos/cadastro" element={< EventosCadastro/>} />
+              <Route path="/eventos/editar/:id" element={<EventosEditar />} />
               <Route path="*" element={<RedirectToHome />} />
               </>
               ) : (
