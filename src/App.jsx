@@ -16,6 +16,8 @@ import CategoriasEditar from './screens/categoriasEditar/categoriasEditar';
 import Eventos from './screens/eventos/eventos';
 import EventosEditar from './screens/eventosEditar/eventosEditar';
 import EventosCadastro from './screens/eventosCadastro/eventosCadastro';
+import Associados from './screens/associados/associados';
+import AssociadosCadastro from './screens/associadosCadastro/associadosCadastro';
 
 function App() {
   const { logged } = useContext(UserContext);
@@ -48,6 +50,8 @@ function App() {
               <Route path="/eventos/cadastro" element={< EventosCadastro/>} />
               <Route path="/eventos/editar/:id" element={<EventosEditar />} />
               <Route path="*" element={<RedirectToHome />} />
+              <Route path="/associados" element={<Associados />} />
+              <Route path="/associados/cadastro" element={<AssociadosCadastro />} />
               </>
               ) : (
                 <>
