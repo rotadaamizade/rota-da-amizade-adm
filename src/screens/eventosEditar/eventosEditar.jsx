@@ -1,6 +1,6 @@
 import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { json, useNavigate, useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
 import RedesDiv from "../../components/redesDiv/redesDiv";
 import Loading from "../../components/loading/loading";
@@ -28,7 +28,7 @@ function EventosEditar() {
         id_terceiro: '',
         imgs: [],
         imgCard: {}
-      })
+    })
     const [imgsCopy, setImgsCopy] = useState([])
     const [imgsExclude, setImgsExclude] = useState([])
     const [image, setImage] = useState(null)
@@ -39,6 +39,8 @@ function EventosEditar() {
     const [associados, setAssociados] = useState([])
     const [tipoRealizador, setTipoRealizador] = useState('');
     const [loaded, setLoaded] = useState(false)
+    const [realizadorValue, setRealizadorValue] = useState('')
+    const [municipioValue, setMunicipioValue] = useState('')
 
     console.log(formData)
 
@@ -102,6 +104,8 @@ function EventosEditar() {
             setImgsCopy(docSnap.data().imgs)
             setLoaded(true)
             setTipoRealizador(docSnap.data().tipo)
+            setRealizadorValue(docSnap.data().realizador)
+            setMunicipioValue(docSnap.data().municipio)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -159,7 +163,7 @@ function EventosEditar() {
             if (element.data === '' || element.horaInicio === '' || element.horaFim === '') {
                 errors.push('Preencha todos os campos de Datas')
             }
-          }
+        }
 
         if (errors.length == 0) {
             return 1
@@ -325,11 +329,7 @@ function EventosEditar() {
         }
     }
 
-    const handleRealizadorChange = (e) => {
-        setFormData({
-            ...formData,
-            tipo: e.target.value
-        });
+    const handleTipoRealizadorChange = (e) => {
         setTipoRealizador(e.target.value)
         setFormData({
             ...formData,
@@ -337,43 +337,46 @@ function EventosEditar() {
             municipio: '',
             id_terceiro: '',
             tipo: e.target.value
-          })
+        })
+        setRealizadorValue('')
+        setMunicipioValue('')
     }
 
 
-    const handleMunicipioRealizadorChange = (e) => {
-        const selectedValue = JSON.parse(e.target.value);
+    console.log(realizadorValue)
 
-        setFormData({
-            ...formData,
-            realizador: selectedValue.nome,
-            municipio: selectedValue.nome,
-            id_terceiro: selectedValue.id,
-            tipo: 'municipio'
-        });
+    const handleRealizadorChange = (e, tipo) => {
+        const selectedOption = e.target.selectedOptions[0]
+        const nome = selectedOption.value;
+        const id = selectedOption.getAttribute('data-id');
+            
+            if (tipo == 'realizador') {
+                console.log(id)
+                setRealizadorValue(nome)
+                setFormData({
+                    ...formData,
+                    realizador: nome,
+                    id_terceiro: id
+                })
+            } else if (tipo == 'municipio') {
+                setMunicipioValue(nome)
+                setFormData({
+                    ...formData,
+                    municipio: nome
+                })
+            } else if (tipo == 'ambos'){
+                setMunicipioValue(nome)
+                setRealizadorValue(nome)
+                setFormData({
+                    ...formData,
+                    municipio: nome,
+                    realizador: nome,
+                    id_terceiro: id
+                })
+
+        console.log(realizadorValue)
+        }
     }
-
-    const handleAssociadoRealizadorChange = (e) => {
-        const selectedValue = JSON.parse(e.target.value);
-
-        setFormData({
-            ...formData,
-            realizador: selectedValue.nome,
-            id_terceiro: selectedValue.id,
-            tipo: 'associado'
-        });
-    }
-
-    const handleAssociadoRealizadorMunicipioChange = (e) => {
-        const selectedValue = JSON.parse(e.target.value);
-
-        setFormData({
-            ...formData,
-            municipio: selectedValue.nome,
-        });
-    }
-
-
     return (
         <>
 
@@ -382,7 +385,7 @@ function EventosEditar() {
             ) : (
                 <>
                     <div className='title-div'>
-                        <div onClick={() => navigate('/municipios')} className='voltar-button'>
+                        <div onClick={() => navigate('/eventos')} className='voltar-button'>
                             <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http:www.w3.org/2000/svg">
                                 <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
@@ -404,7 +407,7 @@ function EventosEditar() {
                             className='select-category'
                             name="category"
                             value={tipoRealizador}
-                            onChange={handleRealizadorChange}
+                            onChange={handleTipoRealizadorChange}
                         >
                             <option value="">Selecione o tipo de Realizador</option>
                             <option value="associado">Associado</option>
@@ -415,24 +418,25 @@ function EventosEditar() {
                             <>
                                 <select
                                     className='select-category'
-                                    name="associado"
-                                    onChange={handleAssociadoRealizadorChange}
+                                    name="realizador"
+                                    onChange={(e) => handleRealizadorChange(e, 'realizador')}
+                                    value={realizadorValue}
                                 >
-                                    <option value={JSON.stringify({ nome: '', id: '' })}>Selecione o Associado Realizador</option>
+                                    <option data-id={''} value="">Selecione o Associado Realizador</option>
                                     {associados.map((associado, index) => (
-                                        <option key={index} value={JSON.stringify(associado)}>{associado.nome}</option>
+                                        <option data-id={associado.id} key={index} value={associado.nome}>{associado.nome}</option>
                                     ))}
                                 </select>
                                 <select
                                     className='select-category'
-                                    name="municipio"
-                                    onChange={handleAssociadoRealizadorMunicipioChange}
+                                    name="municipio2"
+                                    onChange={(e) => handleRealizadorChange(e, 'municipio')}
+                                    value={municipioValue}
                                 >
-                                    <option value={JSON.stringify({ nome: '', id: '' })}>Em que municipio vai acontecer</option>
+                                    <option value="">Selecione o local do evento</option>
                                     {cities.map((city, index) => (
-                                        <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
+                                        <option key={index} value={city.nome}>{city.nome}</option>
                                     ))}
-                                    <option value={JSON.stringify({ nome: 'outro', id: '' })}>Outro</option>
                                 </select>
                             </>
 
@@ -441,11 +445,12 @@ function EventosEditar() {
                             <select
                                 className='select-category'
                                 name="municipio"
-                                onChange={handleMunicipioRealizadorChange}
+                                onChange={(e) => handleRealizadorChange(e, 'ambos')}
+                                value={municipioValue}
                             >
-                                <option value={JSON.stringify({ nome: '', id: '' })}>Selecione o Município Realizador</option>
+                                <option data-id={''} value={''}>Selecione o Município Realizador</option>
                                 {cities.map((city, index) => (
-                                    <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
+                                    <option key={index} data-id={city.id} value={city.nome}>{city.nome}</option>
                                 ))}
                             </select>
                         ) : (
