@@ -22,7 +22,9 @@ function AssociadosCadastro() {
   })
   const [progressCard, setProgressCard] = useState(0)
   const [progressImages, setProgressImages] = useState(0)
+  const [progressLogo, setProgressLogo] = useState(0)
   const [image, setImage] = useState(null)
+  const [imageLogo, setImageLogo] = useState(null)
   const [images, setImages] = useState([])
   const [cities, setCities] = useState([]) // Updated field name
 
@@ -71,9 +73,8 @@ function AssociadosCadastro() {
     return randomId;
   }
 
-  const imagesUpload = (imageCardUrl, imageCardDirectory) => {
-    if (images.length === 0) return; // Updated condition
-
+  const imagesUpload = (imageCardUrl, imageCardDirectory, logoUrl, logoDirectory) => {
+    if (images.length === 0) return; 
     let totalProgress = 0;
     let imagesProcessed = 0;
     let imagesUrl = []
@@ -103,12 +104,34 @@ function AssociadosCadastro() {
             imagesProcessed++;
 
             if (imagesProcessed === images.length) {
-              handleSubmit(imageCardUrl, imageCardDirectory, imagesUrl);
+              handleSubmit(imageCardUrl, imageCardDirectory, imagesUrl, logoUrl, logoDirectory);
             }
           })
         }
       )
     }
+  }
+
+  const logoUpload = (imageCardUrl, imageCardDirectory) => {
+
+    const storageRef = ref(storage, `associados/images/${formData.nome}/${formData.nome}-logo`)
+    const uploadTask = uploadBytesResumable(storageRef, image)
+
+    uploadTask.on(
+      'state_changed',
+      snapshot => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        setProgressLogo(progress)
+      },
+      error => {
+        alert(error)
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(url => {
+          imagesUpload(imageCardUrl, imageCardDirectory, url, `municipios/associados/${formData.nome}/${formData.nome}-logo`)
+        })
+      }
+    )
   }
 
   const cardImageUpload = (event) => {
@@ -158,7 +181,7 @@ function AssociadosCadastro() {
       return
     }
 
-    const storageRef = ref(storage, `associados/images/${formData.nome}/${formData.nome}-card`) // Updated storage path
+    const storageRef = ref(storage, `associados/images/${formData.nome}/${formData.nome}-card`)
     const uploadTask = uploadBytesResumable(storageRef, image)
 
     uploadTask.on(
@@ -172,7 +195,7 @@ function AssociadosCadastro() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          imagesUpload(url, `municipios/associados/${formData.nome}/${formData.nome}-card`) // Updated directory path
+          logoUpload(url, `municipios/associados/${formData.nome}/${formData.nome}-card`)
         })
       }
     )
@@ -187,10 +210,11 @@ function AssociadosCadastro() {
     })
   }
 
-  const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
+  const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl, logoUrl, logoDirectory) => {
     const docRef = await addDoc(collection(db, 'associados'), {
       ...formData,
       imgCard: { url: imageCardUrl, directory: imageCardDirectory },
+      imgLogo: { url: logoUrl, directory: logoDirectory },
       imgs: imagesUrl
     }).then(() => {
       navigate('/associados')
@@ -224,7 +248,7 @@ function AssociadosCadastro() {
           value={formData.municipio} // Updated value attribute
           onChange={handleChange}
         >
-          <option value="">Em que município vai acontecer</option>
+          <option value="">De que município é o associado</option>
           {cities.map((city, index) => (
             <option key={index} value={city.nome}>
               {city.nome}
@@ -267,6 +291,16 @@ function AssociadosCadastro() {
         </div>
 
         <progress value={progressCard} max={100} />
+
+        <div className='file-input file-input-2'>
+          <input onChange={(e) => setImageLogo(e.target.files[0])} type='file' />
+          <span className='button'>Selecione a Logotipo do Associado</span>
+          <p className='label' data-js-label>
+            {imageLogo != null ? imageLogo.name : 'Nenhuma imagem selecionada'}
+          </p>
+        </div>
+
+        <progress value={progressLogo} max={100} />
 
         <div className='file-input file-input-2'>
           <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
