@@ -77,8 +77,9 @@ function Home() {
           <div id="wbaText">
             <div>
               <h2>Faça parte da Rota da Amizade</h2>
+              <p>Conheça o nosso Plano Comercial e as vantagens em ser colaborador do Turismo Regional </p>
               <a href="#contatos">
-                <button onClick={linkContact}>Nos Contate</button>
+                <button onClick={linkContact}>PLANO COMERCIAL</button>
               </a>
             </div>
           </div>
