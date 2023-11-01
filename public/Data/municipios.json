@@ -3,24 +3,28 @@
         "id": 1,
         "nome": "Iomere",
         "imagem": "iomereImg.jpg",
-        "url": "iomere"
+        "url": "iomere",
+        "description": "O nome do município originou-se da língua tupi-guarani, cujo significado é Clareira Branca ou Campo Branco."
     },
     {
         "id": 2,
         "nome": "Arroio Trinta",
         "imagem": "arroioTrintaImg.jpg",
-        "url": "arroioTrinta"
+        "url": "arroioTrinta",
+        "description": "Arroio Trinta é um município brasileiro reconhecido como Capital Catarinense da Cultura Italiana."
     },
     {
         "id": 3,
         "nome": "Videira",
         "imagem": "videiraImg.jpg",
-        "url": "videira"
+        "url": "videira",
+        "description": "Videira, um Vale de belezas e encantos, situados no Vale do Rio do Peixe."
     },
     {
         "id": 4,
         "nome": "Tangará",
         "imagem": "tangaraImg.jpg",
-        "url": "tangara"
+        "url": "tangara",
+        "description": "Tangará é um município brasileiro do estado de Santa Catarina, localizado na latitude 27º06'17' sul e longitude 51º14'50' oeste. Está a 641 metros acima do nível do mar."
     }
 ]

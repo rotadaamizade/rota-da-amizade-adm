@@ -5,26 +5,25 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 function Associates() {
-  const randArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
   const [associadosDiamante, setAssociadosDiamante] = useState([]);
   useEffect(() => {
     axios.get("Data/associadosDiamante.json").then((res) => {
-      setAssociadosDiamante(randArray(res.data));
+      setAssociadosDiamante(res.data);
     });
   }, []);
 
   const [associadosOuro, setAssociadosOuro] = useState([]);
   useEffect(() => {
     axios.get("Data/associadosOuro.json").then((res) => {
-      setAssociadosOuro(randArray(res.data));
+      setAssociadosOuro(res.data);
     });
   }, []);
 
   const [associadosPrata, setAssociadosPrata] = useState([]);
   useEffect(() => {
     axios.get("Data/associadosPrata.json").then((res) => {
-      setAssociadosPrata(randArray(res.data));
+      setAssociadosPrata(res.data);
     });
   }, []);
   return (
@@ -42,6 +41,7 @@ function Associates() {
                 key={associado.id}
                 instancia={associado}
                 path="associados"
+                description={false}
               />
             );
           }),
@@ -51,6 +51,7 @@ function Associates() {
                 key={associado.id}
                 instancia={associado}
                 path="associados"
+                description={false}
               />
             );
           }),
@@ -60,6 +61,7 @@ function Associates() {
                 key={associado.id}
                 instancia={associado}
                 path="associados"
+                description={false}
               />
             );
           })

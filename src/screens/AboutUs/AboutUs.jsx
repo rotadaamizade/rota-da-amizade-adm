@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./AboutUs.css";
 import axios from "axios";
 import ShortDescribeAboutUs from "../../components/ShortDescribeAboutUs/ShortDescribeAboutUs";
+import OurHistory from "../../components/OurHistory/OurHistory";
 
 function AboutUs() {
   const [imgCapa, setImgCapa] = useState([]);
@@ -14,7 +15,6 @@ function AboutUs() {
   return (
     <>
       <span id="sobreNos" />
-      <ShortDescribeAboutUs />
       <section id="ourValues">
         <div className="container" id="valuesWrapper">
           <div>
@@ -36,6 +36,8 @@ function AboutUs() {
           </div>
         </div>
       </section>
+      <OurHistory />
+      <ShortDescribeAboutUs />
     </>
   );
 }
