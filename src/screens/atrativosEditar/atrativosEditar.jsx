@@ -8,7 +8,7 @@ import ImgsEdit from "../../components/imgsEdit/imgsEdit";
 import { deleteObject, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import CategoriesDiv from "../../components/categoriesDiv/categoriesDiv";
 
-function AssociadosEditar() {
+function AtrativosEditar() {
 
     const { id } = useParams();
     const navigate = useNavigate()
@@ -17,9 +17,7 @@ function AssociadosEditar() {
     const [imgsCopy, setImgsCopy] = useState([])
     const [imgsExclude, setImgsExclude] = useState([])
     const [image, setImage] = useState(null)
-    const [logo, setLogo] = useState(null)
     const [images, setImages] = useState([])
-    const [progressLogo, setProgressLogo] = useState(0)
     const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
     const [cities, setCities] = useState([])
@@ -31,23 +29,6 @@ function AssociadosEditar() {
         getAssociado()
         getMunicipios()
     }, [])
-
-    const getAssociado = async () => {
-
-        try {
-            const docRef = doc(db, "associados", id)
-            const docSnap = await getDoc(docRef)
-            setFormData(docSnap.data())
-            setImgsCopy(docSnap.data().imgs)
-
-            if (!docSnap.exists()) {
-                navigate(`/`)
-            }
-        } catch (error) {
-            navigate(`/`)
-            console.log(error)
-        }
-    }
 
     const getMunicipios = async () => {
         try {
@@ -69,6 +50,23 @@ function AssociadosEditar() {
         }
     }
 
+    const getAssociado = async () => {
+
+        try {
+            const docRef = doc(db, "atrativos", id)
+            const docSnap = await getDoc(docRef)
+            setFormData(docSnap.data())
+            setImgsCopy(docSnap.data().imgs)
+
+            if (!docSnap.exists()) {
+                navigate(`/`)
+            }
+        } catch (error) {
+            navigate(`/`)
+            console.log(error)
+        }
+    }
+
     const handleChange = (event) => {
         const { name, value } = event.target
 
@@ -81,8 +79,15 @@ function AssociadosEditar() {
     const verification = () => {
         let errors = []
 
-        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre) {
+        if (!formData.municipio || !formData.localizacao || !formData.sobre || formData.categorias == []) {
             errors.push('Preencha todos os campos principais')
+        }
+
+        for (let i = 0; i < formData.categorias.length; i++) {
+            const element = formData.categorias[i];
+            if (element == '') {
+                errors.push('Preencha todos os campos de categorias')
+            }
         }
 
         if (formData.contatos.length > 0) {
@@ -93,13 +98,6 @@ function AssociadosEditar() {
                 }
             }
         }
-
-        for (let i = 0; i < formData.categorias.length; i++) {
-            const element = formData.categorias[i];
-            if (element == '') {
-                errors.push('Preencha as categorias')
-            }
-          }
 
         if (formData.redesSociais.length > 0) {
             for (let i = 0; i < formData.redesSociais.length; i++) {
@@ -138,9 +136,9 @@ function AssociadosEditar() {
         return randomId;
     }
 
-    const imagesUpload = (cardUrl, cardDirectory, logoUrl, logoDirectory) => {
+    const imagesUpload = (cardUrl, cardDirectory) => {
         if (images.length === 0) {
-            editAssociados([], cardUrl, cardDirectory, logoUrl, logoDirectory)
+            editCity([], cardUrl, cardDirectory)
             return
         }
 
@@ -151,7 +149,7 @@ function AssociadosEditar() {
         for (let index = 0; index < images.length; index++) {
             const id = generateRandomId(6)
 
-            const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-image-${id}`)
+            const storageRef = ref(storage, `atrativos/images${formData.nome}/${formData.nome}-image-${id}`)
             const uploadTask = uploadBytesResumable(storageRef, images[index])
 
             uploadTask.on(
@@ -168,47 +166,17 @@ function AssociadosEditar() {
                     getDownloadURL(uploadTask.snapshot.ref).then(url => {
                         imagesUrl.push({
                             url: url,
-                            directory: `associados/images${formData.nome}/${formData.nome}-image-${id}`
+                            directory: `atrativos/images${formData.nome}/${formData.nome}-image-${id}`
                         })
                         imagesProcessed++;
 
                         if (imagesProcessed === images.length) {
-                            editAssociados(imagesUrl, cardUrl, cardDirectory, logoUrl, logoDirectory);
+                            editCity(imagesUrl, cardUrl, cardDirectory);
                         }
                     })
                 }
             )
         }
-    }
-
-    console.log(formData)
-
-    const logoUpload = (urlCard, directoryCard) => {
-
-
-        if (logo == null || logo.length === 0) {
-            imagesUpload(urlCard, directoryCard, formData.imgLogo.url, formData.imgLogo.directory)
-            return
-        }
-
-        const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-logo`)
-        const uploadTask = uploadBytesResumable(storageRef, logo)
-
-        uploadTask.on(
-            'state_changed',
-            snapshot => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                setProgressLogo(progress)
-            },
-            error => {
-                alert('error')
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                    imagesUpload(urlCard, directoryCard, url, `associados/images${formData.nome}/${formData.nome}-logo`)
-                })
-            }
-        )
     }
 
     const cardImageUpload = (event) => {
@@ -219,11 +187,11 @@ function AssociadosEditar() {
         }
 
         if (image == null || image.length === 0) {
-            logoUpload(formData.imgCard.url, formData.imgCard.directory)
+            imagesUpload(formData.imgCard.url, formData.imgCard.directory)
             return
         }
 
-        const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-card`)
+        const storageRef = ref(storage, `atrativos/images${formData.nome}/${formData.nome}-card`)
         const uploadTask = uploadBytesResumable(storageRef, image)
 
         uploadTask.on(
@@ -237,13 +205,13 @@ function AssociadosEditar() {
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                    logoUpload(url, `associados/images${formData.nome}/${formData.nome}-card`)
+                    imagesUpload(url, `atrativos/images${formData.nome}/${formData.nome}-card`)
                 })
             }
         )
     }
 
-    const editAssociados = async (imgsUrl, cardUrl, cardDirectory, logoUrl, logoDirectory) => {
+    const editCity = async (imgsUrl, cardUrl, cardDirectory) => {
         imgsExclude.forEach(element => {
             const desertRef = ref(storage, element)
 
@@ -254,19 +222,14 @@ function AssociadosEditar() {
             });
         });
 
-        console.log(logoUrl )
-        console.log(logoDirectory)
-
         try {
-            const docRef = doc(db, "associados", id);
+            const docRef = doc(db, "atrativos", id);
             await updateDoc(docRef, {
                 ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
-                imgLogo: { url: logoUrl, directory: logoDirectory },
                 imgs: [...formData.imgs, ...imgsUrl],
-
             })
-            navigate('/associados')
+            navigate('/atrativos')
         } catch (error) {
             console.error("Erro ao editar o documento:", error);
         }
@@ -274,7 +237,7 @@ function AssociadosEditar() {
 
     console.log(formData)
 
-    const deleteAssociado = async () => {
+    const deleteCity = async () => {
         try {
             imgsCopy.forEach(element => {
                 const imagesRef = ref(storage, element.directory)
@@ -288,20 +251,12 @@ function AssociadosEditar() {
             const cardRef = ref(storage, formData.imgCard.directory)
 
             deleteObject(cardRef).then(() => {
-
-                const logoRef = ref(storage, formData.imgLogo.directory)
-
-                deleteObject(logoRef).then(() => {
-                }).catch((error) => {
-                    console.log(error);
-                })
-    
             }).catch((error) => {
                 console.log(error);
             })
 
-            await deleteDoc(doc(db, "associados", id))
-            navigate('/associados')
+            await deleteDoc(doc(db, "atrativos", id))
+            navigate('/atrativos')
         } catch (error) {
             console.error('Erro ao excluir:', error);
         }
@@ -314,23 +269,22 @@ function AssociadosEditar() {
             ) : (
                 <>
                     <div className='title-div'>
-                        <div onClick={() => navigate('/associados')} className='voltar-button'>
+                        <div onClick={() => navigate('/atrativos')} className='voltar-button'>
                             <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http:www.w3.org/2000/svg">
                                 <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                                 <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
-                        <h1 className='title'>Editar Associado: {formData.municipio}</h1>
+                        <h1 className='title'>Editar Atrativo: {formData.nome}</h1>
                     </div>
                     <form onSubmit={cardImageUpload} action="">
-
                         <input
+                            disabled
                             className='input-default input-disabled'
                             type="text"
                             name="nome"
-                            placeholder="Nome do Associado:"
+                            placeholder="Nome do atrativo:"
                             value={formData.nome}
-                            disabled={true}
                             onChange={handleChange}
                         />
                         <select
@@ -345,15 +299,8 @@ function AssociadosEditar() {
                                     {city.nome}
                                 </option>
                             ))}
+
                         </select>
-                        <input
-                            className='input-default'
-                            type="text"
-                            name="descricao"
-                            placeholder="Descrição:"
-                            value={formData.descricao}
-                            onChange={handleChange}
-                        />
                         <input
                             className='input-default'
                             type="text"
@@ -363,6 +310,7 @@ function AssociadosEditar() {
                             onChange={handleChange}
                         />
                         <textarea
+                            type='text'
                             className='textarea-input'
                             name="sobre"
                             placeholder="Sobre:"
@@ -372,9 +320,8 @@ function AssociadosEditar() {
 
                         {Object.keys(formData).length !== 0 && (
                             <>
-                                <CategoriesDiv formData={formData} setFormData={setFormData} type='associados' />
+                                <CategoriesDiv formData={formData} setFormData={setFormData} type='atrativos' />
                                 <RedesDiv formData={formData} setFormData={setFormData} />
-
                                 <h1 className='title-removeImgs'>Editar Imagem Principal</h1>
                                 <div className='file-input'>
                                     <input onChange={(e) => setImage(e.target.files[0])} type='file' />
@@ -387,20 +334,6 @@ function AssociadosEditar() {
                                 </div>
 
                                 <progress value={progressCard} max={100} />
-
-
-                                <h1 className='title-removeImgs'>Editar Logo do associado</h1>
-                                <div className='file-input'>
-                                    <input onChange={(e) => setLogo(e.target.files[0])} type='file' />
-                                    <span className='button'>Selecione a nova logo</span>
-                                    <p className='label' data-js-label>
-                                        {logo != null
-                                            ? logo.name
-                                            : 'Nenhuma imagem selecionada'}
-                                    </p>
-                                </div>
-
-                                <progress value={progressLogo} max={100} />
 
                                 <ImgsEdit
                                     formData={formData}
@@ -428,13 +361,13 @@ function AssociadosEditar() {
                                 <progress value={progressImages} max={100} />
                             </>
                         )}
-                        <button className='submit-button' type="submit">Editar Associado</button>
+                        <button className='submit-button' type="submit">Editar Atrativo</button>
                     </form>
-                    <button className='delete-button' onClick={deleteAssociado}>Remover Associado</button>
+                    <button className='delete-button' onClick={deleteCity}>Remover Atrativo</button>
                 </>
             )}
         </>
     )
 }
 
-export default AssociadosEditar;
+export default AtrativosEditar;

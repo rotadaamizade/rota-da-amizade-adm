@@ -188,6 +188,14 @@ function EventosCadastro() {
       }
     }
 
+    for (let i = 0; i < formData.categorias.length; i++) {
+      const element = formData.categorias[i];
+      if (element == '') {
+        errorAlert()
+        return
+      }
+    }
+
     if (image == null) {
       errorAlert()
       return

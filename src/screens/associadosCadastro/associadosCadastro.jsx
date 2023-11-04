@@ -82,7 +82,7 @@ function AssociadosCadastro() {
     for (let index = 0; index < images.length; index++) {
       const id = generateRandomId(6)
 
-      const storageRef = ref(storage, `associados/images/${formData.nome}/${formData.nome}-image-${id}`) // Updated storage path
+      const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-image-${id}`)
       const uploadTask = uploadBytesResumable(storageRef, images[index])
 
       uploadTask.on(
@@ -99,7 +99,7 @@ function AssociadosCadastro() {
           getDownloadURL(uploadTask.snapshot.ref).then(url => {
             imagesUrl.push({
               url: url,
-              directory: `associados/images/${formData.nome}/${formData.nome}-image-${id}` // Updated directory path
+              directory: `associados/images${formData.nome}/${formData.nome}-image-${id}` 
             })
             imagesProcessed++;
 
@@ -114,8 +114,8 @@ function AssociadosCadastro() {
 
   const logoUpload = (imageCardUrl, imageCardDirectory) => {
 
-    const storageRef = ref(storage, `associados/images/${formData.nome}/${formData.nome}-logo`)
-    const uploadTask = uploadBytesResumable(storageRef, image)
+    const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-logo`)
+    const uploadTask = uploadBytesResumable(storageRef, imageLogo)
 
     uploadTask.on(
       'state_changed',
@@ -128,7 +128,7 @@ function AssociadosCadastro() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          imagesUpload(imageCardUrl, imageCardDirectory, url, `municipios/associados/${formData.nome}/${formData.nome}-logo`)
+          imagesUpload(imageCardUrl, imageCardDirectory, url, `associados/images${formData.nome}/${formData.nome}-logo`)
         })
       }
     )
@@ -144,8 +144,8 @@ function AssociadosCadastro() {
       !formData.localizacao ||
       !formData.sobre ||
       !image ||
-      images.length === 0 || // Updated condition
-      formData.categorias.length === 0 // Updated condition
+      images.length === 0 || 
+      formData.categorias.length === 0 
     ) {
       errorAlert()
       return
@@ -171,6 +171,14 @@ function AssociadosCadastro() {
       }
     }
 
+    for (let i = 0; i < formData.categorias.length; i++) {
+      const element = formData.categorias[i];
+      if (element == '') {
+        errorAlert()
+        return
+      }
+    }
+
     if (image == null) {
       errorAlert()
       return
@@ -181,7 +189,7 @@ function AssociadosCadastro() {
       return
     }
 
-    const storageRef = ref(storage, `associados/images/${formData.nome}/${formData.nome}-card`)
+    const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-card`)
     const uploadTask = uploadBytesResumable(storageRef, image)
 
     uploadTask.on(
@@ -195,7 +203,7 @@ function AssociadosCadastro() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          logoUpload(url, `municipios/associados/${formData.nome}/${formData.nome}-card`)
+          logoUpload(url, `associados/images${formData.nome}/${formData.nome}-card`)
         })
       }
     )

@@ -143,6 +143,13 @@ function EventosEditar() {
             }
         }
 
+        for (let i = 0; i < formData.categorias.length; i++) {
+            const element = formData.categorias[i];
+            if (element == '') {
+                errors.push('Preencha as categorias')
+            }
+          }
+
         if (formData.redesSociais.length > 0) {
             for (let i = 0; i < formData.redesSociais.length; i++) {
                 const element = formData.redesSociais[i];

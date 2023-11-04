@@ -181,7 +181,7 @@ function MunicipiosEditar() {
         )
     }
 
-    async function editCity(imgsUrl, cardUrl, cardDirectory) {
+    const editCity = async (imgsUrl, cardUrl, cardDirectory) => {
         imgsExclude.forEach(element => {
             const desertRef = ref(storage, element)
 
@@ -191,10 +191,6 @@ function MunicipiosEditar() {
                 console.log('erro')
             });
         });
-
-        if (cardUrl) {
-            // Fazer alguma coisa com a imagem do cartão
-        }
 
         try {
             const docRef = doc(db, "municipios", id);

@@ -1,49 +1,47 @@
-import './associados.css'
 import { db } from "../../config/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from 'react';
+import CardEdit from '../../components/cardEdit/cardEdit';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../../components/loading/loading';
-import CardAssociadoEdit from '../../components/cardAssociadoEdit/cardAssociadoEdit';
 
-function Associados() {
+function Atrativos() {
+
     const navigate = useNavigate()
-    const [associados, setAssociados] = useState(null)
+
+    const [atrativos, setAtrativos] = useState(null)
 
     useEffect(() => {
-        getAssociados()
+        getAtrativos()
     }, [])
 
-    const getAssociados = async () => {
+    const getAtrativos = async () => {
+
         try {
-            const data = await getDocs(collection(db, "associados"));
-            const associadosData = [];
+            const data = await getDocs(collection(db, "atrativos"));
+            const atrativosData = [];
 
             data.forEach((doc) => {
-                const associadoData = {
+                const atrativoData = {
                     id: doc.id,
+                    municipio: doc.data().municipio,
                     nome: doc.data().nome,
-                    descricao: doc.data().descricao,
-                    imgCard: doc.data().imgCard,
-                    imgLogo: doc.data().imgLogo,
+                    imgCard: doc.data().imgCard
                 };
 
-                console.log(doc.data())
-
-                associadosData.push(associadoData);
+                atrativosData.push(atrativoData);
             });
 
-            setAssociados(associadosData);
+            setAtrativos(atrativosData);
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
     }
-    console.log(associados)
 
     return (
         <>
             {
-                associados == null ? ( 
+                atrativos == null ? (
                     <Loading />
                 ) : (
                     <>
@@ -54,28 +52,28 @@ function Associados() {
                                     <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </div>
-                            <h1 className='title'>Associados</h1>
+                            <h1 className='title'>Atrativos</h1>
                         </div>
                         <div className='card-div'>
                             {
-                                associados.map((associado, index) => (
-                                    <CardAssociadoEdit
+                                atrativos.map((atrativo, index) => (
+                                    <CardEdit
                                         key={index}
-                                        url={associado.imgCard.url}
-                                        id={"editar/"+associado.id}
-                                        descricao={associado.descricao}
-                                        nome={associado.nome}
-                                        logo={associado.imgLogo.url}
+                                        url={atrativo.imgCard.url}
+                                        id={"editar/"+atrativo.id}
+                                        descricao={atrativo.municipio}
+                                        nome={atrativo.nome}
                                     />
                                 ))
                             }
                         </div>
-                        <button onClick={() => navigate('cadastro')} className='cadastrar-button'>Cadastrar Associado</button>
+                        <button onClick={() => navigate('cadastro')} className='cadastrar-button'>Cadastrar Atrativo</button>
                     </>
                 )
             }
         </>
+
     )
 }
 
-export default Associados;
+export default Atrativos

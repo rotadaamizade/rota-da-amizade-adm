@@ -18,6 +18,10 @@ import EventosEditar from './screens/eventosEditar/eventosEditar';
 import EventosCadastro from './screens/eventosCadastro/eventosCadastro';
 import Associados from './screens/associados/associados';
 import AssociadosCadastro from './screens/associadosCadastro/associadosCadastro';
+import AssociadosEditar from './screens/associadosEditar/associadosEditar';
+import Atrativos from './screens/atrativos/atrativos';
+import AtrativosCadastro from './screens/atrativosCadastro/atrativosCadastro';
+import AtrativosEditar from './screens/atrativosEditar/atrativosEditar';
 
 function App() {
   const { logged } = useContext(UserContext);
@@ -52,6 +56,10 @@ function App() {
               <Route path="*" element={<RedirectToHome />} />
               <Route path="/associados" element={<Associados />} />
               <Route path="/associados/cadastro" element={<AssociadosCadastro />} />
+              <Route path="/associados/editar/:id" element={<AssociadosEditar />} />
+              <Route path="/atrativos" element={<Atrativos />} />
+              <Route path="/atrativos/cadastro" element={<AtrativosCadastro />} />
+              <Route path="/atrativos/editar/:id" element={<AtrativosEditar />} />
               </>
               ) : (
                 <>

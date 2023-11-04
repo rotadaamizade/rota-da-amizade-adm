@@ -10,7 +10,8 @@ function Eventos() {
 
     const navigate = useNavigate()
 
-    const [events, setEvents] = useState(null)
+    const [eventosRealizados, setEventosRealizados] = useState(null)
+    const [eventsNaoRealizados, setEventosNaoRealizados] = useState(null)
 
     useEffect(() => {
         getEventos()
@@ -18,32 +19,60 @@ function Eventos() {
 
 
     const getEventos = async () => {
+        const dataAtual = new Date();
+        const eventosRealizadosData = [];
+        const eventosNaoRealizadosData = [];
 
         try {
             const data = await getDocs(collection(db, "eventos"));
-            const eventsData = [];
 
             data.forEach((doc) => {
+
+                let maiorData = new Date('01-01-0000');
+                let maiorDataIndex
+
+                doc.data().data.forEach((dataItem, index) => {
+                    const dataString = dataItem.data;
+                    const date = new Date(dataString);
+
+                    if (date > maiorData) {
+                        maiorData = date;
+                        maiorDataIndex = index
+                    }
+                });
+
+                console.log(maiorDataIndex);
+
                 const eventData = {
                     id: doc.id,
                     nome: doc.data().nome,
                     realizador: doc.data().realizador,
-                    imgCard: doc.data().imgCard
+                    imgCard: doc.data().imgCard,
+                    data: new Date(doc.data().data[maiorDataIndex].data),
                 };
 
-                eventsData.push(eventData);
+
+
+                if (eventData.data <= dataAtual) {
+                    eventosRealizadosData.push(eventData);
+                } else {
+                    eventosNaoRealizadosData.push(eventData);
+                }
             });
 
-            setEvents(eventsData);
+            setEventosNaoRealizados(eventosNaoRealizadosData)
+            setEventosRealizados(eventosRealizadosData)
+
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
-    }
+    };
+
 
     return (
         <>
             {
-                events == null ? (
+                eventosRealizados == null || eventosRealizados == null ? (
                     <Loading />
                 ) : (
                     <>
@@ -56,13 +85,28 @@ function Eventos() {
                             </div>
                             <h1 className='title'>Eventos</h1>
                         </div>
+                        <h2 className='home-title'>Eventos a serem realizados</h2>
                         <div className='card-div'>
                             {
-                                events.map((event, index) => (
+                                eventsNaoRealizados.map((event, index) => (
                                     <CardEdit
                                         key={index}
                                         url={event.imgCard.url}
-                                        id={"editar/"+event.id}
+                                        id={"editar/" + event.id}
+                                        descricao={event.realizador}
+                                        nome={event.nome}
+                                    />
+                                ))
+                            }
+                        </div>
+                        <h2 className='home-title'>Eventos realizados</h2>
+                        <div className='card-div'>
+                            {
+                                eventosRealizados.map((event, index) => (
+                                    <CardEdit
+                                        key={index}
+                                        url={event.imgCard.url}
+                                        id={"editar/" + event.id}
                                         descricao={event.realizador}
                                         nome={event.nome}
                                     />
