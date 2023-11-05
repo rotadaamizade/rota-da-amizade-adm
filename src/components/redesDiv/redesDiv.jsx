@@ -3,36 +3,30 @@ import './redesDiv.css';
 function RedesDiv({ formData, setFormData }) {
     const contatosTemplate = [
         {
-            color: '25D366',
             name: 'Whatsapp',
         },
         {
-            color: 'FF0000',
             name: 'Email',
         },
         {
-            color: '128C7E',
             name: 'Telefone',
         }
     ];
 
     const redesSociaisTemplate = [
         {
-            color: '4267B2',
             name: 'Facebook',
         },
         {
-            color: '1DA1F2',
             name: 'Twitter',
         },
         {
-            color: 'FD1D1D',
             name: 'Instagram',
         },
     ];
 
     const adicionarContato = () => {
-        const novoContato = { name: '', url: '', color: '' };
+        const novoContato = { name: '', url: '' };
         const novoFormData = { ...formData };
         novoFormData.contatos.push(novoContato);
         setFormData(novoFormData);
@@ -48,11 +42,6 @@ function RedesDiv({ formData, setFormData }) {
         const novoFormData = { ...formData };
         novoFormData.contatos[index].name = selectedValue;
 
-        const contatoTemplate = contatosTemplate.find((template) => template.name === selectedValue);
-        if (contatoTemplate) {
-            novoFormData.contatos[index].color = contatoTemplate.color;
-        }
-
         setFormData(novoFormData);
     }
 
@@ -63,7 +52,7 @@ function RedesDiv({ formData, setFormData }) {
     }
 
     const adicionarRedeSocial = () => {
-        const novaRedeSocial = { name: '', url: '', color: '' };
+        const novaRedeSocial = { name: '', url: '' };
         const novoFormData = { ...formData };
         novoFormData.redesSociais.push(novaRedeSocial);
         setFormData(novoFormData);
@@ -78,11 +67,6 @@ function RedesDiv({ formData, setFormData }) {
     const handleRedeSocialNameChange = (index, selectedValue) => {
         const novoFormData = { ...formData };
         novoFormData.redesSociais[index].name = selectedValue;
-
-        const redeSocialTemplate = redesSociaisTemplate.find((template) => template.name === selectedValue);
-        if (redeSocialTemplate) {
-            novoFormData.redesSociais[index].color = redeSocialTemplate.color;
-        }
 
         setFormData(novoFormData);
     }
