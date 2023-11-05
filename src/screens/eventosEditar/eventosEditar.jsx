@@ -527,9 +527,9 @@ function EventosEditar() {
                                 <progress value={progressImages} max={100} />
                             </>
                         )}
-                        <button className='submit-button' type="submit">Editar Município</button>
+                        <button className='submit-button' type="submit">Editar Evento</button>
                     </form>
-                    <button className='delete-button' onClick={deleteCity}>Remover Município</button>
+                    <button className='delete-button' onClick={deleteCity}>Remover Evento</button>
                 </>
             )}
 
