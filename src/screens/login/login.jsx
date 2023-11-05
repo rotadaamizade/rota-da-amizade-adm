@@ -38,7 +38,7 @@ function Login() {
         <div className='login-container'>
         <div className="login-div">
             <h2>Bem vindo à área administrativa!</h2>
-            <h1>Digite seus dados para continuar</h1>
+            <h1>Digite os dados de credenciamento para continuar</h1>
             <form onSubmit={handleSignIn} action="">
                 <input
                     placeholder='Usuário:'
