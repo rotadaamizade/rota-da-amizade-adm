@@ -60,7 +60,7 @@ section#wannaBeAssociate {
 section#wannaBeAssociate div#wbaContainer {
     position: relative;
     display: flex;
-    width: 100%;
+    overflow: hidden;
     height: 30rem;
 }
 
@@ -71,12 +71,12 @@ section#wannaBeAssociate div#wbaContainer div#wbaBackground img {
     object-fit: cover;
     overflow: hidden;
     filter: blur(5px);
+    vertical-align: middle;
+    transition: all .2s ease;
 }
 
-section#wannaBeAssociate div#wbaContainer div#wbaBackground img:hover, section#wannaBeAssociate div#wbaContainer div#wbaText:hover {
-    width: calc(var(--s)*var(--f));
-    height: calc(var(--s)*var(--f));
-    
+section#wannaBeAssociate div#wbaContainer:hover div#wbaBackground img, section#wannaBeAssociate div#wbaContainer:hover div#wbaText {
+    transform: scale(1.2);
 }
 
 section#wannaBeAssociate div#wbaContainer div#wbaText {
@@ -85,6 +85,7 @@ section#wannaBeAssociate div#wbaContainer div#wbaText {
     width: 100%;
     display: flex;
     justify-content: center;
+    transition: all .2s ease;
 }
 
 section#wannaBeAssociate div#wbaContainer div#wbaText div {

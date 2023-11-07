@@ -9,3 +9,9 @@ section#ourHistory h2 {
 section#ourHistory p {
     color: #7a7a7a;
 }
+
+@media (max-width: 991px) {
+    section#ourHistory {
+        padding: 0 4rem;
+    }
+}

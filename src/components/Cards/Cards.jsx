@@ -3,8 +3,8 @@ import "./Cards.css";
 function Cards(props) {
     return (
         <>
-                <div className={props.description==true ?
-                        `card hoverUp` : "card"}>
+            <div className="card">
+                <div className={props.description == true ? `hoverUp` : ""}>
                     <div className="cardContainer">
                         <img
                             src={`./${props.path}/${props.objeto.imagem}`}
@@ -12,14 +12,24 @@ function Cards(props) {
                             className="cardImg"
                         />
                     </div>
-                    <div className={
-                        props.description==true ?
-                        `shadow ${props.shadow} sHoverUp` : `shadow ${props.shadow}`} />
-                    <div className={
-                        props.description==true ?
-                        `cardOverlay tHoverUp` :
-                        "cardOverlay"}>{props.children}</div>
+                    <div
+                        className={
+                            props.description == true
+                                ? `shadow ${props.shadow} sHoverUp`
+                                : `shadow ${props.shadow}`
+                        }
+                    />
+                    <div
+                        className={
+                            props.description == true
+                                ? `cardOverlay tHoverUp`
+                                : "cardOverlay"
+                        }
+                    >
+                        {props.children}
+                    </div>
                 </div>
+            </div>
         </>
     );
 }

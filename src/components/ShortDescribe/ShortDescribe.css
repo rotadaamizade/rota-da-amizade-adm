@@ -70,6 +70,21 @@ section#aboutUs div#contentMiddle div#contactUsButton button:hover {
 
 /* end gallery */
 
+@media (max-width: 991px) {
+  section#aboutUs > div {
+    display: inline;
+  } 
+
+  section#aboutUs div#contentMiddle {
+    padding-right: 3rem;
+  }
+
+  .gallery {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+}
+
 @keyframes colorTitle {
     25% {
         color: #98b126;
