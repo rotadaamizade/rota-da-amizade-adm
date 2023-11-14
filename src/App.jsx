@@ -14,48 +14,44 @@ import City from "./screens/City/City";
 import Footer from "./components/Footer/Footer";
 import { useContext, useEffect } from "react";
 import { FloatingWhatsApp } from "react-floating-whatsapp";
+import { StrictMode } from "react";
 
 function App() {
-    // const { page, setPage } = useContext(PageContext);
-    // const navigate = useNavigate();
-    // useEffect(() => {
-    //   if (page == "") {
-    //     if (isOpen) setIsOpen(!isOpen);
-    //     setPage("home");
-    //     navigate("");
-    //   }
-    // }, [])
-
     return (
         <>
-            <BrowserRouter>
-                <PageProvider>
-                    <Header />
-                    <main>
-                        <Routes>
-                            <Route index element={<Home />} />
-                            <Route path="/sobre" element={<AboutUs />} />
-                            <Route path="/cidades" element={<Cities />} />
-                            <Route
-                                path="/associados"
-                                element={<Associates />}
+            <StrictMode>
+                <BrowserRouter>
+                    <PageProvider>
+                        <Header />
+                        <main>
+                            <Routes>
+                                <Route index element={<Home />} />
+                                <Route path="/sobre" element={<AboutUs />} />
+                                <Route path="/cidades" element={<Cities />} />
+                                <Route
+                                    path="/associados"
+                                    element={<Associates />}
+                                />
+                                <Route path="/contato" element={<Contact />} />
+                                <Route
+                                    path="/cidades/:url"
+                                    element={<City />}
+                                />
+                                <Route path="*" element={<Navigate to="" />} />
+                            </Routes>
+                            <FloatingWhatsApp
+                                allowClickAway={true}
+                                avatar={whatsAvatarIcon}
+                                accountName="Rota da Amizade"
+                                chatMessage="Olá como podemos ajudar hoje?"
+                                phoneNumber="1234567890"
+                                statusMessage=""
                             />
-                            <Route path="/contato" element={<Contact />} />
-                            <Route path="/cidades/:url" element={<City />} />
-                            <Route path="*" element={<Navigate to="" />} />
-                        </Routes>
-                        <FloatingWhatsApp
-                            allowClickAway={true}
-                            avatar={whatsAvatarIcon}
-                            accountName="Rota da Amizade"
-                            chatMessage="Olá como podemos ajudar hoje?"
-                            phoneNumber="1234567890"
-                            statusMessage=""
-                        />
-                    </main>
-                    <Footer />
-                </PageProvider>
-            </BrowserRouter>
+                        </main>
+                        <Footer />
+                    </PageProvider>
+                </BrowserRouter>
+            </StrictMode>
         </>
     );
 }

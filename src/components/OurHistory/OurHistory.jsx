@@ -12,14 +12,14 @@ function OurHistory() {
 
     return (
         <>
-            <section className="container" id="ourHistory">
+            <section className={history.length === 0 ? "container noElements" : "container"} id="ourHistory">
                 <h2>Nossa História</h2>
                 {history.map((data, index) => {
                     return (
                         <div key={index}>
                             <h3>{data.year}</h3>
                             {data.paragraph.map((info, index) => {
-                                return <p>{info.text}</p>;
+                                return <p key={index}>{info.text}</p>;
                             })}
                         </div>
                     );
