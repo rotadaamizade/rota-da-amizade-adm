@@ -1,9 +1,10 @@
 import CompContact from "../../components/CompContact/CompContact";
+import MotionMain from "../../components/MotionMain/MotionMain";
 import "./Contact.css";
 
 function Contact() {
     return (
-        <>
+        <MotionMain>
             <span id="contatos" />
             <section id="contactUs">
                 <div className="container">
@@ -30,7 +31,7 @@ function Contact() {
                     </div>
                 </div>
             </section>
-        </>
+        </MotionMain>
     );
 }
 

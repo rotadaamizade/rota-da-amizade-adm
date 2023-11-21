@@ -4,10 +4,11 @@ import axios from "axios";
 import ShortDescribeAboutUs from "../../components/ShortDescribeAboutUs/ShortDescribeAboutUs";
 import OurHistory from "../../components/OurHistory/OurHistory";
 import { PageContext } from "../../useContext";
+import MotionMain from "../../components/MotionMain/MotionMain";
 
 function AboutUs() {
     const [imgCapa, setImgCapa] = useState([]);
-    
+
     const { page, setPage } = useContext(PageContext);
 
     useEffect(() => {
@@ -17,8 +18,12 @@ function AboutUs() {
     }, []);
 
     return (
-        <>
-            <section className={page == "about" ? "mainSection active" : "mainSection"}>
+        <MotionMain>
+            <section
+                className={
+                    page == "about" ? "mainSection active" : "mainSection"
+                }
+            >
                 <span id="sobreNos" />
                 <section id="ourValues">
                     <div className="container" id="valuesWrapper">
@@ -46,7 +51,7 @@ function AboutUs() {
                 <OurHistory />
                 <ShortDescribeAboutUs />
             </section>
-        </>
+        </MotionMain>
     );
 }
 
