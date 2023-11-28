@@ -46,7 +46,17 @@ header div#options a.activeLink {
   transition: color 0.3s ease;
 }
 
-header div#options a.activeLink:hover {
+header div#options div#shopIconContainer {
+  display: flex;
+  margin-left: auto;
+}
+
+header div.shopsIconContainer svg {
+  width: 32px;
+}
+
+
+/* header div#options a.activeLink:hover {
   color: #98b126;
   transition: color 1s ease-out;
 }
@@ -56,7 +66,7 @@ header div#options > a#baixarApp {
   border-radius: 5px;
   padding: 0.5rem 1rem;
   margin-left: auto;
-}
+} */
 
 header div#options > a#baixarApp:hover {
   color: #e30613;
@@ -64,6 +74,20 @@ header div#options > a#baixarApp:hover {
 }
 
 /* mobile */
+
+header div.shopsIconContainerMobile svg {
+  width: 64px;
+}
+
+header div#dropdown-menu div#shopIconContainerMobile {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+/* header div#dropdown-menu div#shopIconContainerMobile a:not(:first-child) div.shopsIconContainerMobile {
+  margin-left: 2rem;
+} */
 
 header div#options div#dropdown-icon {
   display: none;
@@ -136,9 +160,9 @@ header div#dropdown-menu ul li a {
 @media (max-width: 991px) {
   /* retirar elementos do desktop */
   header div#options ul,
-  a#baixarApp,
-  a#icon {
-    display: none;
+  div#shopIconContainer,
+  header div#options ul a#icon {
+    display: none!important;
   }
   /* mostrar elementos do mobile */
   header {
