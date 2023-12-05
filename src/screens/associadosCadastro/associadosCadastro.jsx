@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './associadosCadastro.css'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../../config/firebase'
@@ -6,6 +6,7 @@ import { addDoc, collection, getDocs } from 'firebase/firestore'
 import RedesDiv from '../../components/redesDiv/redesDiv'
 import { useNavigate } from 'react-router-dom'
 import CategoriesDiv from '../../components/categoriesDiv/categoriesDiv'
+import { UserContext } from '../../UserContext'
 
 function AssociadosCadastro() {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ function AssociadosCadastro() {
     contatos: [],
     redesSociais: [],
     categorias: [],
+    plano: '',
   })
   const [progressCard, setProgressCard] = useState(0)
   const [progressImages, setProgressImages] = useState(0)
@@ -26,7 +28,8 @@ function AssociadosCadastro() {
   const [image, setImage] = useState(null)
   const [imageLogo, setImageLogo] = useState(null)
   const [images, setImages] = useState([])
-  const [cities, setCities] = useState([]) // Updated field name
+  const [cities, setCities] = useState([])
+  const { planos } = useContext(UserContext);
 
   const maxImgs = 5
   const minImgs = 2
@@ -74,7 +77,7 @@ function AssociadosCadastro() {
   }
 
   const imagesUpload = (imageCardUrl, imageCardDirectory, logoUrl, logoDirectory) => {
-    if (images.length === 0) return; 
+    if (images.length === 0) return;
     let totalProgress = 0;
     let imagesProcessed = 0;
     let imagesUrl = []
@@ -99,7 +102,7 @@ function AssociadosCadastro() {
           getDownloadURL(uploadTask.snapshot.ref).then(url => {
             imagesUrl.push({
               url: url,
-              directory: `associados/images${formData.nome}/${formData.nome}-image-${id}` 
+              directory: `associados/images${formData.nome}/${formData.nome}-image-${id}`
             })
             imagesProcessed++;
 
@@ -144,8 +147,9 @@ function AssociadosCadastro() {
       !formData.localizacao ||
       !formData.sobre ||
       !image ||
-      images.length === 0 || 
-      formData.categorias.length === 0 
+      images.length === 0 ||
+      formData.categorias.length === 0 ||
+      !formData.plano
     ) {
       errorAlert()
       return
@@ -229,6 +233,18 @@ function AssociadosCadastro() {
     })
   }
 
+  const handlePlanoChange = (e) => {
+    const selectedValue = JSON.parse(e.target.value);
+    console.log(selectedValue)
+
+    setFormData({
+      ...formData,
+      plano: selectedValue,
+    });
+  }
+
+  console.log(formData)
+
   return (
     <>
       <div className='title-div'>
@@ -286,6 +302,17 @@ function AssociadosCadastro() {
           value={formData.sobre}
           onChange={handleChange}
         />
+
+        <select
+          className='select-category'
+          name="plano"
+          onChange={handlePlanoChange}
+        >
+          <option value={JSON.stringify('')}>Selecione o plano</option>
+          {planos.map((plano, index) => (
+            <option key={index} value={JSON.stringify(plano)}>{plano}</option>
+          ))}
+        </select>
 
         <CategoriesDiv formData={formData} setFormData={setFormData} type='associados' />
         <RedesDiv formData={formData} setFormData={setFormData} />

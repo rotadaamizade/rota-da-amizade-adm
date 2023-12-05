@@ -1,5 +1,5 @@
 import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
 import RedesDiv from "../../components/redesDiv/redesDiv";
@@ -7,6 +7,7 @@ import Loading from "../../components/loading/loading";
 import ImgsEdit from "../../components/imgsEdit/imgsEdit";
 import { deleteObject, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import CategoriesDiv from "../../components/categoriesDiv/categoriesDiv";
+import { UserContext } from "../../UserContext";
 
 function AssociadosEditar() {
 
@@ -23,6 +24,7 @@ function AssociadosEditar() {
     const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
     const [cities, setCities] = useState([])
+    const { planos } = useContext(UserContext);
 
     const maxImgs = 5
     const minImgs = 2
@@ -99,7 +101,7 @@ function AssociadosEditar() {
             if (element == '') {
                 errors.push('Preencha as categorias')
             }
-          }
+        }
 
         if (formData.redesSociais.length > 0) {
             for (let i = 0; i < formData.redesSociais.length; i++) {
@@ -254,7 +256,7 @@ function AssociadosEditar() {
             });
         });
 
-        console.log(logoUrl )
+        console.log(logoUrl)
         console.log(logoDirectory)
 
         try {
@@ -295,7 +297,7 @@ function AssociadosEditar() {
                 }).catch((error) => {
                     console.log(error);
                 })
-    
+
             }).catch((error) => {
                 console.log(error);
             })
@@ -305,6 +307,15 @@ function AssociadosEditar() {
         } catch (error) {
             console.error('Erro ao excluir:', error);
         }
+    }
+
+    const handlePlanoChange = (e) => {
+        const selectedValue = e.target.value
+
+        setFormData({
+            ...formData,
+            plano: selectedValue,
+        });
     }
 
     return (
@@ -369,6 +380,18 @@ function AssociadosEditar() {
                             value={formData.sobre}
                             onChange={handleChange}
                         />
+
+                        <select
+                            className='select-category'
+                            name="plano"
+                            onChange={handlePlanoChange}
+                            value={formData.plano}
+                        >
+                            <option value={''}>Selecione o plano</option>
+                            {planos.map((plano, index) => (
+                                <option key={index} value={plano}>{plano}</option>
+                            ))}
+                        </select>
 
                         {Object.keys(formData).length !== 0 && (
                             <>

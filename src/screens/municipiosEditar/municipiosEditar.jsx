@@ -1,24 +1,26 @@
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
 import RedesDiv from "../../components/redesDiv/redesDiv";
 import Loading from "../../components/loading/loading";
 import ImgsEdit from "../../components/imgsEdit/imgsEdit";
 import { deleteObject, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { UserContext } from "../../UserContext";
 
 function MunicipiosEditar() {
 
     const { id } = useParams();
     const navigate = useNavigate()
 
-    const [formData, setFormData] = useState({}); // Substitui city por formData
+    const [formData, setFormData] = useState({})
     const [imgsCopy, setImgsCopy] = useState([])
     const [imgsExclude, setImgsExclude] = useState([])
     const [image, setImage] = useState(null)
     const [images, setImages] = useState([])
     const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
+    const { planos } = useContext(UserContext);
 
     const maxImgs = 5
     const minImgs = 2
@@ -202,7 +204,8 @@ function MunicipiosEditar() {
                 localizacao: formData.localizacao,
                 municipio: formData.municipio,
                 redesSociais: formData.redesSociais,
-                sobre: formData.sobre
+                sobre: formData.sobre,
+                plano: formData.plano
             })
             navigate('/municipios')
         } catch (error) {
@@ -212,11 +215,11 @@ function MunicipiosEditar() {
 
     console.log(formData)
 
-    const deleteCity = async() => {
+    const deleteCity = async () => {
         try {
             imgsCopy.forEach(element => {
                 const imagesRef = ref(storage, element.directory)
-    
+
                 deleteObject(imagesRef).then(() => {
                 }).catch((error) => {
                     console.log(error);
@@ -235,6 +238,15 @@ function MunicipiosEditar() {
         } catch (error) {
             console.error('Erro ao excluir:', error);
         }
+    }
+
+    const handlePlanoChange = (e) => {
+        const selectedValue = e.target.value
+
+        setFormData({
+            ...formData,
+            plano: selectedValue,
+        });
     }
 
     return (
@@ -287,6 +299,18 @@ function MunicipiosEditar() {
                             onChange={handleChange}
                         />
 
+                        <select
+                            className='select-category'
+                            name="plano"
+                            onChange={handlePlanoChange}
+                            value={formData.plano}
+                        >
+                            <option value={''}>Selecione o plano</option>
+                            {planos.map((plano, index) => (
+                                <option key={index} value={plano}>{plano}</option>
+                            ))}
+                        </select>
+
                         {Object.keys(formData).length !== 0 && (
                             <>
                                 <RedesDiv formData={formData} setFormData={setFormData} />
@@ -304,8 +328,8 @@ function MunicipiosEditar() {
                                 <progress value={progressCard} max={100} />
 
                                 <ImgsEdit
-                                    formData={formData} // Substitui city por formData
-                                    setFormData={setFormData} // Substitui setCity por setFormData
+                                    formData={formData}
+                                    setFormData={setFormData}
                                     imgsCopy={imgsCopy}
                                     setImgsExclude={setImgsExclude}
                                     imgsExclude={imgsExclude}
@@ -315,9 +339,9 @@ function MunicipiosEditar() {
                                     <h1 className='title-removeImgs'>Adicionar Imagens</h1>
                                     <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
                                     <span className="button">
-                                        Selecione novas imagens{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}` }
-                                        {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}` }
-                                        {formData.imgs.length + images.length > maxImgs && ` - Limite excedido` }
+                                        Selecione novas imagens{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
+                                        {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}`}
+                                        {formData.imgs.length + images.length > maxImgs && ` - Limite excedido`}
                                     </span>
                                     <p className='label'>
                                         {images && images.length > 0

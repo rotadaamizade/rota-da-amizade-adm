@@ -15,8 +15,14 @@ export function UserProvider({children}) {
     localStorage.setItem('logged', JSON.stringify(logged));
   }, [logged]);
 
+  const [planos] = useState([
+    'ouro',
+    'prata',
+    'bronze'
+  ])
+
   return (
-    <UserContext.Provider value={{logged, setLogged}}>
+    <UserContext.Provider value={{logged, setLogged, planos}}>
       {children}
     </UserContext.Provider>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../../config/firebase'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { addDoc, collection, doc, getDocs } from 'firebase/firestore'
 import RedesDiv from '../../components/redesDiv/redesDiv'
 import { useNavigate } from 'react-router-dom'
 import CategoriesDiv from '../../components/categoriesDiv/categoriesDiv'
@@ -24,6 +24,7 @@ function AtrativosCadastro() {
     const [image, setImage] = useState(null)
     const [images, setImages] = useState([])
     const [cities, setCities] = useState([])
+    const [cityId, setCityId] = useState('')
 
     const maxImgs = 5
     const minImgs = 2
@@ -64,6 +65,22 @@ function AtrativosCadastro() {
             [name]: value,
         })
     }
+
+    const handleCityChange = (event) => {
+        const { name, value } = event.target
+        const selectedIndex = event.target.selectedIndex;
+        const id = event.target.options[selectedIndex].getAttribute('data-id');
+    
+        
+        setCityId(id)
+
+        setFormData({
+            ...formData,
+            [name]: value,
+        })
+    }
+
+    console.log(cities)
 
     function generateRandomId(length) {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -188,10 +205,11 @@ function AtrativosCadastro() {
         )
     }
 
-
     const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
+        const planoDocRef = doc(db, 'municipios', cityId);
         const docRef = await addDoc(collection(db, 'atrativos'), {
             ...formData,
+            plano: planoDocRef,
             imgCard: { url: imageCardUrl, directory: imageCardDirectory },
             imgs: imagesUrl,
         }).then(() => {
@@ -224,11 +242,11 @@ function AtrativosCadastro() {
                     className='select-category'
                     name="municipio"
                     value={formData.municipio}
-                    onChange={handleChange}
+                    onChange={handleCityChange}
                 >
-                    <option value="">De que município é o associado</option>
+                    <option data-id={''} value="">De que município é o associado</option>
                     {cities.map((city, index) => (
-                        <option key={index} value={city.nome}>
+                        <option key={index} data-id={city.id} value={city.nome}>
                             {city.nome}
                         </option>
                     ))}

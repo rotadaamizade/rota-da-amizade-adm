@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './municipiosCadastro.css'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../../config/firebase'
 import { addDoc, collection } from 'firebase/firestore'
 import RedesDiv from '../../components/redesDiv/redesDiv'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../../UserContext'
 
 function MunicipiosCasdastro() {
 
@@ -16,15 +17,17 @@ function MunicipiosCasdastro() {
     localizacao: '',
     sobre: '',
     contatos: [],
-    redesSociais: []
+    redesSociais: [],
+    plano: ''
   })
   const [progressCard, setProgressCard] = useState(0)
   const [progressImages, setProgressImages] = useState(0)
   const [image, setImage] = useState(null)
   const [images, setImages] = useState([])
+  const { planos } = useContext(UserContext);
 
   const maxImgs = 5
-    const minImgs = 2
+  const minImgs = 2
 
   const errorAlert = () => {
     alert('Por favor, preencha todos os campos');
@@ -88,8 +91,7 @@ function MunicipiosCasdastro() {
   const cardImageUpload = (event) => {
     event.preventDefault()
 
-    if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || !image || images == []) {
-      errorAlert()
+    if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || !image || images == [] || !formData.plano){
       return
     }
 
@@ -113,16 +115,16 @@ function MunicipiosCasdastro() {
       }
     }
 
-    if (image == null){
+    if (image == null) {
       errorAlert()
       return
-      
+
     }
 
-    if (images.length < minImgs || images.length > maxImgs){
+    if (images.length < minImgs || images.length > maxImgs) {
       errorAlert()
       return
-      
+
     }
 
     const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-card`)
@@ -163,11 +165,24 @@ function MunicipiosCasdastro() {
       municipio: formData.municipio,
       sobre: formData.sobre,
       contatos: formData.contatos,
-      redesSociais: formData.redesSociais
+      redesSociais: formData.redesSociais,
+      plano: formData.plano
     }).then(() => {
       navigate('/municipios')
     })
   }
+
+  const handlePlanoChange = (e) => {
+    const selectedValue = JSON.parse(e.target.value);
+    console.log(selectedValue)
+
+    setFormData({
+      ...formData,
+      plano: selectedValue,
+    });
+  }
+
+  console.log(formData)
 
   return (
     <>
@@ -214,6 +229,16 @@ function MunicipiosCasdastro() {
           value={formData.sobre}
           onChange={handleChange}
         />
+        <select
+          className='select-category'
+          name="plano"
+          onChange={handlePlanoChange}
+        >
+          <option value={JSON.stringify('')}>Selecione o plano</option>
+          {planos.map((plano, index) => (
+            <option key={index} value={JSON.stringify(plano)}>{plano}</option>
+          ))}
+        </select>
 
         <RedesDiv formData={formData} setFormData={setFormData} />
 
@@ -231,10 +256,10 @@ function MunicipiosCasdastro() {
 
         <div className='file-input file-input-2'>
           <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
-          <span className='button'>Selecione as Imagens Secundárias 
-          {images.length < maxImgs && ` - maximo: ${maxImgs - images.length} `}
-          {minImgs - images.length > 0 && ` - Mínimo: ${minImgs - images.length} `}
-          {images.length > maxImgs && ` - Limite excedido`}</span>
+          <span className='button'>Selecione as Imagens Secundárias
+            {images.length < maxImgs && ` - maximo: ${maxImgs - images.length} `}
+            {minImgs - images.length > 0 && ` - Mínimo: ${minImgs - images.length} `}
+            {images.length > maxImgs && ` - Limite excedido`}</span>
           <p className='label'>
             {images && images.length > 0
               ? Array.from(images).map((image) => image.name).join(', ')
