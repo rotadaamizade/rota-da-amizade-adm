@@ -16,9 +16,8 @@ export function UserProvider({children}) {
   }, [logged]);
 
   const [planos] = useState([
-    'ouro',
-    'prata',
-    'bronze'
+    'black',
+    'gold'
   ])
 
   return (

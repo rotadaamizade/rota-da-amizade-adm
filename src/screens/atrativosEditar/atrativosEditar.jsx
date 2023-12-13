@@ -21,12 +21,13 @@ function AtrativosEditar() {
     const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
     const [cities, setCities] = useState([])
+    const [cityId, setCityId] = useState('')
 
     const maxImgs = 5
     const minImgs = 2
 
     useEffect(() => {
-        getAssociado()
+        getAtrativo()
         getMunicipios()
     }, [])
 
@@ -50,13 +51,14 @@ function AtrativosEditar() {
         }
     }
 
-    const getAssociado = async () => {
+    const getAtrativo = async () => {
 
         try {
             const docRef = doc(db, "atrativos", id)
             const docSnap = await getDoc(docRef)
             setFormData(docSnap.data())
             setImgsCopy(docSnap.data().imgs)
+            setCityId(docSnap.data().plano)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -69,6 +71,21 @@ function AtrativosEditar() {
 
     const handleChange = (event) => {
         const { name, value } = event.target
+
+        setFormData({
+            ...formData,
+            [name]: value,
+        })
+    }
+
+    console.log(cityId)
+
+    const handleCityChange = (event) => {
+        const { name, value } = event.target
+
+        const selectedOption = event.target.options[event.target.selectedIndex];
+        const id = selectedOption.getAttribute('city-id');
+        setCityId(id);
 
         setFormData({
             ...formData,
@@ -211,6 +228,8 @@ function AtrativosEditar() {
         )
     }
 
+    console.log(cityId)
+
     const editCity = async (imgsUrl, cardUrl, cardDirectory) => {
         imgsExclude.forEach(element => {
             const desertRef = ref(storage, element)
@@ -223,11 +242,19 @@ function AtrativosEditar() {
         });
 
         try {
-            const docRef = doc(db, "atrativos", id);
+            const docRef = doc(db, "atrativos", id)
+
+            let planRef = cityId
+
+            if (typeof cityId === 'string'){
+                planRef = doc(db, "municipios", cityId);
+            }
+
             await updateDoc(docRef, {
                 ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
                 imgs: [...formData.imgs, ...imgsUrl],
+                plano: planRef
             })
             navigate('/atrativos')
         } catch (error) {
@@ -291,11 +318,11 @@ function AtrativosEditar() {
                             className='select-category'
                             name="municipio"
                             value={formData.municipio}
-                            onChange={handleChange}
+                            onChange={handleCityChange}
                         >
-                            <option value="">De que município é o associado</option>
+                            <option value="">De que município é o atrativo</option>
                             {cities.map((city, index) => (
-                                <option key={index} value={city.nome}>
+                                <option key={index} city-id={city.id} value={city.nome}>
                                     {city.nome}
                                 </option>
                             ))}

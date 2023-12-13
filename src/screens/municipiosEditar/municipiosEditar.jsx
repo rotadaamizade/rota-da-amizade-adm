@@ -34,7 +34,7 @@ function MunicipiosEditar() {
         try {
             const docRef = doc(db, "municipios", id)
             const docSnap = await getDoc(docRef)
-            setFormData(docSnap.data()) // Substitui setCity por setFormData
+            setFormData(docSnap.data())
             setImgsCopy(docSnap.data().imgs)
 
             if (!docSnap.exists()) {
@@ -58,7 +58,7 @@ function MunicipiosEditar() {
     const verification = () => {
         let errors = []
 
-        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre) {
+        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.plano || !formData.sobre) {
             errors.push('Preencha todos os campos principais')
         }
 

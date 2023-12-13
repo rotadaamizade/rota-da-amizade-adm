@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './eventosCadastro.css'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../../config/firebase'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { addDoc, collection, doc, getDocs } from 'firebase/firestore'
 import RedesDiv from '../../components/redesDiv/redesDiv'
 import { useNavigate } from 'react-router-dom'
 import CategoriesDiv from '../../components/categoriesDiv/categoriesDiv'
@@ -32,6 +32,7 @@ function EventosCadastro() {
   const [tipoRealizador, setTipoRealizador] = useState('');
   const [cities, setCities] = useState([])
   const [associados, setAssociados] = useState([])
+  const [realizador, setRealizador] = useState({id:'', type:''})
 
   const maxImgs = 5
   const minImgs = 2
@@ -86,7 +87,7 @@ function EventosCadastro() {
         const associadoData = {
           id: doc.id,
           nome: doc.data().nome
-        };
+        }
 
         associadosData.push(associadoData);
       });
@@ -238,10 +239,18 @@ function EventosCadastro() {
   }
 
   const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
+    let planoDocRef = null
+    if(realizador.type == 'associado'){
+      planoDocRef = doc(db, 'associados', realizador.id);
+    } else if(realizador.type == 'municipio'){
+      planoDocRef = doc(db, 'municipios', realizador.id);
+    }
+
     const docRef = await addDoc(collection(db, 'eventos'), {
       ...formData,
       imgCard: { url: imageCardUrl, directory: imageCardDirectory },
-      imgs: imagesUrl
+      imgs: imagesUrl,
+      plano: planoDocRef
     }).then(() => {
       navigate('/eventos')
     })
@@ -254,6 +263,8 @@ function EventosCadastro() {
   const handleMunicipioRealizadorChange = (e) => {
     const selectedValue = JSON.parse(e.target.value);
 
+    setRealizador({id: selectedValue.id, type: 'municipio'})
+
     setFormData({
       ...formData,
       realizador: selectedValue.nome,
@@ -263,15 +274,19 @@ function EventosCadastro() {
     });
   }
 
+  console.log(realizador)
+
   const handleAssociadoRealizadorChange = (e) => {
-    const selectedValue = JSON.parse(e.target.value);
+    const selectedValue = JSON.parse(e.target.value)
+
+    setRealizador({id: selectedValue.id, type: 'associado'})
 
     setFormData({
       ...formData,
       realizador: selectedValue.nome,
       id_terceiro: selectedValue.id,
       tipo: 'associado'
-    });
+    })
   }
 
   const handleAssociadoRealizadorMunicipioChange = (e) => {

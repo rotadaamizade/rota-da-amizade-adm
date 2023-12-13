@@ -41,6 +41,7 @@ function EventosEditar() {
     const [loaded, setLoaded] = useState(false)
     const [realizadorValue, setRealizadorValue] = useState('')
     const [municipioValue, setMunicipioValue] = useState('')
+    const [realizador, setRealizador] = useState({ id: '', type: '' })
 
     console.log(formData)
 
@@ -106,6 +107,7 @@ function EventosEditar() {
             setTipoRealizador(docSnap.data().tipo)
             setRealizadorValue(docSnap.data().realizador)
             setMunicipioValue(docSnap.data().municipio)
+            setRealizador(docSnap.data().plano)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -148,7 +150,7 @@ function EventosEditar() {
             if (element == '') {
                 errors.push('Preencha as categorias')
             }
-          }
+        }
 
         if (formData.redesSociais.length > 0) {
             for (let i = 0; i < formData.redesSociais.length; i++) {
@@ -296,11 +298,17 @@ function EventosEditar() {
 
         try {
             const docRef = doc(db, "eventos", id);
+            let planoDocRef = realizador
+            if (realizador.type == 'associado') {
+                planoDocRef = doc(db, 'associados', realizador.id);
+            } else if (realizador.type == 'municipio') {
+                planoDocRef = doc(db, 'municipios', realizador.id);
+            }
             await updateDoc(docRef, {
                 ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
-                imgs: [...formData.imgs, ...imgsUrl]
-
+                imgs: [...formData.imgs, ...imgsUrl],
+                plano: planoDocRef
             })
             navigate('/eventos')
         } catch (error) {
@@ -349,41 +357,42 @@ function EventosEditar() {
         setMunicipioValue('')
     }
 
-
-    console.log(realizadorValue)
-
     const handleRealizadorChange = (e, tipo) => {
         const selectedOption = e.target.selectedOptions[0]
         const nome = selectedOption.value;
         const id = selectedOption.getAttribute('data-id');
-            
-            if (tipo == 'realizador') {
-                console.log(id)
-                setRealizadorValue(nome)
-                setFormData({
-                    ...formData,
-                    realizador: nome,
-                    id_terceiro: id
-                })
-            } else if (tipo == 'municipio') {
-                setMunicipioValue(nome)
-                setFormData({
-                    ...formData,
-                    municipio: nome
-                })
-            } else if (tipo == 'ambos'){
-                setMunicipioValue(nome)
-                setRealizadorValue(nome)
-                setFormData({
-                    ...formData,
-                    municipio: nome,
-                    realizador: nome,
-                    id_terceiro: id
-                })
 
-        console.log(realizadorValue)
+        if (tipo == 'realizador') {
+            console.log(id)
+            setRealizadorValue(nome)
+            setFormData({
+                ...formData,
+                realizador: nome,
+                id_terceiro: id
+            })
+            setRealizador({ id: id, type: 'associado' })
+        } else if (tipo == 'municipio') {
+            setMunicipioValue(nome)
+            setFormData({
+                ...formData,
+                municipio: nome
+            })
+        } else if (tipo == 'ambos') {
+            setMunicipioValue(nome)
+            setRealizadorValue(nome)
+            setFormData({
+                ...formData,
+                municipio: nome,
+                realizador: nome,
+                id_terceiro: id
+            })
+            setRealizador({ id: id, type: 'municipio' })
         }
     }
+
+
+    console.log(realizador)
+
     return (
         <>
 
