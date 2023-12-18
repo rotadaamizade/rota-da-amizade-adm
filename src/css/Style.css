@@ -1,84 +1,85 @@
 main {
-    background-color: rgb(252, 252, 252);
-    min-height: 100vh;
+  background-color: rgb(252, 252, 252);
+  min-height: 100vh;
 }
 
 body {
-    font-family: "Raleway", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 .row {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .icon {
-    max-width: 1.5rem;
-    width: 100%;
+  max-width: 1.5rem;
+  width: 100%;
 }
 
 .container {
-    width: 100%;
-    max-width: 1140px;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
 }
 
 .mb-1 {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 section.mainSection {
-    transform: translate3d(100%, 0, 0);
-    opacity: 0;
-    transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+  transform: translate3d(100%, 0, 0);
+  opacity: 0;
+  transition: transform 0.5s ease-in, opacity 0.5s ease-in;
 }
 
 section.mainSection.active {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
 }
 
 @media (max-width: 991px) {
-    .container {
-        width: auto;
-        max-width: 990px;
-    }
+  .container {
+    width: auto;
+    max-width: 990px;
+  }
 
-    main {
-        padding-top: 92px;
-    }
+  main {
+    padding-top: 92px;
+  }
 
-    .mob-mb-05 {
-        margin-bottom: 0.5rem;
-    }
+  .mob-mb-05 {
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* transição */
 
-::view-transition-old(root) {
+/* os dois CSSs estavam causando problemas entre navegadores, comentados até revisão */
+/* ::view-transition-old(root) {
     animation: fade-and-scale-out 0.5s ease-in-out 1 forwards;
 }
 ::view-transition-new(root) {
-    animation: fade-and-scale-in 10s ease-in-out 1 forwards;
-}
+    animation: fade-and-scale-in 0.5s ease-in-out 1 forwards;
+} */
 
 @keyframes fade-and-scale-in {
-    from {
-        opacity: 0;
-        transform: scale(0);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @keyframes fade-and-scale-out {
-    from {
-        opacity: 1;
-        transform: scale(1);
-    }
-    to {
-        opacity: 0;
-        transform: scale(0);
-    }
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0);
+  }
 }

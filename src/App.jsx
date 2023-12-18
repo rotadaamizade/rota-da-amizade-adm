@@ -1,9 +1,9 @@
 import {
-    Routes,
-    Route,
-    Navigate,
-    useNavigate,
-    useLocation,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
 } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import { PageContext, PageProvider } from "./useContext";
@@ -22,63 +22,47 @@ import { useContext, useEffect } from "react";
 import { FloatingWhatsApp } from "react-floating-whatsapp";
 import { StrictMode } from "react";
 import { AnimatePresence } from "framer-motion";
+import CommercialPlans from "./screens/CommercialPlans/CommercialPlans";
 
 function App() {
   const openWhatsapp = (url) => {
     window.open(url, "_blank", "noreferrer");
   };
-    return (
-        <>
-            <StrictMode>
-                <BrowserRouter>
-                    <PageProvider>
-                        <Header />
-                        <AnimatePresence>
-                            <main>
-                                <Routes>
-                                    <Route index element={<Home />} />
-                                    <Route
-                                        path="/sobre"
-                                        element={<AboutUs />}
-                                    />
-                                    <Route
-                                        path="/cidades"
-                                        element={<Cities />}
-                                    />
-                                    <Route
-                                        path="/associados"
-                                        element={<Associates />}
-                                    />
-                                    <Route
-                                        path="/contato"
-                                        element={<Contact />}
-                                    />
-                                    <Route
-                                        path="/cidades/:url"
-                                        element={<City />}
-                                    />
-                                    <Route
-                                        path="*"
-                                        element={<Navigate to="" />}
-                                    />
-                                </Routes>
-                                <FloatingWhatsApp
-                                    // onClick={() => {openWhatsapp("https://api.whatsapp.com/send?phone=1234567890")}}
-                                    allowClickAway={true}
-                                    avatar={whatsAvatarIcon}
-                                    accountName="Rota da Amizade"
-                                    chatMessage="Olá como podemos ajudar hoje?"
-                                    phoneNumber="1234567890"
-                                    statusMessage=""
-                                />
-                            </main>
-                        </AnimatePresence>
-                        <Footer />
-                    </PageProvider>
-                </BrowserRouter>
-            </StrictMode>
-        </>
-    );
+  return (
+    <>
+      <StrictMode>
+        <BrowserRouter>
+          <PageProvider>
+            <Header />
+            <AnimatePresence>
+              <main>
+                <Routes>
+                  <Route index element={<Home />} />
+                  <Route path="/sobre" element={<AboutUs />} />
+                  <Route path="/cidades" element={<Cities />} />
+                  <Route path="/associados" element={<Associates />} />
+                  <Route path="/contato" element={<Contact />} />
+                  <Route path="/cidades/:url" element={<City />} />
+                  <Route path="/planos" element={<CommercialPlans />} />
+                  <Route path="*" element={<Navigate to="" />} />
+                </Routes>
+                <FloatingWhatsApp
+                  // onClick={() => {openWhatsapp("https://api.whatsapp.com/send?phone=1234567890")}}
+                  allowClickAway={true}
+                  avatar={whatsAvatarIcon}
+                  accountName="Rota da Amizade"
+                  chatMessage="Olá como podemos ajudar hoje?"
+                  phoneNumber="49991528426"
+                  statusMessage=""
+                />
+              </main>
+            </AnimatePresence>
+            <Footer />
+          </PageProvider>
+        </BrowserRouter>
+      </StrictMode>
+    </>
+  );
 }
 
 export default App;
