@@ -56,11 +56,11 @@
 }
 
 .img-logo{
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     position: absolute;
     right: 0;
-    margin: 20px;
+    margin: 10px;
     border-radius: 8px;
 }
 

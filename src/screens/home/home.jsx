@@ -5,7 +5,7 @@ import HomeCards from '../../components/homeCards/homeCards'
 function Home(){
     return(
         <>
-            <h2 className='home-title'>Cadastrar, Remover e Editar</h2>
+            <h2 className='home-title'>Gerenciamento de dados:</h2>
             <div className='homeCards-container'>
                 <HomeCards
                     name={'Municípios'}

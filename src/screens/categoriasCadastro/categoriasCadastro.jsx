@@ -50,7 +50,7 @@ function CategoriasCadastro() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(category == null || category == undefined || formData.corFundo == '' || formData.corPrincipal == '' || formData.nome == '' || formData.svg == ''){
+        if (category == null || category == undefined || formData.corFundo == '' || formData.corPrincipal == '' || formData.nome == '' || formData.svg == '') {
             errorAlert()
             return
         }
@@ -100,35 +100,45 @@ function CategoriasCadastro() {
                     ))}
                 </select>
 
+                <p className='label'>Nome:</p>
                 <input
                     className='input-default'
                     type="text"
                     name="nome"
-                    placeholder="Nome:"
+                    placeholder="Digite o nome:"
                     value={formData.nome}
                     onChange={handleChange}
                 />
-                <input
-                    className='input-default'
-                    type="text"
-                    name="corFundo"
-                    placeholder="Cor de Fundo (Hexadecimal):"
-                    value={formData.corFundo}
-                    onChange={handleChange}
-                />
-                <input
-                    className='input-default'
-                    type="text"
-                    name="corPrincipal"
-                    placeholder="Cor Principal (Hexadecimal):"
-                    value={formData.corPrincipal}
-                    onChange={handleChange}
-                />
+
+                <div className='input-color-div'>
+                    <div>
+                        <p className='label'>Cor Secundária:</p>
+                        <input
+                            className='input-color'
+                            type="color"
+                            name="corFundo"
+                            value={formData.corFundo}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div>
+                        <p className='label'>Cor Principal:</p>
+                        <input
+                            className='input-color'
+                            type="color"
+                            name="corPrincipal"
+                            value={formData.corPrincipal}
+                            onChange={handleChange}
+                        />
+                    </div>
+                </div>
+                <p className='label'>Ícone em SVG:</p>
                 <textarea
                     type='text'
                     className='textarea-input'
                     name="svg"
-                    placeholder="Ícone: (Svg):"
+                    placeholder="Dígite o ícone em SVG:"
                     value={formData.svg}
                     onChange={handleChange}
                 />

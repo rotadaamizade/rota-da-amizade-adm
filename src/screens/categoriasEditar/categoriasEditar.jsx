@@ -7,7 +7,7 @@ import Loading from '../../components/loading/loading'
 
 
 function CategoriasEditar() {
-    
+
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -44,7 +44,7 @@ function CategoriasEditar() {
     const errorAlert = () => {
         alert('Preencha todos os campos corretamente')
     }
-    
+
     const handleChange = (event) => {
         const { name, value } = event.target
 
@@ -56,7 +56,7 @@ function CategoriasEditar() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(formData.corPrincipal == '' || formData.corFundo == '' || formData.nome == '' || formData.svg == ''){
+        if (formData.corPrincipal == '' || formData.corFundo == '' || formData.nome == '' || formData.svg == '') {
             errorAlert()
             return
         }
@@ -93,58 +93,70 @@ function CategoriasEditar() {
         }
     }
 
+    console.log(category)
+
     return (
         Object.keys(formData).length === 0 ? (
-            <Loading/>
+            <Loading />
         ) : (
-        <>
-            <div className='title-div'>
-                <div onClick={() => navigate('/categorias')} className='voltar-button'>
-                    <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http:www.w3.org/2000/svg">
-                        <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+            <>
+                <div className='title-div'>
+                    <div onClick={() => navigate('/categorias')} className='voltar-button'>
+                        <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http:www.w3.org/2000/svg">
+                            <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </div>
+                    <h1 className='title'>Editar Categoria | {category.nome} </h1>
                 </div>
-                <h1 className='title'>Editar Categoria | {category.nome} </h1>
-            </div>
-            <form onSubmit={handleSubmit} action="">
-                <input
-                    className='input-default'
-                    type="text"
-                    name="nome"
-                    placeholder="Nome:"
-                    value={formData.nome}
-                    onChange={handleChange}
-                />
-                <input
-                    className='input-default'
-                    type="text"
-                    name="corFundo"
-                    placeholder="Cor de Fundo (Hexadecimal):"
-                    value={formData.corFundo}
-                    onChange={handleChange}
-                />
-                <input
-                    className='input-default'
-                    type="text"
-                    name="corPrincipal"
-                    placeholder="Cor Principal (Hexadecimal):"
-                    value={formData.corPrincipal}
-                    onChange={handleChange}
-                />
-                <textarea
-                    type='text'
-                    className='textarea-input'
-                    name="svg"
-                    placeholder="Ícone: (Svg):"
-                    value={formData.svg}
-                    onChange={handleChange}
-                />
+                <form onSubmit={handleSubmit} action="">
+                    <p className='label'>Nome:</p>
+                    <input
+                        className='input-default'
+                        type="text"
+                        name="nome"
+                        placeholder="Digite o nome:"
+                        value={formData.nome}
+                        onChange={handleChange}
+                    />
+                    <div className='input-color-div'>
+                        <div>
+                            <p className='label'>Cor Secundária:</p>
+                            <input
+                                className='input-color'
+                                type="color"
+                                name="corFundo"
+                                value={formData.corFundo}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                <button className='submit-button' type="submit">Editar Categoria</button>
-            </form>
-            <button className='delete-button' onClick={deleteCategory}>Remover Categoria</button>
-        </>
+                        <div>
+                            <p className='label'>Cor Principal:</p>
+                            <input
+                                className='input-color'
+                                type="color"
+                                name="corPrincipal"
+                                value={formData.corPrincipal}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <p className='label'>SVG:</p>
+                    <textarea
+                        type='text'
+                        className='textarea-input'
+                        name="svg"
+                        placeholder="Dígite o ícone em SVG:"
+                        value={formData.svg}
+                        onChange={handleChange}
+                    />
+
+                    <button className='submit-button' type="submit">Editar Categoria</button>
+                </form>
+                <button className='delete-button' onClick={deleteCategory}>Remover Categoria</button>
+            </>
         )
     )
 }

@@ -224,7 +224,7 @@ progress{
 
 .card-div {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr); 
   grid-gap: 10px;
 }
 
@@ -251,4 +251,11 @@ progress{
   .card-div {
       grid-template-columns: 1fr;
   }
+}
+
+.label{
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }

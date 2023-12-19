@@ -197,38 +197,44 @@ function MunicipiosCasdastro() {
       </div>
 
       <form onSubmit={cardImageUpload} action="">
+        <p className='label'>Nome do município:</p>
         <input
           className='input-default'
           type="text"
           name="municipio"
-          placeholder="Nome do município:"
+          placeholder="Digite o nome do município:"
           value={formData.municipio}
           onChange={handleChange}
         />
+        <p className='label'>Descrição:</p>
         <input
           className='input-default'
           type="text"
           name="descricao"
-          placeholder="Descrição:"
+          placeholder="Digite a descrição:"
           value={formData.descricao}
           onChange={handleChange}
         />
+        <p className='label'>Localização (URL do Google Maps):</p>
         <input
           className='input-default'
           type="text"
           name="localizacao"
-          placeholder="URL da localização: (Google Maps)"
+          placeholder="Digite a URL:"
           value={formData.localizacao}
           onChange={handleChange}
         />
+        <p className='label'>Sobre:</p>
         <textarea
           type='text'
           className='textarea-input'
           name="sobre"
-          placeholder="Sobre:"
+          placeholder="Digite sobre:"
           value={formData.sobre}
           onChange={handleChange}
+          maxLength={1500}
         />
+        <p className='label'>Sobre:</p>
         <select
           className='select-category'
           name="plano"

@@ -42,6 +42,7 @@ function EventosEditar() {
     const [realizadorValue, setRealizadorValue] = useState('')
     const [municipioValue, setMunicipioValue] = useState('')
     const [realizador, setRealizador] = useState({ id: '', type: '' })
+    const [title, setTitle] = useState('')
 
     console.log(formData)
 
@@ -108,6 +109,7 @@ function EventosEditar() {
             setRealizadorValue(docSnap.data().realizador)
             setMunicipioValue(docSnap.data().municipio)
             setRealizador(docSnap.data().plano)
+            setTitle(docSnap.data().nome)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -407,18 +409,19 @@ function EventosEditar() {
                                 <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
-                        <h1 className='title'>Editar Evento: {formData.nome}</h1>
+                        <h1 className='title'>Editar Evento: {title}</h1>
                     </div>
                     <form onSubmit={cardImageUpload} action="">
+                        <p className='label'>Nome do Evento:</p>
                         <input
                             className='input-default'
                             type="text"
                             name="nome"
-                            placeholder="Nome do Evento:"
+                            placeholder="Digite o nome do Evento:"
                             value={formData.nome}
                             onChange={handleChange}
                         />
-
+                        <p className='label'>Tipo do realizador:</p>
                         <select
                             className='select-category'
                             name="category"
@@ -432,6 +435,7 @@ function EventosEditar() {
 
                         {tipoRealizador === 'associado' ? (
                             <>
+                                <p className='label'>Associado realizador:</p>
                                 <select
                                     className='select-category'
                                     name="realizador"
@@ -443,6 +447,7 @@ function EventosEditar() {
                                         <option data-id={associado.id} key={index} value={associado.nome}>{associado.nome}</option>
                                     ))}
                                 </select>
+                                <p className='label'>Local do evento:</p>
                                 <select
                                     className='select-category'
                                     name="municipio2"
@@ -457,36 +462,41 @@ function EventosEditar() {
                             </>
 
                         ) : tipoRealizador === 'municipio' ? (
-
-                            <select
-                                className='select-category'
-                                name="municipio"
-                                onChange={(e) => handleRealizadorChange(e, 'ambos')}
-                                value={municipioValue}
-                            >
-                                <option data-id={''} value={''}>Selecione o Município Realizador</option>
-                                {cities.map((city, index) => (
-                                    <option key={index} data-id={city.id} value={city.nome}>{city.nome}</option>
-                                ))}
-                            </select>
+                            <>
+                                <p className='label'>Municipio realizador:</p>
+                                <select
+                                    className='select-category'
+                                    name="municipio"
+                                    onChange={(e) => handleRealizadorChange(e, 'ambos')}
+                                    value={municipioValue}
+                                >
+                                    <option data-id={''} value={''}>Selecione o Município Realizador</option>
+                                    {cities.map((city, index) => (
+                                        <option key={index} data-id={city.id} value={city.nome}>{city.nome}</option>
+                                    ))}
+                                </select>
+                            </>
                         ) : (
                             null
                         )}
+                        <p className='label'>Localização (URL do Google Maps):</p>
                         <input
                             className='input-default'
                             type="text"
                             name="localizacao"
-                            placeholder="URL da localização: (Google Maps)"
+                            placeholder="Digite a URL:"
                             value={formData.localizacao}
                             onChange={handleChange}
                         />
+                        <p className='label'>Sobre:</p>
                         <textarea
                             type='text'
                             className='textarea-input'
                             name="sobre"
-                            placeholder="Sobre:"
+                            placeholder="Digite sobre:"
                             value={formData.sobre}
                             onChange={handleChange}
+                            maxLength={1500}
                         />
 
                         <DatasDiv formData={formData} setFormData={setFormData} />
@@ -496,7 +506,7 @@ function EventosEditar() {
                         {Object.keys(formData).length !== 0 && (
                             <>
 
-                                <h1 className='title-removeImgs'>Editar Imagem Principal</h1>
+                                <h1 className='title-removeImgs'>Imagem Principal</h1>
                                 <div className='file-input'>
                                     <input onChange={(e) => setImage(e.target.files[0])} type='file' />
                                     <span className='button'>Selecione a nova imagem principal</span>
@@ -519,10 +529,10 @@ function EventosEditar() {
 
 
                                 <div className='file-input file-input-2'>
-                                    <h1 className='title-removeImgs'>Adicionar Imagens</h1>
+                                    <h1 className='title-removeImgs'>Imagens Secundárias</h1>
                                     <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
                                     <span className="button">
-                                        Selecione novas imagens{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
+                                        Selecione as novas imagens secundárias{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
                                         {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}`}
                                         {formData.imgs.length + images.length > maxImgs && ` - Limite excedido`}
                                     </span>
