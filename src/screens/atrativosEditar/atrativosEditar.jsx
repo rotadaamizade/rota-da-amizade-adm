@@ -22,6 +22,7 @@ function AtrativosEditar() {
     const [progressImages, setProgressImages] = useState(0)
     const [cities, setCities] = useState([])
     const [cityId, setCityId] = useState('')
+    const [title, setTitle] = useState('')
 
     const maxImgs = 5
     const minImgs = 2
@@ -59,6 +60,7 @@ function AtrativosEditar() {
             setFormData(docSnap.data())
             setImgsCopy(docSnap.data().imgs)
             setCityId(docSnap.data().plano)
+            setTitle(docSnap.data().nome)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -246,23 +248,20 @@ function AtrativosEditar() {
 
             let planRef = cityId
 
-            if (typeof cityId === 'string'){
+            if (typeof cityId === 'string') {
                 planRef = doc(db, "municipios", cityId);
             }
 
             await updateDoc(docRef, {
                 ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
-                imgs: [...formData.imgs, ...imgsUrl],
-                plano: planRef
+                imgs: [...formData.imgs, ...imgsUrl] 
             })
             navigate('/atrativos')
         } catch (error) {
             console.error("Erro ao editar o documento:", error);
         }
     }
-
-    console.log(formData)
 
     const deleteCity = async () => {
         try {
@@ -281,8 +280,10 @@ function AtrativosEditar() {
             }).catch((error) => {
                 console.log(error);
             })
-
             await deleteDoc(doc(db, "atrativos", id))
+
+
+
             navigate('/atrativos')
         } catch (error) {
             console.error('Erro ao excluir:', error);
@@ -302,25 +303,26 @@ function AtrativosEditar() {
                                 <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
-                        <h1 className='title'>Editar Atrativo: {formData.nome}</h1>
+                        <h1 className='title'>Editar Atrativo: {title}</h1>
                     </div>
                     <form onSubmit={cardImageUpload} action="">
+                        <p className='label'>Nome do atrativo:</p>
                         <input
-                            disabled
-                            className='input-default input-disabled'
+                            className='input-default'
                             type="text"
                             name="nome"
-                            placeholder="Nome do atrativo:"
+                            placeholder="Digite o nome do atrativo:"
                             value={formData.nome}
                             onChange={handleChange}
                         />
+                        <p className='label'>De que município é o atrativo:</p>
                         <select
                             className='select-category'
                             name="municipio"
                             value={formData.municipio}
                             onChange={handleCityChange}
                         >
-                            <option value="">De que município é o atrativo</option>
+                            <option value="">Selecione de que município é o atrativo</option>
                             {cities.map((city, index) => (
                                 <option key={index} city-id={city.id} value={city.nome}>
                                     {city.nome}
@@ -328,19 +330,21 @@ function AtrativosEditar() {
                             ))}
 
                         </select>
+                        <p className='label'>Localização (URL do Google Maps):</p>
                         <input
                             className='input-default'
                             type="text"
                             name="localizacao"
-                            placeholder="URL da localização: (Google Maps)"
+                            placeholder="Digite a URL:"
                             value={formData.localizacao}
                             onChange={handleChange}
                         />
+                        <p className='label'>Sobre:</p>
                         <textarea
                             type='text'
                             className='textarea-input'
                             name="sobre"
-                            placeholder="Sobre:"
+                            placeholder="Digite sobre:"
                             value={formData.sobre}
                             onChange={handleChange}
                         />
@@ -349,7 +353,7 @@ function AtrativosEditar() {
                             <>
                                 <CategoriesDiv formData={formData} setFormData={setFormData} type='atrativos' />
                                 <RedesDiv formData={formData} setFormData={setFormData} />
-                                <h1 className='title-removeImgs'>Editar Imagem Principal</h1>
+                                <h1 className='title-removeImgs'>Imagem Principal</h1>
                                 <div className='file-input'>
                                     <input onChange={(e) => setImage(e.target.files[0])} type='file' />
                                     <span className='button'>Selecione a nova imagem principal</span>
@@ -371,10 +375,10 @@ function AtrativosEditar() {
                                 />
 
                                 <div className='file-input file-input-2'>
-                                    <h1 className='title-removeImgs'>Adicionar Imagens</h1>
+                                    <h1 className='title-removeImgs'>Imagens Secundárias</h1>
                                     <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
                                     <span className="button">
-                                        Selecione novas imagens{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
+                                        Selecione novas imagens secundárias{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
                                         {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}`}
                                         {formData.imgs.length + images.length > maxImgs && ` - Limite excedido`}
                                     </span>

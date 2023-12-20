@@ -80,8 +80,6 @@ function AtrativosCadastro() {
         })
     }
 
-    console.log(cities)
-
     function generateRandomId(length) {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let randomId = '';
@@ -209,9 +207,9 @@ function AtrativosCadastro() {
         const planoDocRef = doc(db, 'municipios', cityId);
         const docRef = await addDoc(collection(db, 'atrativos'), {
             ...formData,
-            plano: planoDocRef,
             imgCard: { url: imageCardUrl, directory: imageCardDirectory },
             imgs: imagesUrl,
+            ativo: true
         }).then(() => {
             navigate('/atrativos')
         })
@@ -230,21 +228,23 @@ function AtrativosCadastro() {
             </div>
 
             <form onSubmit={cardImageUpload} action="">
+            <p className='label'>Nome do atrativo:</p>
                 <input
                     className='input-default'
                     type="text"
                     name="nome"
-                    placeholder="Nome do Atrativo:"
+                    placeholder="Digite o nome do atrativo:"
                     value={formData.nome}
                     onChange={handleChange}
                 />
+                <p className='label'>De que município é o atrativo:</p>
                 <select
                     className='select-category'
                     name="municipio"
                     value={formData.municipio}
                     onChange={handleCityChange}
                 >
-                    <option data-id={''} value="">De que município é o associado</option>
+                    <option value="">Selecione de que município é o atrativo</option>
                     {cities.map((city, index) => (
                         <option key={index} data-id={city.id} value={city.nome}>
                             {city.nome}
@@ -252,19 +252,21 @@ function AtrativosCadastro() {
                     ))}
 
                 </select>
+                <p className='label'>Localização (URL do Google Maps):</p>
                 <input
                     className='input-default'
                     type="text"
                     name="localizacao"
-                    placeholder="URL da localização: (Google Maps)"
+                    placeholder="Digite a URL:"
                     value={formData.localizacao}
                     onChange={handleChange}
                 />
+                <p className='label'>Sobre:</p>
                 <textarea
                     type='text'
                     className='textarea-input'
                     name="sobre"
-                    placeholder="Sobre:"
+                    placeholder="Digite sobre:"
                     value={formData.sobre}
                     onChange={handleChange}
                 />

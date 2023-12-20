@@ -9,7 +9,8 @@ function Atrativos() {
 
     const navigate = useNavigate()
 
-    const [atrativos, setAtrativos] = useState(null)
+    const [activeAtrativos, setActiveAtrativos] = useState(null)
+    const [desactiveAtrativos, setDesactiveAtrativos] = useState(null)
 
     useEffect(() => {
         getAtrativos()
@@ -19,7 +20,8 @@ function Atrativos() {
 
         try {
             const data = await getDocs(collection(db, "atrativos"));
-            const atrativosData = [];
+            const activeAtrativosData = [];
+            const desactiveAtrativosData = [];
 
             data.forEach((doc) => {
                 const atrativoData = {
@@ -29,10 +31,14 @@ function Atrativos() {
                     imgCard: doc.data().imgCard
                 };
 
-                atrativosData.push(atrativoData);
-            });
-
-            setAtrativos(atrativosData);
+                if(doc.data().ativo){
+                    activeAtrativosData.push(atrativoData);
+                } else {
+                    desactiveAtrativosData.push(atrativoData);
+                }
+            })
+            setDesactiveAtrativos(desactiveAtrativosData)
+            setActiveAtrativos(activeAtrativosData);
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
@@ -41,7 +47,7 @@ function Atrativos() {
     return (
         <>
             {
-                atrativos == null ? (
+                activeAtrativos == null ? (
                     <Loading />
                 ) : (
                     <>
@@ -54,9 +60,24 @@ function Atrativos() {
                             </div>
                             <h1 className='title'>Atrativos</h1>
                         </div>
+                        <h2 className='home-title'>Atrativos Ativos</h2>
                         <div className='card-div'>
                             {
-                                atrativos.map((atrativo, index) => (
+                                activeAtrativos.map((atrativo, index) => (
+                                    <CardEdit
+                                        key={index}
+                                        url={atrativo.imgCard.url}
+                                        id={"editar/"+atrativo.id}
+                                        descricao={atrativo.municipio}
+                                        nome={atrativo.nome}
+                                    />
+                                ))
+                            }
+                        </div>
+                        <h2 className='home-title'>Atrativos Não Ativos</h2>
+                        <div className='card-div'>
+                            {
+                                desactiveAtrativos.map((atrativo, index) => (
                                     <CardEdit
                                         key={index}
                                         url={atrativo.imgCard.url}

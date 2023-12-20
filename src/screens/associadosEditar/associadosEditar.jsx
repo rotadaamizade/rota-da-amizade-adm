@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection, query, where } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
@@ -25,6 +25,7 @@ function AssociadosEditar() {
     const [progressImages, setProgressImages] = useState(0)
     const [cities, setCities] = useState([])
     const { planos } = useContext(UserContext);
+    const [eventosId, setEventosId] = useState([])
 
     const maxImgs = 5
     const minImgs = 2
@@ -41,6 +42,7 @@ function AssociadosEditar() {
             const docSnap = await getDoc(docRef)
             setFormData(docSnap.data())
             setImgsCopy(docSnap.data().imgs)
+            getEventos(docSnap.data().nome)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -69,6 +71,17 @@ function AssociadosEditar() {
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
+    }
+
+    const getEventos = async (nome) => {
+        let eventosId = []
+        const q = query(collection(db, "eventos"), where("realizador", "==", nome));
+        const data = await getDocs(q)
+        data.forEach((doc) => {
+            eventosId.push(doc.id);
+        });
+        setEventosId(eventosId)
+        console.log(eventosId)
     }
 
     const handleChange = (event) => {
@@ -183,8 +196,6 @@ function AssociadosEditar() {
         }
     }
 
-    console.log(formData)
-
     const logoUpload = (urlCard, directoryCard) => {
 
 
@@ -274,8 +285,6 @@ function AssociadosEditar() {
         }
     }
 
-    console.log(formData)
-
     const deleteAssociado = async () => {
         try {
             imgsCopy.forEach(element => {
@@ -303,9 +312,38 @@ function AssociadosEditar() {
             })
 
             await deleteDoc(doc(db, "associados", id))
+
+            const eventosCollection = collection(db, "eventos");
+
+            for (const element of eventosId) {
+                await deleteDoc(doc(eventosCollection, element));
+                console.log(element)
+            }
+
             navigate('/associados')
         } catch (error) {
             console.error('Erro ao excluir:', error);
+        }
+    }
+
+    const activeDesactive = async (bool) => {
+        try{
+            for (const element of eventosId) {
+                const eventRef = doc(db, "eventos", element)
+                await updateDoc(eventRef, {
+                    ativo: bool
+                })
+            }
+
+            const associadoRef = doc(db, "associados", id)
+            await updateDoc(associadoRef, {
+                ativo: bool
+            })
+
+            navigate('/associados')
+        } catch (error){
+            navigate(`/`)
+            console.log(error)
         }
     }
 
@@ -334,53 +372,57 @@ function AssociadosEditar() {
                         <h1 className='title'>Editar Associado: {formData.municipio}</h1>
                     </div>
                     <form onSubmit={cardImageUpload} action="">
-
+                        <p className='label'>Nome do associado:</p>
                         <input
                             className='input-default input-disabled'
                             type="text"
                             name="nome"
-                            placeholder="Nome do Associado:"
+                            placeholder="Digite o nome do Associado:"
                             value={formData.nome}
                             disabled={true}
                             onChange={handleChange}
                         />
+                        <p className='label'>De que município é o associado:</p>
                         <select
                             className='select-category'
                             name="municipio"
                             value={formData.municipio}
                             onChange={handleChange}
                         >
-                            <option value="">De que município é o associado</option>
+                            <option value="">Selecione de que município é o associado</option>
                             {cities.map((city, index) => (
                                 <option key={index} value={city.nome}>
                                     {city.nome}
                                 </option>
                             ))}
                         </select>
+                        <p className='label'>Descrição:</p>
                         <input
                             className='input-default'
                             type="text"
                             name="descricao"
-                            placeholder="Descrição:"
+                            placeholder="Digite a descrição:"
                             value={formData.descricao}
                             onChange={handleChange}
                         />
+                        <p className='label'>Localização (URL do Google Maps):</p>
                         <input
                             className='input-default'
                             type="text"
                             name="localizacao"
-                            placeholder="URL da localização: (Google Maps)"
+                            placeholder="Digite a URL:"
                             value={formData.localizacao}
                             onChange={handleChange}
                         />
+                        <p className='label'>Sobre:</p>
                         <textarea
                             className='textarea-input'
                             name="sobre"
-                            placeholder="Sobre:"
+                            placeholder="Digite sobre:"
                             value={formData.sobre}
                             onChange={handleChange}
                         />
-
+                        <p className='label'>Plano:</p>
                         <select
                             className='select-category'
                             name="plano"
@@ -398,7 +440,7 @@ function AssociadosEditar() {
                                 <CategoriesDiv formData={formData} setFormData={setFormData} type='associados' />
                                 <RedesDiv formData={formData} setFormData={setFormData} />
 
-                                <h1 className='title-removeImgs'>Editar Imagem Principal</h1>
+                                <h1 className='title-removeImgs'>Imagem Principal</h1>
                                 <div className='file-input'>
                                     <input onChange={(e) => setImage(e.target.files[0])} type='file' />
                                     <span className='button'>Selecione a nova imagem principal</span>
@@ -412,10 +454,10 @@ function AssociadosEditar() {
                                 <progress value={progressCard} max={100} />
 
 
-                                <h1 className='title-removeImgs'>Editar Logo do associado</h1>
+                                <h1 className='title-removeImgs'>Logo do Associado</h1>
                                 <div className='file-input'>
                                     <input onChange={(e) => setLogo(e.target.files[0])} type='file' />
-                                    <span className='button'>Selecione a nova logo</span>
+                                    <span className='button'>Selecione a nova logo do associado</span>
                                     <p className='label' data-js-label>
                                         {logo != null
                                             ? logo.name
@@ -434,10 +476,10 @@ function AssociadosEditar() {
                                 />
 
                                 <div className='file-input file-input-2'>
-                                    <h1 className='title-removeImgs'>Adicionar Imagens</h1>
+                                    <h1 className='title-removeImgs'>Imagens Secundárias</h1>
                                     <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
                                     <span className="button">
-                                        Selecione novas imagens{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
+                                        Selecione novas imagens secundárias{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
                                         {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}`}
                                         {formData.imgs.length + images.length > maxImgs && ` - Limite excedido`}
                                     </span>
@@ -454,6 +496,10 @@ function AssociadosEditar() {
                         <button className='submit-button' type="submit">Editar Associado</button>
                     </form>
                     <button className='delete-button' onClick={deleteAssociado}>Remover Associado</button>
+                    <button className={formData.ativo ? "desactive-button" : "active-button"} onClick={() => {
+                        activeDesactive(!formData.ativo)
+                    }}>
+                        {formData.ativo ? "Desativar Associado" : "Ativar Associado"}</button>
                 </>
             )}
         </>

@@ -8,7 +8,8 @@ import CardAssociadoEdit from '../../components/cardAssociadoEdit/cardAssociadoE
 
 function Associados() {
     const navigate = useNavigate()
-    const [associados, setAssociados] = useState(null)
+    const [activeAssociados, setActiveAssociados] = useState(null)
+    const [desactiveAssociados, setDesactiveAssociados] = useState(null)
 
     useEffect(() => {
         getAssociados()
@@ -17,7 +18,8 @@ function Associados() {
     const getAssociados = async () => {
         try {
             const data = await getDocs(collection(db, "associados"));
-            const associadosData = [];
+            const activeAssociadosData = [];
+            const desactiveAssociadosData = [];
 
             data.forEach((doc) => {
                 const associadoData = {
@@ -30,20 +32,24 @@ function Associados() {
 
                 console.log(doc.data())
 
-                associadosData.push(associadoData);
+                if(doc.data().ativo){
+                    activeAssociadosData.push(associadoData);
+                } else {
+                    desactiveAssociadosData.push(associadoData);
+                }
             });
 
-            setAssociados(associadosData);
+            setActiveAssociados(activeAssociadosData);
+            setDesactiveAssociados(desactiveAssociadosData)
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
     }
-    console.log(associados)
 
     return (
         <>
             {
-                associados == null ? ( 
+                activeAssociados == null ? ( 
                     <Loading />
                 ) : (
                     <>
@@ -56,9 +62,26 @@ function Associados() {
                             </div>
                             <h1 className='title'>Associados</h1>
                         </div>
+
+                        <h2 className='home-title'>Associados Ativos</h2>
                         <div className='card-div'>
                             {
-                                associados.map((associado, index) => (
+                                activeAssociados.map((associado, index) => (
+                                    <CardAssociadoEdit
+                                        key={index}
+                                        url={associado.imgCard.url}
+                                        id={"editar/"+associado.id}
+                                        descricao={associado.descricao}
+                                        nome={associado.nome}
+                                        logo={associado.imgLogo.url}
+                                    />
+                                ))
+                            }
+                        </div>
+                        <h2 className='home-title'>Associados Não Ativos</h2>
+                        <div className='card-div'>
+                            {
+                                desactiveAssociados.map((associado, index) => (
                                     <CardAssociadoEdit
                                         key={index}
                                         url={associado.imgCard.url}

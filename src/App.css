@@ -167,6 +167,38 @@ form progress {
   width: 100%;
 }
 
+.active-button{
+  background-color: #559600;
+  border: none;
+  color: white;
+  font-size: 16px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.desactive-button{
+  background-color: #424242;
+  border: none;
+  color: white;
+  font-size: 16px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
 progress{
   appearance: none;
   width: 100%;

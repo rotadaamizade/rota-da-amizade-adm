@@ -10,19 +10,19 @@ function Municipios() {
 
     const navigate = useNavigate()
 
-    const [cities, setCities] = useState(null)
+    const [activeCities, setActiveCities] = useState(null)
+    const [desactiveCities, setDesactiveCities] = useState(null)
 
     useEffect(() => {
         getCities()
     }, [])
 
-    console.log(cities)
-
     const getCities = async () => {
 
         try {
             const data = await getDocs(collection(db, "municipios"));
-            const citiesData = [];
+            const activeCitiesData = [];
+            const desactiveCitiesData = [];
 
             data.forEach((doc) => {
                 const cityData = {
@@ -32,10 +32,15 @@ function Municipios() {
                     imgCard: doc.data().imgCard
                 };
 
-                citiesData.push(cityData);
+                if(doc.data().ativo){
+                    activeCitiesData.push(cityData);
+                } else {
+                    desactiveCitiesData.push(cityData);
+                }
             });
 
-            setCities(citiesData);
+            setActiveCities(activeCitiesData);
+            setDesactiveCities(desactiveCitiesData)
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
@@ -44,7 +49,7 @@ function Municipios() {
     return (
         <>
             {
-                cities == null ? (
+                activeCities == null ? (
                     <Loading />
                 ) : (
                     <>
@@ -57,9 +62,24 @@ function Municipios() {
                             </div>
                             <h1 className='title'>Municípios</h1>
                         </div>
+                        <h2 className='home-title'>Municípios Ativos</h2>
                         <div className='card-div'>
                             {
-                                cities.map((city, index) => (
+                                activeCities.map((city, index) => (
+                                    <CardEdit
+                                        key={index}
+                                        url={city.imgCard.url}
+                                        id={"editar/"+city.id}
+                                        descricao={city.descricao}
+                                        nome={city.municipio}
+                                    />
+                                ))
+                            }
+                        </div>
+                        <h2 className='home-title'>Municípios Não Ativos</h2>
+                        <div className='card-div'>
+                            {
+                                desactiveCities.map((city, index) => (
                                     <CardEdit
                                         key={index}
                                         url={city.imgCard.url}

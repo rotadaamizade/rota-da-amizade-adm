@@ -158,15 +158,10 @@ function MunicipiosCasdastro() {
 
   const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
     const docRef = await addDoc(collection(db, 'municipios'), {
-      descricao: formData.descricao,
+      ...formData,
       imgCard: { url: imageCardUrl, directory: imageCardDirectory },
       imgs: imagesUrl,
-      localizacao: formData.localizacao,
-      municipio: formData.municipio,
-      sobre: formData.sobre,
-      contatos: formData.contatos,
-      redesSociais: formData.redesSociais,
-      plano: formData.plano
+      ativo: true
     }).then(() => {
       navigate('/municipios')
     })

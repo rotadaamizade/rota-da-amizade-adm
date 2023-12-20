@@ -10,6 +10,7 @@ function Eventos() {
 
     const navigate = useNavigate()
 
+    const [eventosDesativados, setEventosDesativados] = useState(null)
     const [eventosRealizados, setEventosRealizados] = useState(null)
     const [eventsNaoRealizados, setEventosNaoRealizados] = useState(null)
 
@@ -22,6 +23,7 @@ function Eventos() {
         const dataAtual = new Date();
         const eventosRealizadosData = [];
         const eventosNaoRealizadosData = [];
+        const eventosDesativadosData = [];
 
         try {
             const data = await getDocs(collection(db, "eventos"));
@@ -49,17 +51,20 @@ function Eventos() {
                     realizador: doc.data().realizador,
                     imgCard: doc.data().imgCard,
                     data: new Date(doc.data().data[maiorDataIndex].data),
+                    ativo: doc.data().ativo,
                 };
 
 
-
-                if (eventData.data <= dataAtual) {
+                if (!eventData.ativo) { 
+                    eventosDesativadosData.push(eventData)
+                } else if (eventData.data <= dataAtual) {
                     eventosRealizadosData.push(eventData);
                 } else {
                     eventosNaoRealizadosData.push(eventData);
                 }
             });
 
+            setEventosDesativados(eventosDesativadosData)
             setEventosNaoRealizados(eventosNaoRealizadosData)
             setEventosRealizados(eventosRealizadosData)
 
@@ -113,6 +118,21 @@ function Eventos() {
                                 ))
                             }
                         </div>
+                        <h2 className='home-title'>Eventos Não Ativos</h2>
+                        <div className='card-div'>
+                            {
+                                eventosDesativados.map((event, index) => (
+                                    <CardEdit
+                                        key={index}
+                                        url={event.imgCard.url}
+                                        id={"editar/" + event.id}
+                                        descricao={event.realizador}
+                                        nome={event.nome}
+                                    />
+                                ))
+                            }
+                        </div>
+
                         <button onClick={() => navigate('cadastro')} className='cadastrar-button'>Cadastrar Eventos</button>
                     </>
                 )

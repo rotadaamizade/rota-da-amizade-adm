@@ -309,8 +309,7 @@ function EventosEditar() {
             await updateDoc(docRef, {
                 ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
-                imgs: [...formData.imgs, ...imgsUrl],
-                plano: planoDocRef
+                imgs: [...formData.imgs, ...imgsUrl]
             })
             navigate('/eventos')
         } catch (error) {
@@ -318,7 +317,7 @@ function EventosEditar() {
         }
     }
 
-    const deleteCity = async () => {
+    const deleteEvent = async () => {
         try {
 
             imgsCopy.forEach(element => {
@@ -548,7 +547,7 @@ function EventosEditar() {
                         )}
                         <button className='submit-button' type="submit">Editar Evento</button>
                     </form>
-                    <button className='delete-button' onClick={deleteCity}>Remover Evento</button>
+                    <button className='delete-button' onClick={deleteEvent}>Remover Evento</button>
                 </>
             )}
 

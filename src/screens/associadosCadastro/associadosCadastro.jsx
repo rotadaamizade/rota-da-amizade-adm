@@ -13,7 +13,7 @@ function AssociadosCadastro() {
 
   const [formData, setFormData] = useState({
     nome: '',
-    municipio: '', // Updated field name
+    municipio: '',
     descricao: '',
     localizacao: '',
     sobre: '',
@@ -37,8 +37,6 @@ function AssociadosCadastro() {
   useEffect(() => {
     getMunicipios()
   }, [])
-
-  console.log(formData)
 
   const getMunicipios = async () => {
     try {
@@ -227,7 +225,8 @@ function AssociadosCadastro() {
       ...formData,
       imgCard: { url: imageCardUrl, directory: imageCardDirectory },
       imgLogo: { url: logoUrl, directory: logoDirectory },
-      imgs: imagesUrl
+      imgs: imagesUrl,
+      ativo: true
     }).then(() => {
       navigate('/associados')
     })
@@ -258,51 +257,56 @@ function AssociadosCadastro() {
       </div>
 
       <form onSubmit={cardImageUpload} action="">
+        <p className='label'>Nome do associado:</p>
         <input
           className='input-default'
           type="text"
           name="nome"
-          placeholder="Nome do Associado:"
+          placeholder="Digite o nome do Associado:"
           value={formData.nome}
           onChange={handleChange}
         />
+        <p className='label'>De que município é o associado:</p>
         <select
           className='select-category'
           name="municipio"
-          value={formData.municipio} // Updated value attribute
+          value={formData.municipio}
           onChange={handleChange}
         >
-          <option value="">De que município é o associado</option>
+          <option value="">Selecione de que município é o associado</option>
           {cities.map((city, index) => (
             <option key={index} value={city.nome}>
               {city.nome}
             </option>
           ))}
         </select>
+        <p className='label'>Descrição:</p>
         <input
           className='input-default'
           type="text"
           name="descricao"
-          placeholder="Descrição:"
+          placeholder="Digite a descrição:"
           value={formData.descricao}
           onChange={handleChange}
         />
+        <p className='label'>Localização (URL do Google Maps):</p>
         <input
           className='input-default'
           type="text"
           name="localizacao"
-          placeholder="URL da localização: (Google Maps)"
+          placeholder="Digite a URL:"
           value={formData.localizacao}
           onChange={handleChange}
         />
+        <p className='label'>Sobre:</p>
         <textarea
           className='textarea-input'
           name="sobre"
-          placeholder="Sobre:"
+          placeholder="Digite sobre:"
           value={formData.sobre}
           onChange={handleChange}
         />
-
+        <p className='label'>Plano:</p>
         <select
           className='select-category'
           name="plano"

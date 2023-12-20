@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc, query, collection, where, getDocs } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { db, storage } from "../../config/firebase";
@@ -20,7 +20,9 @@ function MunicipiosEditar() {
     const [images, setImages] = useState([])
     const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
-    const { planos } = useContext(UserContext);
+    const { planos } = useContext(UserContext)
+    const [eventosId, setEventosId] = useState([])
+    const [atrativosId, setAtrativosId] = useState([])
 
     const maxImgs = 5
     const minImgs = 2
@@ -36,6 +38,8 @@ function MunicipiosEditar() {
             const docSnap = await getDoc(docRef)
             setFormData(docSnap.data())
             setImgsCopy(docSnap.data().imgs)
+            getAtrativos(docSnap.data().municipio)
+            getEventos(docSnap.data().municipio)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -44,6 +48,28 @@ function MunicipiosEditar() {
             navigate(`/`)
             console.log(error)
         }
+    }
+
+    const getEventos = async (nome) => {
+        let eventosId = []
+        const q = query(collection(db, "eventos"), where("realizador", "==", nome));
+        const data = await getDocs(q)
+        data.forEach((doc) => {
+            eventosId.push(doc.id);
+        });
+        setEventosId(eventosId)
+        console.log(eventosId)
+    }
+
+    const getAtrativos = async (nome) => {
+        let atrativosId = []
+        const q = query(collection(db, "atrativos"), where("municipio", "==", nome));
+        const data = await getDocs(q)
+        data.forEach((doc) => {
+            atrativosId.push(doc.id);
+        });
+        setAtrativosId(atrativosId)
+        console.log(atrativosId)
     }
 
     const handleChange = (event) => {
@@ -197,23 +223,15 @@ function MunicipiosEditar() {
         try {
             const docRef = doc(db, "municipios", id);
             await updateDoc(docRef, {
-                contatos: formData.contatos,
-                descricao: formData.descricao,
+                ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
-                imgs: [...formData.imgs, ...imgsUrl],
-                localizacao: formData.localizacao,
-                municipio: formData.municipio,
-                redesSociais: formData.redesSociais,
-                sobre: formData.sobre,
-                plano: formData.plano
+                imgs: [...formData.imgs, ...imgsUrl]
             })
             navigate('/municipios')
         } catch (error) {
             console.error("Erro ao editar o documento:", error);
         }
     }
-
-    console.log(formData)
 
     const deleteCity = async () => {
         try {
@@ -234,9 +252,52 @@ function MunicipiosEditar() {
             })
 
             await deleteDoc(doc(db, "municipios", id))
+
+            const atrativosCollection = collection(db, "atrativos");
+            
+            for (const element of atrativosId) {
+                await deleteDoc(doc(atrativosCollection, element));
+                console.log(element)
+            }
+
+            const eventosCollection = collection(db, "eventos");
+            
+            for (const element of eventosId) {
+                await deleteDoc(doc(eventosCollection, element));
+                console.log(element)
+            }
+            
             navigate('/municipios')
         } catch (error) {
             console.error('Erro ao excluir:', error);
+        }
+    }
+
+    const activeDesactive = async (bool) => {
+        try{
+            for (const element of eventosId) {
+                const eventRef = doc(db, "eventos", element)
+                await updateDoc(eventRef, {
+                    ativo: bool
+                })
+            }
+
+            for (const element of atrativosId) {
+                const atrativoRef = doc(db, "atrativos", element)
+                await updateDoc(atrativoRef, {
+                    ativo: bool
+                })
+            }
+
+            const cityRef = doc(db, "municipios", id)
+            await updateDoc(cityRef, {
+                ativo: bool
+            })
+
+            navigate('/municipios')
+        } catch (error){
+            navigate(`/`)
+            console.log(error)
         }
     }
 
@@ -362,6 +423,9 @@ function MunicipiosEditar() {
                         <button className='submit-button' type="submit">Editar Município</button>
                     </form>
                     <button className='delete-button' onClick={deleteCity}>Remover Município</button>
+                    <button className={formData.ativo ? "desactive-button" : "active-button"} onClick={() => {
+                        activeDesactive(!formData.ativo)
+                    }}>{formData.ativo ? "Desativar Município" : "Ativar Município"}</button>
                 </>
             )}
         </>

@@ -32,7 +32,7 @@ function EventosCadastro() {
   const [tipoRealizador, setTipoRealizador] = useState('');
   const [cities, setCities] = useState([])
   const [associados, setAssociados] = useState([])
-  const [realizador, setRealizador] = useState({id:'', type:''})
+  const [realizador, setRealizador] = useState({ id: '', type: '' })
 
   const maxImgs = 5
   const minImgs = 2
@@ -240,9 +240,9 @@ function EventosCadastro() {
 
   const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
     let planoDocRef = null
-    if(realizador.type == 'associado'){
+    if (realizador.type == 'associado') {
       planoDocRef = doc(db, 'associados', realizador.id);
-    } else if(realizador.type == 'municipio'){
+    } else if (realizador.type == 'municipio') {
       planoDocRef = doc(db, 'municipios', realizador.id);
     }
 
@@ -250,7 +250,7 @@ function EventosCadastro() {
       ...formData,
       imgCard: { url: imageCardUrl, directory: imageCardDirectory },
       imgs: imagesUrl,
-      plano: planoDocRef
+      ativo: true
     }).then(() => {
       navigate('/eventos')
     })
@@ -263,7 +263,7 @@ function EventosCadastro() {
   const handleMunicipioRealizadorChange = (e) => {
     const selectedValue = JSON.parse(e.target.value);
 
-    setRealizador({id: selectedValue.id, type: 'municipio'})
+    setRealizador({ id: selectedValue.id, type: 'municipio' })
 
     setFormData({
       ...formData,
@@ -279,7 +279,7 @@ function EventosCadastro() {
   const handleAssociadoRealizadorChange = (e) => {
     const selectedValue = JSON.parse(e.target.value)
 
-    setRealizador({id: selectedValue.id, type: 'associado'})
+    setRealizador({ id: selectedValue.id, type: 'associado' })
 
     setFormData({
       ...formData,
@@ -313,15 +313,16 @@ function EventosCadastro() {
       </div>
 
       <form onSubmit={cardImageUpload} action="">
+        <p className='label'>Nome do Evento:</p>
         <input
           className='input-default'
           type="text"
           name="nome"
-          placeholder="Nome do Evento:"
+          placeholder="Digite o nome do Evento:"
           value={formData.nome}
           onChange={handleChange}
         />
-
+        <p className='label'>Tipo do realizador:</p>
         <select
           className='select-category'
           name="category"
@@ -335,6 +336,7 @@ function EventosCadastro() {
 
         {tipoRealizador === 'associado' ? (
           <>
+            <p className='label'>Associado realizador:</p>
             <select
               className='select-category'
               name="associado"
@@ -345,6 +347,7 @@ function EventosCadastro() {
                 <option key={index} value={JSON.stringify(associado)}>{associado.nome}</option>
               ))}
             </select>
+            <p className='label'>Local do evento:</p>
             <select
               className='select-category'
               name="municipio"
@@ -359,33 +362,37 @@ function EventosCadastro() {
           </>
 
         ) : tipoRealizador === 'municipio' ? (
+          <>
+          <p className='label'>Municipio realizador:</p>
+            <select
+              className='select-category'
+              name="municipio"
+              onChange={handleMunicipioRealizadorChange}
+            >
+              <option value={JSON.stringify({ nome: '', id: '' })}>Selecione o Município Realizador</option>
+              {cities.map((city, index) => (
+                <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
+              ))}
+            </select></>
 
-          <select
-            className='select-category'
-            name="municipio"
-            onChange={handleMunicipioRealizadorChange}
-          >
-            <option value={JSON.stringify({ nome: '', id: '' })}>Selecione o Município Realizador</option>
-            {cities.map((city, index) => (
-              <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
-            ))}
-          </select>
         ) : (
           null
         )}
+        <p className='label'>Localização (URL do Google Maps):</p>
         <input
           className='input-default'
           type="text"
           name="localizacao"
-          placeholder="URL da localização: (Google Maps)"
+          placeholder="Digite a URL:"
           value={formData.localizacao}
           onChange={handleChange}
         />
+        <p className='label'>Sobre:</p>
         <textarea
           type='text'
           className='textarea-input'
           name="sobre"
-          placeholder="Sobre:"
+          placeholder="Digite sobre:"
           value={formData.sobre}
           onChange={handleChange}
         />
