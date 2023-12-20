@@ -114,9 +114,10 @@ function CategoriasCadastro() {
                     <div>
                         <p className='label'>Cor Secundária:</p>
                         <input
-                            className='input-color'
-                            type="color"
+                            className='input-default'
+                            type="text"
                             name="corFundo"
+                            placeholder='Digite a cor secundária: (Hexadecimal sem o "#")'
                             value={formData.corFundo}
                             onChange={handleChange}
                         />
@@ -125,9 +126,10 @@ function CategoriasCadastro() {
                     <div>
                         <p className='label'>Cor Principal:</p>
                         <input
-                            className='input-color'
-                            type="color"
+                            className='input-default'
+                            type="text"
                             name="corPrincipal"
+                            placeholder='Digite a cor primária: (Hexadecimal sem o "#")'
                             value={formData.corPrincipal}
                             onChange={handleChange}
                         />

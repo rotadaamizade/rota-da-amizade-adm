@@ -294,18 +294,9 @@ function EventosEditar() {
             });
         });
 
-        if (cardUrl) {
-
-        }
 
         try {
             const docRef = doc(db, "eventos", id);
-            let planoDocRef = realizador
-            if (realizador.type == 'associado') {
-                planoDocRef = doc(db, 'associados', realizador.id);
-            } else if (realizador.type == 'municipio') {
-                planoDocRef = doc(db, 'municipios', realizador.id);
-            }
             await updateDoc(docRef, {
                 ...formData,
                 imgCard: { url: cardUrl, directory: cardDirectory },
