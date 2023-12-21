@@ -10,3 +10,31 @@
     height: 100%;
     object-fit: cover;
 }
+
+button.carouselPrevButton, button.carouselNextButton {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 0.5rem;
+    padding: 5px;
+    border-radius: 100%;
+    justify-content: center;
+    display: flex;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    display: flex;
+    justify-items: center;
+    color: black;
+    opacity: 70%;
+    background-color: #4c4b4e7c;
+}
+
+button.carouselPrevButton:disabled, button.carouselNextButton:disabled {
+    cursor: not-allowed;
+    opacity: 30%!important;
+}
+
+button.carouselPrevButton:hover, button.carouselNextButton:hover {
+    opacity: 100%;
+}

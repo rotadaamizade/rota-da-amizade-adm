@@ -5,6 +5,7 @@ import axios from "axios";
 import Loading from "../../components/Loading/Loading";
 import ImgCarousel from "../../components/ImgCarousel/ImgCarousel";
 import CompContact from "../../components/CompContact/CompContact";
+import MotionMain from "../../components/MotionMain/MotionMain";
 
 function City() {
     const townUrl = useParams();
@@ -73,7 +74,7 @@ function City() {
     );
 
     return (
-        <>
+        <MotionMain>
             {town.length === 0 ? (
                 <Loading />
             ) : (
@@ -187,7 +188,7 @@ function City() {
                     </section>
                 </>
             )}
-        </>
+        </MotionMain>
     );
 }
 

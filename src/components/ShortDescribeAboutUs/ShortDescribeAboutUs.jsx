@@ -9,7 +9,6 @@ function ShortDescribeAboutUs() {
         divulgação dos municípios e dos seus associados busca promover e
         desenvolver o turismo na região do Vale dos Imigrantes.
       </p>
-      {}
     </ShortDescribe>
   );
 }

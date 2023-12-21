@@ -1,0 +1,21 @@
+section.noElements {
+    min-height: 1000px;
+}
+
+section#ourHistory h3 {
+    color: #e30613;
+}
+
+section#ourHistory h2 {
+    text-align: center;
+}
+
+section#ourHistory p {
+    color: #7a7a7a;
+}
+
+@media (max-width: 991px) {
+    section#ourHistory {
+        padding: 0 4rem;
+    }
+}
