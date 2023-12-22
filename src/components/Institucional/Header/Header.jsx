@@ -2,7 +2,7 @@ import rotaDesenho from "./rota-da-amizade-desenho.png";
 import rotaEscrita from "./rota-da-amizade-escrita.png";
 import "./Header.css";
 import { useContext, useEffect, useState } from "react";
-import { PageContext } from "../../useContext";
+import { PageContext } from "../../../useContext";
 import { useNavigate } from "react-router-dom";
 
 function Header() {

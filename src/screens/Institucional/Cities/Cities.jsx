@@ -1,6 +1,6 @@
-import CidadeCard from "../../components/CidadeCard/CidadeCard";
-import Loading from "../../components/Loading/Loading";
-import MotionMain from "../../components/MotionMain/MotionMain";
+import CidadeCard from "../../../components/Institucional/CidadeCard/CidadeCard";
+import Loading from "../../../components/Institucional/Loading/Loading";
+import MotionMain from "../../../components/Institucional/MotionMain/MotionMain";
 import "./Cities.css";
 import axios from "axios";
 import { useEffect, useState } from "react";

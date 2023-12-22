@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import "./ShortDescribe.css";
 import { useNavigate } from "react-router-dom";
-import { PageContext } from "../../useContext";
+import { PageContext } from "../../../useContext";
 
 function ShortDescribe(props) {
 

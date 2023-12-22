@@ -1,6 +1,6 @@
-import AssociadoCard from "../../components/AssociadoCard/AssociadoCard";
-import Loading from "../../components/Loading/Loading";
-import MotionMain from "../../components/MotionMain/MotionMain";
+import AssociadoCard from "../../../components/Institucional/AssociadoCard/AssociadoCard";
+import Loading from "../../../components/Institucional/Loading/Loading";
+import MotionMain from "../../../components/Institucional/MotionMain/MotionMain";
 import "./Associates.css";
 import axios from "axios";
 import { useEffect, useState } from "react";

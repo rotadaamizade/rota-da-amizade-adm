@@ -1,5 +1,5 @@
-import CompContact from "../../components/CompContact/CompContact";
-import MotionMain from "../../components/MotionMain/MotionMain";
+import CompContact from "../../../components/Institucional/CompContact/CompContact";
+import MotionMain from "../../../components/Institucional/MotionMain/MotionMain";
 import "./Contact.css";
 
 function Contact() {

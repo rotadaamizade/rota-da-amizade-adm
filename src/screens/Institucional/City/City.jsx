@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 import "./City.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Loading from "../../components/Loading/Loading";
-import ImgCarousel from "../../components/ImgCarousel/ImgCarousel";
-import CompContact from "../../components/CompContact/CompContact";
-import MotionMain from "../../components/MotionMain/MotionMain";
+import Loading from "../../../components/Institucional/Loading/Loading";
+import ImgCarousel from "../../../components/Institucional/ImgCarousel/ImgCarousel";
+import CompContact from "../../../components/Institucional/CompContact/CompContact";
+import MotionMain from "../../../components/Institucional/MotionMain/MotionMain";
 
 function City() {
     const townUrl = useParams();

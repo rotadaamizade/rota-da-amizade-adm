@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import ShortDescribeHome from "../../components/ShortDescribeHome/ShortDescribeHome";
+import ShortDescribeHome from "../../../components/Institucional/ShortDescribeHome/ShortDescribeHome";
 import "./Home.css";
-import { PageContext } from "../../useContext";
+import { PageContext } from "../../../useContext";
 import { useNavigate } from "react-router-dom";
-import MotionMain from "../../components/MotionMain/MotionMain";
+import MotionMain from "../../../components/Institucional/MotionMain/MotionMain";
 
 function Home() {
     const { page, setPage } = useContext(PageContext);

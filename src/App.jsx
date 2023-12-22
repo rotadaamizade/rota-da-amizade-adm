@@ -10,19 +10,19 @@ import { PageContext, PageProvider } from "./useContext";
 import "./css/Normalize.css";
 import "./css/Style.css";
 import whatsAvatarIcon from "./assets/rota-da-amizade-logo-title.png";
-import Home from "./screens/Home/Home";
-import AboutUs from "./screens/AboutUs/AboutUs";
-import Cities from "./screens/Cities/Cities";
-import Contact from "./screens/Contact/Contact";
-import Associates from "./screens/Associates/Associates";
-import Header from "./components/Header/Header";
-import City from "./screens/City/City";
-import Footer from "./components/Footer/Footer";
+import Home from "./screens/Institucional/Home/Home";
+import AboutUs from "./screens/Institucional/AboutUs/AboutUs";
+import Cities from "./screens/Institucional/Cities/Cities";
+import Contact from "./screens/Institucional/Contact/Contact";
+import Associates from "./screens/Institucional/Associates/Associates";
+import Header from "./components/Institucional/Header/Header";
+import City from "./screens/Institucional/City/City";
+import Footer from "./components/Institucional/Footer/Footer";
 import { useContext, useEffect } from "react";
 import { FloatingWhatsApp } from "react-floating-whatsapp";
 import { StrictMode } from "react";
 import { AnimatePresence } from "framer-motion";
-import CommercialPlans from "./screens/CommercialPlans/CommercialPlans";
+import CommercialPlans from "./screens/Institucional/CommercialPlans/CommercialPlans";
 
 function App() {
   const openWhatsapp = (url) => {

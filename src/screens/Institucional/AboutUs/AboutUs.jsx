@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import "./AboutUs.css";
 import axios from "axios";
-import ShortDescribeAboutUs from "../../components/ShortDescribeAboutUs/ShortDescribeAboutUs";
-import OurHistory from "../../components/OurHistory/OurHistory";
-import { PageContext } from "../../useContext";
-import MotionMain from "../../components/MotionMain/MotionMain";
+import ShortDescribeAboutUs from "../../../components/Institucional/ShortDescribeAboutUs/ShortDescribeAboutUs";
+import OurHistory from "../../../components/Institucional/OurHistory/OurHistory";
+import { PageContext } from "../../../useContext";
+import MotionMain from "../../../components/Institucional/MotionMain/MotionMain";
 
 function AboutUs() {
     const [imgCapa, setImgCapa] = useState([]);
