@@ -1,0 +1,50 @@
+header{
+    height: 75px;
+    width: 100%;
+    position: fixed;
+    background-color: rgb(0, 0, 0);
+    z-index: 2;
+}
+
+header div{
+    max-width: 1200px;
+    margin: 0 auto;
+    color: white;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    font-size: 18px;
+    font-weight: 600;
+    justify-content: space-between;
+}
+
+.header-title{
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 21px;
+}
+
+.header-button{
+
+  background-color: #cc1e1e;
+  border: none;
+  color: white;
+  font-size: 16px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0 30px;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 1240px) {
+    header div{
+      padding: 0 30px;
+      box-sizing: border-box;
+    }
+  }

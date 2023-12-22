@@ -1,0 +1,35 @@
+.categorias-title{
+    display: flex;
+    border-top: 1px solid #d4d4d4;
+    padding-top: 5px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.categorias-title p {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgb(61, 61, 61);
+}
+
+.categorias-title button{
+    max-width: 35px;
+    min-width: 35px;
+    margin-left: 10px;
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+    border: none;
+    background-color: rgb(58, 58, 253);
+    font-size: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.selectCategoria-div{
+    display: flex;
+}

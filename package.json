@@ -1,5 +1,5 @@
 {
-  "name": "site-institucional",
+  "name": "rota-da-amizade-adm",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,16 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@react-navigation/native": "^6.1.9",
-    "@react-navigation/native-stack": "^6.9.17",
-    "axios": "^1.5.0",
-    "framer-motion": "^10.16.5",
-    "node": "^21.0.0",
-    "nuka-carousel": "^6.0.3",
+    "dompurify": "^3.0.6",
+    "dotenv": "^16.3.1",
+    "firebase": "^10.4.0",
+    "html-react-parser": "^4.2.10",
     "react": "^18.2.0",
+    "react-dangerous-html": "^1.0.0",
     "react-dom": "^18.2.0",
-    "react-floating-whatsapp": "^5.0.8",
-    "react-router-dom": "^6.15.0"
+    "react-firebase-hooks": "^5.1.1",
+    "react-router-dom": "^6.16.0",
+    "sanitize-html": "^2.11.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
