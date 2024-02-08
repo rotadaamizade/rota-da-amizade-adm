@@ -44,8 +44,6 @@ function EventosEditar() {
     const [realizador, setRealizador] = useState({ id: '', type: '' })
     const [title, setTitle] = useState('')
 
-    console.log(formData)
-
     const maxImgs = 5
     const minImgs = 2
 
@@ -134,7 +132,7 @@ function EventosEditar() {
 
         let errors = []
 
-        if (!formData.municipio || !formData.realizador || !formData.nome || !formData.localizacao || !formData.sobre || !formData.tipo || !formData.id_terceiro || formData.categorias.length == 0 || formData.data.length == 0) {
+        if (!formData.municipio || !formData.realizador || !formData.nome || !formData.localizacao || !formData.sobre || !formData.tipo || !formData.id_terceiro || formData.categorias.length == 0 || formData.data.length == 0 || formData.contatos.length == 0) {
             errors.push('Preencha todos os campos principais')
         }
 
@@ -288,9 +286,8 @@ function EventosEditar() {
             const desertRef = ref(storage, element)
 
             deleteObject(desertRef).then(() => {
-                console.log('sucesso')
             }).catch((error) => {
-                console.log('erro')
+                console.log(error)
             });
         });
 
@@ -316,8 +313,7 @@ function EventosEditar() {
 
                 deleteObject(imagesRef).then(() => {
                 }).catch((error) => {
-                    console.log(error
-                    )
+                    console.log(error)
                 });
             });
 
@@ -355,7 +351,6 @@ function EventosEditar() {
         const id = selectedOption.getAttribute('data-id');
 
         if (tipo == 'realizador') {
-            console.log(id)
             setRealizadorValue(nome)
             setFormData({
                 ...formData,
@@ -381,9 +376,6 @@ function EventosEditar() {
             setRealizador({ id: id, type: 'municipio' })
         }
     }
-
-
-    console.log(realizador)
 
     return (
         <>

@@ -138,7 +138,7 @@ function AtrativosCadastro() {
     const cardImageUpload = (event) => {
         event.preventDefault()
 
-        if (!formData.municipio || !formData.nome || !formData.localizacao || !formData.sobre || !image || images == [] || formData.categorias == []) {
+        if (!formData.municipio || !formData.nome || !formData.localizacao || !formData.sobre || !image || images == [] || formData.categorias == [] || formData.contatos.length == 0) {
             errorAlert()
             return
         }

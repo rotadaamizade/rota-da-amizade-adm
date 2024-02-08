@@ -1,6 +1,6 @@
 .homeCard{
     height: 70px;
-    min-width: calc(50% - 5px);
+    width: 100%;
     border-radius: 7px;
     cursor: pointer;
     display: flex;

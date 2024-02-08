@@ -147,7 +147,8 @@ function AssociadosCadastro() {
       !image ||
       images.length === 0 ||
       formData.categorias.length === 0 ||
-      !formData.plano
+      !formData.plano ||
+      formData.contatos.length == 0
     ) {
       errorAlert()
       return
@@ -234,15 +235,12 @@ function AssociadosCadastro() {
 
   const handlePlanoChange = (e) => {
     const selectedValue = JSON.parse(e.target.value);
-    console.log(selectedValue)
 
     setFormData({
       ...formData,
       plano: selectedValue,
     });
   }
-
-  console.log(formData)
 
   return (
     <>

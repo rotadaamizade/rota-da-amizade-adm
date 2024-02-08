@@ -77,14 +77,12 @@ function RedesDiv({ formData, setFormData }) {
         setFormData(novoFormData);
     }
 
-    // Verifica se todas as opções de contatos já foram selecionadas
     const todasOpcoesContatosSelecionadas = () => {
         return contatosTemplate.every((contato) =>
             formData.contatos.some((item) => item.name === contato.name)
         );
     }
 
-    // Verifica se todas as opções de redes sociais já foram selecionadas
     const todasOpcoesRedesSociaisSelecionadas = () => {
         return redesSociaisTemplate.every((redeSocial) =>
             formData.redesSociais.some((item) => item.name === redeSocial.name)
@@ -94,7 +92,7 @@ function RedesDiv({ formData, setFormData }) {
     return (
         <div>
             <div className='redes-title'>
-                <p>Contatos (opcional)</p>
+                <p>Contatos</p>
                 <button
                     onClick={() => adicionarContato()}
                     type="button"

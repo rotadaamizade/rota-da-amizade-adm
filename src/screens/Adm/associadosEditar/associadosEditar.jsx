@@ -81,7 +81,6 @@ function AssociadosEditar() {
             eventosId.push(doc.id);
         });
         setEventosId(eventosId)
-        console.log(eventosId)
     }
 
     const handleChange = (event) => {
@@ -96,7 +95,7 @@ function AssociadosEditar() {
     const verification = () => {
         let errors = []
 
-        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre) {
+        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || formData.contatos.length == 0) {
             errors.push('Preencha todos os campos principais')
         }
 
@@ -261,14 +260,10 @@ function AssociadosEditar() {
             const desertRef = ref(storage, element)
 
             deleteObject(desertRef).then(() => {
-                console.log('sucesso')
             }).catch((error) => {
-                console.log('erro')
+                console.log(error)
             });
         });
-
-        console.log(logoUrl)
-        console.log(logoDirectory)
 
         try {
             const docRef = doc(db, "associados", id);
@@ -317,7 +312,6 @@ function AssociadosEditar() {
 
             for (const element of eventosId) {
                 await deleteDoc(doc(eventosCollection, element));
-                console.log(element)
             }
 
             navigate('/associados')
