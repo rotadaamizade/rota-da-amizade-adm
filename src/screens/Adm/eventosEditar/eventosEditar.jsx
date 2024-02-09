@@ -14,21 +14,7 @@ function EventosEditar() {
     const { id } = useParams();
     const navigate = useNavigate()
 
-    const [formData, setFormData] = useState({
-        municipio: '',
-        realizador: '',
-        nome: '',
-        localizacao: '',
-        sobre: '',
-        contatos: [],
-        redesSociais: [],
-        data: [],
-        categorias: [],
-        tipo: '',
-        id_terceiro: '',
-        imgs: [],
-        imgCard: {}
-    })
+    const [formData, setFormData] = useState({})
     const [imgsCopy, setImgsCopy] = useState([])
     const [imgsExclude, setImgsExclude] = useState([])
     const [image, setImage] = useState(null)
@@ -41,19 +27,19 @@ function EventosEditar() {
     const [loaded, setLoaded] = useState(false)
     const [realizadorValue, setRealizadorValue] = useState('')
     const [municipioValue, setMunicipioValue] = useState('')
-    const [realizador, setRealizador] = useState({ id: '', type: '' })
     const [title, setTitle] = useState('')
+    const [isOtherCity, setIsOtherCity] = useState(null);
+    const [realizador, setRealizador] = useState({})
 
     const maxImgs = 5
     const minImgs = 2
 
     useEffect(() => {
         getEvent()
-        getMunicipios()
         getAssociados()
     }, [])
 
-    const getMunicipios = async () => {
+    const getMunicipios = async (eventCity) => {
 
         try {
             const data = await getDocs(collection(db, "municipios"));
@@ -67,8 +53,14 @@ function EventosEditar() {
 
                 citiesData.push(cityData);
             });
-
             setCities(citiesData);
+
+            if (citiesData.some(city => city.nome === eventCity)) {
+                setIsOtherCity(true)
+            } else {
+                setIsOtherCity(false)
+            }
+
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
@@ -106,8 +98,8 @@ function EventosEditar() {
             setTipoRealizador(docSnap.data().tipo)
             setRealizadorValue(docSnap.data().realizador)
             setMunicipioValue(docSnap.data().municipio)
-            setRealizador(docSnap.data().plano)
             setTitle(docSnap.data().nome)
+            getMunicipios(docSnap.data().municipio)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -125,6 +117,15 @@ function EventosEditar() {
         setFormData({
             ...formData,
             [name]: value,
+        })
+    }
+
+    const handleRadioChange = (value) => {
+        setIsOtherCity(value);
+
+        setFormData({
+            ...formData,
+            municipio: '',
         })
     }
 
@@ -377,6 +378,8 @@ function EventosEditar() {
         }
     }
 
+    console.log(formData)
+
     return (
         <>
 
@@ -429,18 +432,53 @@ function EventosEditar() {
                                         <option data-id={associado.id} key={index} value={associado.nome}>{associado.nome}</option>
                                     ))}
                                 </select>
-                                <p className='label'>Local do evento:</p>
-                                <select
-                                    className='select-category'
-                                    name="municipio2"
-                                    onChange={(e) => handleRealizadorChange(e, 'municipio')}
-                                    value={municipioValue}
-                                >
-                                    <option value="">Selecione o local do evento</option>
-                                    {cities.map((city, index) => (
-                                        <option key={index} value={city.nome}>{city.nome}</option>
-                                    ))}
-                                </select>
+                                {isOtherCity != null && (
+                                    <>
+                                        <div className='p-other-div'>
+                                            <p className='label'>Vai acontecer em um município associado:</p>
+                                            <label>
+                                                <input
+                                                    type="radio"
+                                                    value={true}
+                                                    checked={isOtherCity === true}
+                                                    onChange={() => handleRadioChange(true)}
+                                                />
+                                                Sim
+                                            </label>
+                                            <label>
+                                                <input
+                                                    type="radio"
+                                                    value={false}
+                                                    checked={isOtherCity === false}
+                                                    onChange={() => handleRadioChange(false)}
+                                                />
+                                                Não
+                                            </label>
+                                        </div>
+                                        <p className='label'>Local do evento:</p>
+                                        {isOtherCity ?
+                                            <select
+                                                className='select-category'
+                                                name="municipio2"
+                                                onChange={(e) => handleRealizadorChange(e, 'municipio')}
+                                                value={municipioValue}
+                                            >
+                                                <option value="">Selecione o local do evento</option>
+                                                {cities.map((city, index) => (
+                                                    <option key={index} value={city.nome}>{city.nome}</option>
+                                                ))}
+                                            </select> :
+                                            <input
+                                                type="text"
+                                                className='input-default'
+                                                placeholder='Digite em que município vai acontecer'
+                                                value={formData.municipio}
+                                                name='municipio'
+                                                onChange={handleChange}
+                                            />
+                                        }
+                                    </>
+                                )}
                             </>
 
                         ) : tipoRealizador === 'municipio' ? (
@@ -483,7 +521,7 @@ function EventosEditar() {
 
                         <DatasDiv formData={formData} setFormData={setFormData} />
                         <CategoriesDiv formData={formData} setFormData={setFormData} type='eventos' />
-                        <RedesDiv formData={formData} setFormData={formData} />
+                        <RedesDiv formData={formData} setFormData={setFormData} />
 
                         {Object.keys(formData).length !== 0 && (
                             <>

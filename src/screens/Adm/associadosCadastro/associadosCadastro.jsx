@@ -29,6 +29,7 @@ function AssociadosCadastro() {
   const [imageLogo, setImageLogo] = useState(null)
   const [images, setImages] = useState([])
   const [cities, setCities] = useState([])
+  const [isOtherCity, setIsOtherCity] = useState(true);
   const { planos } = useContext(UserContext);
 
   const maxImgs = 5
@@ -37,6 +38,13 @@ function AssociadosCadastro() {
   useEffect(() => {
     getMunicipios()
   }, [])
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      municipio: '',
+    })
+  }, [isOtherCity])
 
   const getMunicipios = async () => {
     try {
@@ -242,6 +250,10 @@ function AssociadosCadastro() {
     });
   }
 
+  const handleRadioChange = (value) => {
+    setIsOtherCity(value);
+  }
+
   return (
     <>
       <div className='title-div'>
@@ -264,20 +276,56 @@ function AssociadosCadastro() {
           value={formData.nome}
           onChange={handleChange}
         />
+        <div className='p-other-div'>
+          <p className='label'>Faz parte de um município associado:</p>
+          <label>
+            <input
+              type="radio"
+              value={true}
+              checked={isOtherCity === true}
+              onChange={() => handleRadioChange(true)}
+            />
+            Sim
+          </label>
+          <label>
+            <input
+              type="radio"
+              value={false}
+              checked={isOtherCity === false}
+              onChange={() => handleRadioChange(false)}
+            />
+            Não
+          </label>
+        </div>
+
+
         <p className='label'>De que município é o associado:</p>
-        <select
-          className='select-category'
-          name="municipio"
-          value={formData.municipio}
-          onChange={handleChange}
-        >
-          <option value="">Selecione de que município é o associado</option>
-          {cities.map((city, index) => (
-            <option key={index} value={city.nome}>
-              {city.nome}
-            </option>
-          ))}
-        </select>
+
+        {isOtherCity ?
+          <select
+            className='select-category'
+            name="municipio"
+            value={formData.municipio}
+            onChange={handleChange}
+          >
+            <option value="">Selecione de que município é o associado</option>
+            {cities.map((city, index) => (
+              <option key={index} value={city.nome}>
+                {city.nome}
+              </option>
+            ))}
+          </select>
+          :
+          <input
+            type="text"
+            className='input-default'
+            placeholder='Digite de que município é o associado'
+            value={formData.municipio}
+            name='municipio'
+            onChange={handleChange}
+          />
+        }
+
         <p className='label'>Descrição:</p>
         <input
           className='input-default'

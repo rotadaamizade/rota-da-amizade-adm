@@ -33,6 +33,7 @@ function EventosCadastro() {
   const [cities, setCities] = useState([])
   const [associados, setAssociados] = useState([])
   const [realizador, setRealizador] = useState({ id: '', type: '' })
+  const [isOtherCity, setIsOtherCity] = useState(true);
 
   const maxImgs = 5
   const minImgs = 2
@@ -45,6 +46,13 @@ function EventosCadastro() {
     getMunicipios()
     getAssociados()
   }, [])
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      municipio: '',
+    })
+  }, [isOtherCity])
 
   useEffect(() => {
     setFormData({
@@ -238,6 +246,10 @@ function EventosCadastro() {
     })
   }
 
+  const handleRadioChange = (value) => {
+    setIsOtherCity(value);
+  }
+
   const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
     let planoDocRef = null
     if (realizador.type == 'associado') {
@@ -343,23 +355,59 @@ function EventosCadastro() {
                 <option key={index} value={JSON.stringify(associado)}>{associado.nome}</option>
               ))}
             </select>
+
+            <div className='p-other-div'>
+              <p className='label'>Vai acontecer em um município associado:</p>
+              <label>
+                <input
+                  type="radio"
+                  value={true}
+                  checked={isOtherCity === true}
+                  onChange={() => handleRadioChange(true)}
+                />
+                Sim
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value={false}
+                  checked={isOtherCity === false}
+                  onChange={() => handleRadioChange(false)}
+                />
+                Não
+              </label>
+            </div>
+
             <p className='label'>Local do evento:</p>
-            <select
-              className='select-category'
-              name="municipio"
-              onChange={handleAssociadoRealizadorMunicipioChange}
-            >
-              <option value={JSON.stringify({ nome: '', id: '' })}>Em que municipio vai acontecer</option>
-              {cities.map((city, index) => (
-                <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
-              ))}
-              <option value={JSON.stringify({ nome: 'outro', id: '' })}>Outro</option>
-            </select>
+
+            {isOtherCity ?
+              <select
+                className='select-category'
+                name="municipio"
+                onChange={handleAssociadoRealizadorMunicipioChange}
+              >
+                <option value={JSON.stringify({ nome: '', id: '' })}>Selecione emyyy que municipio vai acontecer</option>
+                {cities.map((city, index) => (
+                  <option key={index} value={JSON.stringify(city)}>{city.nome}</option>
+                ))}
+                <option value={JSON.stringify({ nome: 'outro', id: '' })}>Outro</option>
+              </select>
+              :
+              <input
+                type="text"
+                className='input-default'
+                placeholder='Digite em que município vai acontecer'
+                value={formData.municipio}
+                name='municipio'
+                onChange={handleChange}
+              />
+            }
+
           </>
 
         ) : tipoRealizador === 'municipio' ? (
           <>
-          <p className='label'>Municipio realizador:</p>
+            <p className='label'>Municipio realizador:</p>
             <select
               className='select-category'
               name="municipio"
