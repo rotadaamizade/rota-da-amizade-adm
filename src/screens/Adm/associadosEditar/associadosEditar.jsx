@@ -14,7 +14,7 @@ function AssociadosEditar() {
     const { id } = useParams();
     const navigate = useNavigate()
 
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({})
     const [imgsCopy, setImgsCopy] = useState([])
     const [imgsExclude, setImgsExclude] = useState([])
     const [image, setImage] = useState(null)
@@ -26,13 +26,13 @@ function AssociadosEditar() {
     const [cities, setCities] = useState([])
     const { planos } = useContext(UserContext);
     const [eventosId, setEventosId] = useState([])
+    const [isOtherCity, setIsOtherCity] = useState(null);
 
     const maxImgs = 5
     const minImgs = 2
 
     useEffect(() => {
         getAssociado()
-        getMunicipios()
     }, [])
 
     const getAssociado = async () => {
@@ -43,6 +43,7 @@ function AssociadosEditar() {
             setFormData(docSnap.data())
             setImgsCopy(docSnap.data().imgs)
             getEventos(docSnap.data().nome)
+            getMunicipios(docSnap.data().municipio)
 
             if (!docSnap.exists()) {
                 navigate(`/`)
@@ -53,7 +54,7 @@ function AssociadosEditar() {
         }
     }
 
-    const getMunicipios = async () => {
+    const getMunicipios = async (associadoCity) => {
         try {
             const data = await getDocs(collection(db, "municipios"));
             const citiesData = [];
@@ -66,8 +67,13 @@ function AssociadosEditar() {
 
                 citiesData.push(cityData);
             });
-
             setCities(citiesData);
+            if (citiesData.some(city => city.nome === associadoCity)) {
+                setIsOtherCity(true)
+            } else {
+                setIsOtherCity(false)
+            }
+
         } catch (error) {
             console.error("Erro ao recuperar documentos:", error);
         }
@@ -81,15 +87,6 @@ function AssociadosEditar() {
             eventosId.push(doc.id);
         });
         setEventosId(eventosId)
-    }
-
-    const handleChange = (event) => {
-        const { name, value } = event.target
-
-        setFormData({
-            ...formData,
-            [name]: value,
-        })
     }
 
     const verification = () => {
@@ -321,7 +318,7 @@ function AssociadosEditar() {
     }
 
     const activeDesactive = async (bool) => {
-        try{
+        try {
             for (const element of eventosId) {
                 const eventRef = doc(db, "eventos", element)
                 await updateDoc(eventRef, {
@@ -335,7 +332,7 @@ function AssociadosEditar() {
             })
 
             navigate('/associados')
-        } catch (error){
+        } catch (error) {
             navigate(`/`)
             console.log(error)
         }
@@ -348,6 +345,24 @@ function AssociadosEditar() {
             ...formData,
             plano: selectedValue,
         });
+    }
+
+    const handleChange = (event) => {
+        const { name, value } = event.target
+
+        setFormData({
+            ...formData,
+            [name]: value,
+        })
+    }
+
+    const handleRadioChange = (value) => {
+        setIsOtherCity(value);
+
+        setFormData({
+            ...formData,
+            municipio: '',
+        })
     }
 
     return (
@@ -363,7 +378,7 @@ function AssociadosEditar() {
                                 <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </div>
-                        <h1 className='title'>Editar Associado: {formData.municipio}</h1>
+                        <h1 className='title'>Editar Associado: {formData.nome}</h1>
                     </div>
                     <form onSubmit={cardImageUpload} action="">
                         <p className='label'>Nome do associado:</p>
@@ -376,20 +391,57 @@ function AssociadosEditar() {
                             disabled={true}
                             onChange={handleChange}
                         />
-                        <p className='label'>De que município é o associado:</p>
-                        <select
-                            className='select-category'
-                            name="municipio"
-                            value={formData.municipio}
-                            onChange={handleChange}
-                        >
-                            <option value="">Selecione de que município é o associado</option>
-                            {cities.map((city, index) => (
-                                <option key={index} value={city.nome}>
-                                    {city.nome}
-                                </option>
-                            ))}
-                        </select>
+
+                        {isOtherCity != null && (
+                            <>
+                                <div className='p-other-div'>
+                                    <p className='label'>Faz parte de um município associado:</p>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            value={true}
+                                            checked={isOtherCity === true}
+                                            onChange={() => handleRadioChange(true)}
+                                        />
+                                        Sim
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            value={false}
+                                            checked={isOtherCity === false}
+                                            onChange={() => handleRadioChange(false)}
+                                        />
+                                        Não
+                                    </label>
+                                </div>
+                                <p className='label'>De que município é o associado:</p>
+                                {isOtherCity ?
+                                    <select
+                                        className='select-category'
+                                        name="municipio"
+                                        value={formData.municipio}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Selecione de que município é o associado</option>
+                                        {cities.map((city, index) => (
+                                            <option key={index} value={city.nome}>
+                                                {city.nome}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    :
+                                    <input
+                                        type="text"
+                                        className='input-default'
+                                        placeholder='Digite de que município é o associado'
+                                        value={formData.municipio}
+                                        name='municipio'
+                                        onChange={handleChange}
+                                    />
+                                }
+                            </>
+                        )}
                         <p className='label'>Descrição:</p>
                         <input
                             className='input-default'
@@ -473,7 +525,7 @@ function AssociadosEditar() {
                                     <h1 className='title-removeImgs'>Imagens Secundárias</h1>
                                     <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
                                     <span className="button">
-                                        Selecione novas imagens secundárias{formData.imgs.length + images.length < maxImgs && ` - Máximo: ${maxImgs - (formData.imgs.length + images.length)}`}
+
                                         {formData.imgs.length + images.length < minImgs && ` - Mínimo: ${minImgs - (formData.imgs.length + images.length)}`}
                                         {formData.imgs.length + images.length > maxImgs && ` - Limite excedido`}
                                     </span>
