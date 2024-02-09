@@ -156,7 +156,7 @@ function EventosCadastro() {
   const cardImageUpload = (event) => {
     event.preventDefault()
 
-    if (!formData.municipio || !formData.realizador || !formData.nome || !formData.localizacao || !formData.sobre || !formData.tipo || !formData.id_terceiro || formData.categorias.length == 0 || formData.data.length == 0 || !image || images == []) {
+    if (!formData.municipio || !formData.realizador || !formData.nome || !formData.localizacao || !formData.sobre || !formData.tipo || !formData.id_terceiro || formData.categorias.length == 0 || formData.data.length == 0 || !image || images == [] || formData.contatos.length == 0) {
       errorAlert()
       return
     }
@@ -274,8 +274,6 @@ function EventosCadastro() {
     });
   }
 
-  console.log(realizador)
-
   const handleAssociadoRealizadorChange = (e) => {
     const selectedValue = JSON.parse(e.target.value)
 
@@ -297,8 +295,6 @@ function EventosCadastro() {
       municipio: selectedValue.nome,
     });
   }
-
-  console.log(formData)
 
   return (
     <>

@@ -80,8 +80,6 @@ function AtrativosEditar() {
         })
     }
 
-    console.log(cityId)
-
     const handleCityChange = (event) => {
         const { name, value } = event.target
 
@@ -98,7 +96,7 @@ function AtrativosEditar() {
     const verification = () => {
         let errors = []
 
-        if (!formData.municipio || !formData.localizacao || !formData.sobre || formData.categorias == []) {
+        if (!formData.municipio || !formData.localizacao || !formData.sobre || formData.categorias == [] || formData.contatos.length == 0) {
             errors.push('Preencha todos os campos principais')
         }
 
@@ -230,16 +228,13 @@ function AtrativosEditar() {
         )
     }
 
-    console.log(cityId)
-
     const editCity = async (imgsUrl, cardUrl, cardDirectory) => {
         imgsExclude.forEach(element => {
             const desertRef = ref(storage, element)
 
             deleteObject(desertRef).then(() => {
-                console.log('sucesso')
             }).catch((error) => {
-                console.log('erro')
+                console.log(error)
             });
         });
 

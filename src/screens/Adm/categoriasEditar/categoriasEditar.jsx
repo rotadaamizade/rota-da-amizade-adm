@@ -22,8 +22,6 @@ function CategoriasEditar() {
         getCategory()
     }, [])
 
-    console.log(formData)
-
     const getCategory = async () => {
 
         try {
@@ -92,8 +90,6 @@ function CategoriasEditar() {
             console.error("Erro ao editar o documento:", error);
         }
     }
-
-    console.log(category)
 
     return (
         Object.keys(formData).length === 0 ? (

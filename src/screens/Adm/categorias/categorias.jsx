@@ -37,8 +37,6 @@ function Categorias() {
         }
     }
 
-    console.log(categories)
-
     return (
         categories.length === 0 ? (
             <Loading />

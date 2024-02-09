@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import './municipiosCadastro.css'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../../../config/firebase'
@@ -17,14 +17,12 @@ function MunicipiosCasdastro() {
     localizacao: '',
     sobre: '',
     contatos: [],
-    redesSociais: [],
-    plano: ''
+    redesSociais: []
   })
   const [progressCard, setProgressCard] = useState(0)
   const [progressImages, setProgressImages] = useState(0)
   const [image, setImage] = useState(null)
   const [images, setImages] = useState([])
-  const { planos } = useContext(UserContext);
 
   const maxImgs = 5
   const minImgs = 2
@@ -91,7 +89,8 @@ function MunicipiosCasdastro() {
   const cardImageUpload = (event) => {
     event.preventDefault()
 
-    if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || !image || images == [] || !formData.plano){
+    if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || !image || images == [] || formData.contatos.length == 0){
+      errorAlert()
       return
     }
 
@@ -167,18 +166,6 @@ function MunicipiosCasdastro() {
     })
   }
 
-  const handlePlanoChange = (e) => {
-    const selectedValue = JSON.parse(e.target.value);
-    console.log(selectedValue)
-
-    setFormData({
-      ...formData,
-      plano: selectedValue,
-    });
-  }
-
-  console.log(formData)
-
   return (
     <>
       <div className='title-div'>
@@ -229,17 +216,6 @@ function MunicipiosCasdastro() {
           onChange={handleChange}
           maxLength={1500}
         />
-        <p className='label'>Sobre:</p>
-        <select
-          className='select-category'
-          name="plano"
-          onChange={handlePlanoChange}
-        >
-          <option value={JSON.stringify('')}>Selecione o plano</option>
-          {planos.map((plano, index) => (
-            <option key={index} value={JSON.stringify(plano)}>{plano}</option>
-          ))}
-        </select>
 
         <RedesDiv formData={formData} setFormData={setFormData} />
 

@@ -20,7 +20,6 @@ function MunicipiosEditar() {
     const [images, setImages] = useState([])
     const [progressCard, setProgressCard] = useState(0)
     const [progressImages, setProgressImages] = useState(0)
-    const { planos } = useContext(UserContext)
     const [eventosId, setEventosId] = useState([])
     const [atrativosId, setAtrativosId] = useState([])
 
@@ -58,7 +57,6 @@ function MunicipiosEditar() {
             eventosId.push(doc.id);
         });
         setEventosId(eventosId)
-        console.log(eventosId)
     }
 
     const getAtrativos = async (nome) => {
@@ -69,7 +67,6 @@ function MunicipiosEditar() {
             atrativosId.push(doc.id);
         });
         setAtrativosId(atrativosId)
-        console.log(atrativosId)
     }
 
     const handleChange = (event) => {
@@ -84,7 +81,7 @@ function MunicipiosEditar() {
     const verification = () => {
         let errors = []
 
-        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.plano || !formData.sobre) {
+        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || formData.contatos.length == 0) {
             errors.push('Preencha todos os campos principais')
         }
 
@@ -214,9 +211,8 @@ function MunicipiosEditar() {
             const desertRef = ref(storage, element)
 
             deleteObject(desertRef).then(() => {
-                console.log('sucesso')
             }).catch((error) => {
-                console.log('erro')
+                console.log(error)
             });
         });
 
@@ -257,14 +253,12 @@ function MunicipiosEditar() {
             
             for (const element of atrativosId) {
                 await deleteDoc(doc(atrativosCollection, element));
-                console.log(element)
             }
 
             const eventosCollection = collection(db, "eventos");
             
             for (const element of eventosId) {
                 await deleteDoc(doc(eventosCollection, element));
-                console.log(element)
             }
             
             navigate('/municipios')
@@ -364,19 +358,6 @@ function MunicipiosEditar() {
                             onChange={handleChange}
                             maxLength={1500}
                         />
-
-                        <p className='label'>Plano:</p>
-                        <select
-                            className='select-category'
-                            name="plano"
-                            onChange={handlePlanoChange}
-                            value={formData.plano}
-                        >
-                            <option value={''}>Selecione o plano</option>
-                            {planos.map((plano, index) => (
-                                <option key={index} value={plano}>{plano}</option>
-                            ))}
-                        </select>
 
                         {Object.keys(formData).length !== 0 && (
                             <>

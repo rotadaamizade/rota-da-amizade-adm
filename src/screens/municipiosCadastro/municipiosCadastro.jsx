@@ -1,62 +1,31 @@
-import React, { useState, useEffect, useContext } from 'react'
-import './associadosCadastro.css'
+import React, { useState, useContext } from 'react'
+import './municipiosCadastro.css'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import { db, storage } from '../../../config/firebase'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
-import RedesDiv from '../../../components/Adm/redesDiv/redesDiv'
+import { db, storage } from '../../config/firebase'
+import { addDoc, collection } from 'firebase/firestore'
+import RedesDiv from '../../components/redesDiv/redesDiv'
 import { useNavigate } from 'react-router-dom'
-import CategoriesDiv from '../../../components/Adm/categoriesDiv/categoriesDiv'
-import { UserContext } from '../../../UserContext'
+import { UserContext } from '../../UserContext'
 
-function AssociadosCadastro() {
+function MunicipiosCasdastro() {
+
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
-    nome: '',
     municipio: '',
     descricao: '',
     localizacao: '',
     sobre: '',
     contatos: [],
-    redesSociais: [],
-    categorias: [],
-    plano: '',
+    redesSociais: []
   })
   const [progressCard, setProgressCard] = useState(0)
   const [progressImages, setProgressImages] = useState(0)
-  const [progressLogo, setProgressLogo] = useState(0)
   const [image, setImage] = useState(null)
-  const [imageLogo, setImageLogo] = useState(null)
   const [images, setImages] = useState([])
-  const [cities, setCities] = useState([])
-  const { planos } = useContext(UserContext);
 
   const maxImgs = 5
   const minImgs = 2
-
-  useEffect(() => {
-    getMunicipios()
-  }, [])
-
-  const getMunicipios = async () => {
-    try {
-      const data = await getDocs(collection(db, "municipios"));
-      const citiesData = [];
-
-      data.forEach((doc) => {
-        const cityData = {
-          id: doc.id,
-          nome: doc.data().municipio
-        };
-
-        citiesData.push(cityData);
-      });
-
-      setCities(citiesData);
-    } catch (error) {
-      console.error("Erro ao recuperar documentos:", error);
-    }
-  }
 
   const errorAlert = () => {
     alert('Por favor, preencha todos os campos');
@@ -74,22 +43,26 @@ function AssociadosCadastro() {
     return randomId;
   }
 
-  const imagesUpload = (imageCardUrl, imageCardDirectory, logoUrl, logoDirectory) => {
-    if (images.length === 0) return;
+  const imagesUpload = (imageCardUrl, imageCardDirectory) => {
+    if (images == []) return
+
     let totalProgress = 0;
     let imagesProcessed = 0;
     let imagesUrl = []
 
+
     for (let index = 0; index < images.length; index++) {
+
       const id = generateRandomId(6)
 
-      const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-image-${id}`)
+      const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-image-${id}`)
       const uploadTask = uploadBytesResumable(storageRef, images[index])
 
       uploadTask.on(
         'state_changed',
         snapshot => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * (100 / images.length);
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * (100 / images.length);
           totalProgress += progress;
           setProgressImages(totalProgress);
         },
@@ -100,12 +73,12 @@ function AssociadosCadastro() {
           getDownloadURL(uploadTask.snapshot.ref).then(url => {
             imagesUrl.push({
               url: url,
-              directory: `associados/images${formData.nome}/${formData.nome}-image-${id}`
+              directory: `municipios/images${formData.municipio}/${formData.municipio}-image-${id}`
             })
             imagesProcessed++;
 
             if (imagesProcessed === images.length) {
-              handleSubmit(imageCardUrl, imageCardDirectory, imagesUrl, logoUrl, logoDirectory);
+              handleSubmit(imageCardUrl, imageCardDirectory, imagesUrl);
             }
           })
         }
@@ -113,43 +86,10 @@ function AssociadosCadastro() {
     }
   }
 
-  const logoUpload = (imageCardUrl, imageCardDirectory) => {
-
-    const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-logo`)
-    const uploadTask = uploadBytesResumable(storageRef, imageLogo)
-
-    uploadTask.on(
-      'state_changed',
-      snapshot => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        setProgressLogo(progress)
-      },
-      error => {
-        alert(error)
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          imagesUpload(imageCardUrl, imageCardDirectory, url, `associados/images${formData.nome}/${formData.nome}-logo`)
-        })
-      }
-    )
-  }
-
   const cardImageUpload = (event) => {
     event.preventDefault()
 
-    if (
-      !formData.municipio ||
-      !formData.descricao ||
-      !formData.nome ||
-      !formData.localizacao ||
-      !formData.sobre ||
-      !image ||
-      images.length === 0 ||
-      formData.categorias.length === 0 ||
-      !formData.plano ||
-      formData.contatos.length == 0
-    ) {
+    if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || !image || images == [] || formData.contatos.length == 0){
       errorAlert()
       return
     }
@@ -174,14 +114,6 @@ function AssociadosCadastro() {
       }
     }
 
-    for (let i = 0; i < formData.categorias.length; i++) {
-      const element = formData.categorias[i];
-      if (element == '') {
-        errorAlert()
-        return
-      }
-    }
-
     if (image == null) {
       errorAlert()
       return
@@ -190,9 +122,10 @@ function AssociadosCadastro() {
     if (images.length < minImgs || images.length > maxImgs) {
       errorAlert()
       return
+
     }
 
-    const storageRef = ref(storage, `associados/images${formData.nome}/${formData.nome}-card`)
+    const storageRef = ref(storage, `municipios/images${formData.municipio}/${formData.municipio}-card`)
     const uploadTask = uploadBytesResumable(storageRef, image)
 
     uploadTask.on(
@@ -206,7 +139,7 @@ function AssociadosCadastro() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          logoUpload(url, `associados/images${formData.nome}/${formData.nome}-card`)
+          imagesUpload(url, `municipios/images${formData.municipio}/${formData.municipio}-card`)
         })
       }
     )
@@ -221,63 +154,39 @@ function AssociadosCadastro() {
     })
   }
 
-  const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl, logoUrl, logoDirectory) => {
-    const docRef = await addDoc(collection(db, 'associados'), {
+  const handleSubmit = async (imageCardUrl, imageCardDirectory, imagesUrl) => {
+    const docRef = await addDoc(collection(db, 'municipios'), {
       ...formData,
       imgCard: { url: imageCardUrl, directory: imageCardDirectory },
-      imgLogo: { url: logoUrl, directory: logoDirectory },
       imgs: imagesUrl,
       ativo: true
     }).then(() => {
-      navigate('/associados')
+      navigate('/municipios')
     })
-  }
-
-  const handlePlanoChange = (e) => {
-    const selectedValue = JSON.parse(e.target.value);
-
-    setFormData({
-      ...formData,
-      plano: selectedValue,
-    });
   }
 
   return (
     <>
       <div className='title-div'>
-        <div onClick={() => navigate('/associados')} className='voltar-button'>
+        <div onClick={() => navigate('/municipios')} className='voltar-button'>
           <svg width="20px" height="20px" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12.9998 8L6 14L12.9998 21" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M6 14H28.9938C35.8768 14 41.7221 19.6204 41.9904 26.5C42.2739 33.7696 36.2671 40 28.9938 40H11.9984" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h1 className='title'>Cadastro de Associados</h1>
+        <h1 className='title'>Cadastro de Municípios</h1>
       </div>
 
       <form onSubmit={cardImageUpload} action="">
-        <p className='label'>Nome do associado:</p>
+        <p className='label'>Nome do município:</p>
         <input
           className='input-default'
           type="text"
-          name="nome"
-          placeholder="Digite o nome do Associado:"
-          value={formData.nome}
-          onChange={handleChange}
-        />
-        <p className='label'>De que município é o associado:</p>
-        <select
-          className='select-category'
           name="municipio"
+          placeholder="Digite o nome do município:"
           value={formData.municipio}
           onChange={handleChange}
-        >
-          <option value="">Selecione de que município é o associado</option>
-          {cities.map((city, index) => (
-            <option key={index} value={city.nome}>
-              {city.nome}
-            </option>
-          ))}
-        </select>
+        />
         <p className='label'>Descrição:</p>
         <input
           className='input-default'
@@ -298,50 +207,35 @@ function AssociadosCadastro() {
         />
         <p className='label'>Sobre:</p>
         <textarea
+          type='text'
           className='textarea-input'
           name="sobre"
           placeholder="Digite sobre:"
           value={formData.sobre}
           onChange={handleChange}
+          maxLength={1500}
         />
-        <p className='label'>Plano:</p>
-        <select
-          className='select-category'
-          name="plano"
-          onChange={handlePlanoChange}
-        >
-          <option value={JSON.stringify('')}>Selecione o plano</option>
-          {planos.map((plano, index) => (
-            <option key={index} value={JSON.stringify(plano)}>{plano}</option>
-          ))}
-        </select>
 
-        <CategoriesDiv formData={formData} setFormData={setFormData} type='associados' />
         <RedesDiv formData={formData} setFormData={setFormData} />
 
         <div className='file-input'>
           <input onChange={(e) => setImage(e.target.files[0])} type='file' />
           <span className='button'>Selecione a Imagem Principal</span>
           <p className='label' data-js-label>
-            {image != null ? image.name : 'Nenhuma imagem selecionada'}
+            {image != null
+              ? image.name
+              : 'Nenhuma imagem selecionada'}
           </p>
         </div>
 
         <progress value={progressCard} max={100} />
 
         <div className='file-input file-input-2'>
-          <input onChange={(e) => setImageLogo(e.target.files[0])} type='file' />
-          <span className='button'>Selecione a Logotipo do Associado</span>
-          <p className='label' data-js-label>
-            {imageLogo != null ? imageLogo.name : 'Nenhuma imagem selecionada'}
-          </p>
-        </div>
-
-        <progress value={progressLogo} max={100} />
-
-        <div className='file-input file-input-2'>
           <input multiple onChange={(e) => setImages(e.target.files)} type='file' />
-          <span className='button'>Selecione as Imagens Secundárias</span>
+          <span className='button'>Selecione as Imagens Secundárias
+            {images.length < maxImgs && ` - maximo: ${maxImgs - images.length} `}
+            {minImgs - images.length > 0 && ` - Mínimo: ${minImgs - images.length} `}
+            {images.length > maxImgs && ` - Limite excedido`}</span>
           <p className='label'>
             {images && images.length > 0
               ? Array.from(images).map((image) => image.name).join(', ')
@@ -357,4 +251,4 @@ function AssociadosCadastro() {
   )
 }
 
-export default AssociadosCadastro;
+export default MunicipiosCasdastro

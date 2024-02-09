@@ -30,8 +30,6 @@ function Associados() {
                     imgLogo: doc.data().imgLogo,
                 };
 
-                console.log(doc.data())
-
                 if(doc.data().ativo){
                     activeAssociadosData.push(associadoData);
                 } else {

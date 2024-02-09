@@ -43,8 +43,6 @@ function Eventos() {
                     }
                 });
 
-                console.log(maiorDataIndex);
-
                 const eventData = {
                     id: doc.id,
                     nome: doc.data().nome,
