@@ -1,0 +1,10 @@
+[[redirects]]
+  from = "/"
+  to = "https://rotadaamizade-adm.netlify.app"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
