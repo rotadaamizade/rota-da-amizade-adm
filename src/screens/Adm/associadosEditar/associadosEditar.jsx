@@ -92,7 +92,7 @@ function AssociadosEditar() {
     const verification = () => {
         let errors = []
 
-        if (!formData.municipio || !formData.descricao || !formData.localizacao || !formData.sobre || formData.contatos.length == 0) {
+        if (!formData.municipio || !formData.descricao || !formData.sobre || formData.contatos.length == 0) {
             errors.push('Preencha todos os campos principais')
         }
 

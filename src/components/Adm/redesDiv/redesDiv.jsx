@@ -23,6 +23,9 @@ function RedesDiv({ formData, setFormData }) {
         {
             name: 'Instagram',
         },
+        {
+            name: 'Site'
+        }
     ];
 
     const adicionarContato = () => {
