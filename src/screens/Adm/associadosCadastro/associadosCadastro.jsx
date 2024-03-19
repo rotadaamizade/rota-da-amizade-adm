@@ -150,7 +150,6 @@ function AssociadosCadastro() {
       !formData.municipio ||
       !formData.descricao ||
       !formData.nome ||
-      !formData.localizacao ||
       !formData.sobre ||
       !image ||
       images.length === 0 ||
