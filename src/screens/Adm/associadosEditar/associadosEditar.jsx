@@ -364,6 +364,7 @@ function AssociadosEditar() {
             municipio: '',
         })
     }
+
     return (
         <>
             {Object.keys(formData).length === 0 ? (
@@ -449,7 +450,7 @@ function AssociadosEditar() {
                             value={formData.descricao}
                             onChange={handleChange}
                         />
-                        <p className='label'>Localização (URL do Google Maps):</p>
+                        <p className='label'>Localização (URL do Google Maps): </p>
                         <input
                             className='input-default'
                             type="text"
