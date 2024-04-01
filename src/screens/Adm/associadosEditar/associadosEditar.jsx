@@ -383,12 +383,11 @@ function AssociadosEditar() {
                     <form onSubmit={cardImageUpload} action="">
                         <p className='label'>Nome do associado:</p>
                         <input
-                            className='input-default input-disabled'
+                            className='input-default'
                             type="text"
                             name="nome"
                             placeholder="Digite o nome do Associado:"
                             value={formData.nome}
-                            disabled={true}
                             onChange={handleChange}
                         />
 

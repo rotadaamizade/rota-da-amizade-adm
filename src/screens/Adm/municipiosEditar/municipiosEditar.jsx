@@ -322,8 +322,7 @@ function MunicipiosEditar() {
                     <form onSubmit={cardImageUpload} action="">
                         <p className='label'>Nome do município:</p>
                         <input
-                            disabled
-                            className='input-default input-disabled'
+                            className='input-default'
                             type="text"
                             name="municipio"
                             placeholder="Digite o nome do município:"
